@@ -1,0 +1,29 @@
+# Environment variables and credentials
+.env
+firebase-credentials.json
+
+# Python cache files
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Virtual environments
+venv/
+env/
+.venv/
+.virtualenv/
+
+# Coverage reports
+.coverage
+htmlcov/
+
+# Log files
+*.log
+*.log.*
+*.log.*.*
+*.log.*.*.*
+*.log.*.*.*.*
+*.log.*.*.*.*.*
+
+# Database files
+user_accounts.json
