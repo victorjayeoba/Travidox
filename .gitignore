@@ -1,0 +1,49 @@
+# Root-level files to ignore
+.DS_Store
+.env
+*.log
+
+# Backend specific ignores
+travidox_backend/.env
+travidox_backend/*.env
+travidox_backend/*firebase*credentials*.json
+travidox_backend/*firebase*.json
+travidox_backend/firebase-credentials.json
+travidox_backend/__pycache__/
+travidox_backend/*.py[cod]
+travidox_backend/*$py.class
+travidox_backend/*.so
+travidox_backend/venv/
+travidox_backend/.venv/
+travidox_backend/user_accounts.json
+travidox_backend/*.db
+travidox_backend/*.sqlite3
+travidox_backend/*.pem
+travidox_backend/*.key
+travidox_backend/id_rsa
+travidox_backend/id_dsa
+travidox_backend/*.ppk
+travidox_backend/.pytest_cache/
+
+# Frontend specific ignores
+travidox_frontend/node_modules/
+travidox_frontend/.env
+travidox_frontend/.env.*
+travidox_frontend/build/
+travidox_frontend/dist/
+travidox_frontend/.cache/
+travidox_frontend/coverage/
+travidox_frontend/.firebase/
+travidox_frontend/firebase-config.js
+travidox_frontend/firebase-config.ts
+travidox_frontend/.next/
+travidox_frontend/out/
+travidox_frontend/npm-debug.log*
+travidox_frontend/yarn-debug.log*
+travidox_frontend/yarn-error.log*
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo 
