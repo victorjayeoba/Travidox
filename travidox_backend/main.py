@@ -5,51 +5,77 @@ import firebase_admin
 from firebase_admin import credentials, auth
 import os
 from dotenv import load_dotenv
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 import json
 from db import db  # Import the database module
 from vps_manager import VPSManager, MetaTraderManager
+import MetaTrader5 as mt5
 
 # Load environment variables
 load_dotenv()
 
+# Development mode flag
+DEV_MODE = os.getenv("DEV_MODE", "false").lower() == "true"
+DEV_USER_ID = os.getenv("DEV_USER_ID", "dev-user-123")
+DEV_USER_EMAIL = os.getenv("DEV_USER_EMAIL", "dev@example.com")
+# MetaTrader development credentials (for local MT connection)
+DEV_MT_LOGIN = os.getenv("DEV_MT_LOGIN", "81378629")
+DEV_MT_PASSWORD = os.getenv("DEV_MT_PASSWORD", "Jayeoba@112")
+DEV_MT_SERVER = os.getenv("DEV_MT_SERVER", "Exness-MT5Trial10")
+DEV_MT_PLATFORM = os.getenv("DEV_MT_PLATFORM", "mt5")
+
 # Initialize Firebase Admin SDK
 cred_path = os.getenv("FIREBASE_CREDENTIALS_PATH", "firebase-credentials.json")
 try:
-    cred = credentials.Certificate(cred_path)
-    firebase_admin.initialize_app(cred)
+    if not firebase_admin._apps:  # Check if already initialized
+        cred = credentials.Certificate(cred_path)
+        firebase_admin.initialize_app(cred)
 except Exception as e:
-    print(f"Failed to initialize Firebase: {e}")
-    # Continue without Firebase for development, but it will fail in production
+    print(f"Failed to initialize Firebase: {str(e)}")
+    # Continue without Firebase for development
     pass
 
-# Initialize VPS connection
-VPS_HOST = os.getenv("VPS_HOST")
-VPS_USERNAME = os.getenv("VPS_USERNAME")
-VPS_PASSWORD = os.getenv("VPS_PASSWORD")
-VPS_KEY_PATH = os.getenv("VPS_KEY_PATH")
-VPS_MT_SCRIPTS_DIR = os.getenv("VPS_MT_SCRIPTS_DIR", "~/mt_scripts")
-
-# Initialize VPS manager if credentials are provided
+# Initialize VPS connection or local MT connection
 vps_manager = None
 mt_manager = None
 
-if VPS_HOST and VPS_USERNAME and (VPS_PASSWORD or VPS_KEY_PATH):
-    try:
-        vps_manager = VPSManager(
-            host=VPS_HOST,
-            username=VPS_USERNAME,
-            password=VPS_PASSWORD,
-            key_path=VPS_KEY_PATH
-        )
-        mt_manager = MetaTraderManager(
-            vps_manager=vps_manager,
-            mt_scripts_dir=VPS_MT_SCRIPTS_DIR
-        )
-        print(f"Successfully connected to VPS at {VPS_HOST}")
-    except Exception as e:
-        print(f"Failed to connect to VPS: {str(e)}")
-        # Continue without VPS connection for development
+if DEV_MODE:
+    # In development mode, use local MetaTrader API connection
+    print("⚠️ DEVELOPMENT MODE: Using local MetaTrader connection ⚠️")
+    
+    # Check if MetaTrader development credentials are provided
+    if not all([DEV_MT_LOGIN, DEV_MT_PASSWORD, DEV_MT_SERVER]):
+        print("⚠️ WARNING: MetaTrader development credentials not fully provided.")
+        print("Please set DEV_MT_LOGIN, DEV_MT_PASSWORD, and DEV_MT_SERVER in your .env file.")
+    
+    # Initialize MT5 connection
+    if not mt5.initialize():
+        print(f"⚠️ WARNING: Failed to initialize MT5: {mt5.last_error()}")
+    else:
+        print("✅ MT5 initialized successfully")
+else:
+    # Production mode - Connect to VPS
+    VPS_HOST = os.getenv("VPS_HOST")
+    VPS_USERNAME = os.getenv("VPS_USERNAME")
+    VPS_PASSWORD = os.getenv("VPS_PASSWORD")
+    VPS_KEY_PATH = os.getenv("VPS_KEY_PATH")
+    VPS_MT_SCRIPTS_DIR = os.getenv("VPS_MT_SCRIPTS_DIR", "~/mt_scripts")
+
+    if VPS_HOST and VPS_USERNAME and (VPS_PASSWORD or VPS_KEY_PATH):
+        try:
+            vps_manager = VPSManager(
+                host=VPS_HOST,
+                username=VPS_USERNAME,
+                password=VPS_PASSWORD,
+                key_path=VPS_KEY_PATH
+            )
+            mt_manager = MetaTraderManager(
+                vps_manager=vps_manager,
+                mt_scripts_dir=VPS_MT_SCRIPTS_DIR
+            )
+            print(f"Successfully connected to VPS at {VPS_HOST}")
+        except Exception as e:
+            print(f"Failed to connect to VPS: {str(e)}")
 
 app = FastAPI(title="Travidox Backend API")
 
@@ -75,7 +101,309 @@ class MarketOrder(BaseModel):
     stop_loss: Optional[float] = None
     take_profit: Optional[float] = None
 
+class Symbol(BaseModel):
+    """Model for trading symbol information"""
+    name: str
+    description: str
+    base_currency: str
+    profit_currency: str
+    digits: int
+    trade_mode: str
+    spread: float
+    tick_size: float
+    volume_min: float
+    volume_max: float
+    volume_step: float
+    category: str  # 'forex', 'crypto', 'index', 'commodity', 'stock', 'other'
+
+# Local MetaTrader connection functions
+def connect_local_mt(login, password, server, platform="mt5"):
+    """Connect to local MetaTrader terminal"""
+    if not mt5.initialize():
+        return {
+            "success": False,
+            "error": f"Failed to initialize MT5: {mt5.last_error()}"
+        }
+    
+    # Connect to trading account
+    authorized = mt5.login(
+        login=int(login),
+        password=password,
+        server=server
+    )
+    
+    if not authorized:
+        mt5.shutdown()
+        return {
+            "success": False,
+            "error": f"Failed to login: {mt5.last_error()}"
+        }
+    
+    return {
+        "success": True,
+        "account_id": login,
+        "message": "Connected to local MetaTrader terminal"
+    }
+
+def get_local_account_info(account_id):
+    """Get account info from local MetaTrader terminal"""
+    if not mt5.initialize():
+        return {
+            "success": False,
+            "error": f"Failed to initialize MT5: {mt5.last_error()}"
+        }
+    
+    # Get account information
+    account_info = mt5.account_info()
+    
+    if not account_info:
+        return {
+            "success": False,
+            "error": f"Failed to get account info: {mt5.last_error()}"
+        }
+    
+    # Convert account info to dictionary
+    info = {
+        "login": account_info.login,
+        "name": mt5.account_info()._asdict().get('name', 'Unknown'),
+        "server": mt5.account_info()._asdict().get('server', 'Unknown'),
+        "currency": account_info.currency,
+        "leverage": f"1:{account_info.leverage}",
+        "balance": account_info.balance,
+        "equity": account_info.equity,
+        "margin": account_info.margin,
+        "free_margin": account_info.margin_free,
+        "margin_level": account_info.margin_level,
+    }
+    
+    return {
+        "success": True,
+        "account": info
+    }
+
+def get_local_symbols():
+    """Get all available symbols from the local MetaTrader terminal"""
+    if not mt5.initialize():
+        return {
+            "success": False,
+            "error": f"Failed to initialize MT5: {mt5.last_error()}"
+        }
+    
+    # Get all symbols
+    symbols = mt5.symbols_get()
+    
+    if symbols is None:
+        return {
+            "success": True,
+            "symbols": []
+        }
+    
+    # Format symbols
+    formatted_symbols = []
+    for symbol in symbols:
+        symbol_dict = symbol._asdict()
+        
+        # Determine category
+        name = symbol_dict["name"]
+        if any(pair in name for pair in ['USD', 'EUR', 'GBP', 'JPY', 'AUD', 'CAD', 'CHF', 'NZD']):
+            category = "forex"
+        elif any(crypto in name for crypto in ['BTC', 'ETH', 'LTC', 'XRP', 'DOGE']):
+            category = "crypto"
+        elif any(index in name for index in ['SPX', 'NDX', 'DJI', 'UK100', 'DE30', 'JP225']):
+            category = "index"
+        elif any(commodity in name for commodity in ['GOLD', 'SILVER', 'OIL', 'GAS', 'XAU']):
+            category = "commodity"
+        elif 'Vol' in name or any(x in name for x in ['AAPL', 'MSFT', 'GOOGL', 'AMZN']):
+            category = "stock"
+        else:
+            category = "other"
+        
+        # Add formatted symbol
+        formatted_symbols.append({
+            "name": symbol_dict["name"],
+            "description": symbol_dict.get("description", ""),
+            "base_currency": symbol_dict.get("currency_base", ""),
+            "profit_currency": symbol_dict.get("currency_profit", ""),
+            "digits": symbol_dict.get("digits", 0),
+            "trade_mode": str(symbol_dict.get("trade_mode", 0)),
+            "spread": symbol_dict.get("spread", 0),
+            "tick_size": symbol_dict.get("trade_tick_size", 0),
+            "volume_min": symbol_dict.get("volume_min", 0),
+            "volume_max": symbol_dict.get("volume_max", 0),
+            "volume_step": symbol_dict.get("volume_step", 0),
+            "category": category
+        })
+    
+    return {
+        "success": True,
+        "symbols": formatted_symbols
+    }
+
+def get_local_positions(account_id):
+    """Get positions from local MetaTrader terminal"""
+    if not mt5.initialize():
+        return {
+            "success": False,
+            "error": f"Failed to initialize MT5: {mt5.last_error()}"
+        }
+    
+    # Get all positions
+    positions = mt5.positions_get()
+    
+    if positions is None:
+        return {
+            "success": True,
+            "positions": []
+        }
+    
+    # Format positions
+    formatted_positions = []
+    for position in positions:
+        pos_dict = position._asdict()
+        formatted_positions.append({
+            "id": pos_dict["ticket"],
+            "symbol": pos_dict["symbol"],
+            "type": "BUY" if pos_dict["type"] == 0 else "SELL",
+            "volume": pos_dict["volume"],
+            "price_open": pos_dict["price_open"],
+            "current_price": pos_dict["price_current"],
+            "profit": pos_dict["profit"],
+            "swap": pos_dict["swap"],
+            "time_open": pos_dict["time"],
+            "stop_loss": pos_dict["sl"],
+            "take_profit": pos_dict["tp"]
+        })
+    
+    return {
+        "success": True,
+        "positions": formatted_positions
+    }
+
+def place_local_order(account_id, symbol, order_type, volume, stop_loss=None, take_profit=None):
+    """Place order using local MetaTrader terminal"""
+    if not mt5.initialize():
+        return {
+            "success": False,
+            "error": f"Failed to initialize MT5: {mt5.last_error()}"
+        }
+    
+    # Prepare order request
+    order_type_mt5 = mt5.ORDER_TYPE_BUY if order_type == "BUY" else mt5.ORDER_TYPE_SELL
+    
+    # Get current price
+    symbol_info = mt5.symbol_info(symbol)
+    if symbol_info is None:
+        return {
+            "success": False,
+            "error": f"Symbol {symbol} not found"
+        }
+    
+    price = symbol_info.ask if order_type == "BUY" else symbol_info.bid
+    
+    # Prepare request
+    request = {
+        "action": mt5.TRADE_ACTION_DEAL,
+        "symbol": symbol,
+        "volume": float(volume),
+        "type": order_type_mt5,
+        "price": price,
+        "deviation": 20,  # Allow price deviation in points
+        "magic": 12345,   # Expert Advisor ID
+        "comment": "Travidox order",
+        "type_time": mt5.ORDER_TIME_GTC,
+        "type_filling": mt5.ORDER_FILLING_IOC,
+    }
+    
+    # Add stop loss and take profit if provided
+    if stop_loss:
+        request["sl"] = float(stop_loss)
+    if take_profit:
+        request["tp"] = float(take_profit)
+    
+    # Send order
+    result = mt5.order_send(request)
+    
+    if result.retcode != mt5.TRADE_RETCODE_DONE:
+        return {
+            "success": False,
+            "error": f"Order failed: {result.comment} (Code: {result.retcode})"
+        }
+    
+    # Get order details
+    order_info = result._asdict()
+    
+    return {
+        "success": True,
+        "order": {
+            "id": order_info["order"],
+            "symbol": symbol,
+            "type": order_type,
+            "volume": volume,
+            "price": price,
+            "time": order_info["request"]["time"],
+            "stop_loss": stop_loss,
+            "take_profit": take_profit
+        }
+    }
+
+def close_local_position(account_id, position_id):
+    """Close position using local MetaTrader terminal"""
+    if not mt5.initialize():
+        return {
+            "success": False,
+            "error": f"Failed to initialize MT5: {mt5.last_error()}"
+        }
+    
+    # Get position info
+    position = mt5.positions_get(ticket=position_id)
+    
+    if not position:
+        return {
+            "success": False,
+            "error": f"Position {position_id} not found"
+        }
+    
+    position = position[0]._asdict()
+    
+    # Prepare close request
+    request = {
+        "action": mt5.TRADE_ACTION_DEAL,
+        "symbol": position["symbol"],
+        "volume": position["volume"],
+        "type": mt5.ORDER_TYPE_SELL if position["type"] == 0 else mt5.ORDER_TYPE_BUY,  # Opposite direction
+        "position": position_id,
+        "price": position["price_current"],
+        "deviation": 20,
+        "magic": 12345,
+        "comment": "Travidox close position",
+        "type_time": mt5.ORDER_TIME_GTC,
+        "type_filling": mt5.ORDER_FILLING_IOC,
+    }
+    
+    # Send order
+    result = mt5.order_send(request)
+    
+    if result.retcode != mt5.TRADE_RETCODE_DONE:
+        return {
+            "success": False,
+            "error": f"Close position failed: {result.comment} (Code: {result.retcode})"
+        }
+    
+    return {
+        "success": True,
+        "message": f"Position {position_id} closed successfully"
+    }
+
 async def verify_firebase_token(authorization: Optional[str] = Header(None)):
+    # Development mode bypass
+    if DEV_MODE:
+        print("⚠️ DEVELOPMENT MODE: Bypassing authentication ⚠️")
+        return {
+            "uid": DEV_USER_ID,
+            "email": DEV_USER_EMAIL,
+        }
+    
+    # Normal authentication flow
     if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Invalid authorization header")
     
@@ -93,11 +421,89 @@ async def verify_firebase_token(authorization: Optional[str] = Header(None)):
 async def root():
     return {"message": "Travidox API is running"}
 
+@app.get("/symbols")
+async def get_symbols(user: dict = Depends(verify_firebase_token), category: Optional[str] = None):
+    """Get all available trading symbols/pairs
+    
+    Parameters:
+    - category (optional): Filter symbols by category (forex, crypto, index, commodity, stock, other)
+    
+    Returns a list of all available trading symbols with details.
+    """
+    if DEV_MODE:
+        # Get symbols from local MetaTrader terminal
+        result = get_local_symbols()
+        
+        if not result.get("success", False):
+            raise HTTPException(
+                status_code=500, 
+                detail=result.get("error", "Failed to get symbols from local terminal")
+            )
+        
+        symbols = result.get("symbols", [])
+        
+        # Filter by category if specified
+        if category:
+            symbols = [s for s in symbols if s["category"] == category.lower()]
+        
+        # Return symbols
+        return symbols
+    
+    # Production mode
+    if not mt_manager:
+        raise HTTPException(status_code=500, detail="VPS connection not configured")
+    
+    try:
+        # This would need to be implemented in the VPS_Manager class
+        # For now, just return an empty list
+        return []
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get symbols: {str(e)}")
+
 @app.post("/connect-account")
 async def connect_account(
     account: MetaTraderAccount, 
     user: dict = Depends(verify_firebase_token)
 ):
+    if DEV_MODE:
+        # Use provided account info or fallback to env variables
+        login = account.login or DEV_MT_LOGIN
+        password = account.password or DEV_MT_PASSWORD
+        server = account.server_name or DEV_MT_SERVER
+        platform = account.platform or DEV_MT_PLATFORM
+        
+        if not all([login, password, server]):
+            raise HTTPException(
+                status_code=400, 
+                detail="Missing MetaTrader credentials. Provide in request or set in .env file."
+            )
+        
+        # Connect to local MetaTrader terminal
+        result = connect_local_mt(login, password, server, platform)
+        
+        if not result.get("success", False):
+            raise HTTPException(
+                status_code=500, 
+                detail=result.get("error", "Failed to connect to local MetaTrader terminal")
+            )
+        
+        # Store the mapping between Firebase user and MT account
+        account_id = result["account_id"]
+        db.set_user_account(user["uid"], {
+            "account_id": account_id,
+            "login": login,
+            "server": server,
+            "platform": platform,
+            "status": "connected"
+        })
+        
+        return {
+            "success": True,
+            "message": "MetaTrader account connected successfully (Local Terminal)",
+            "account_id": account_id
+        }
+    
+    # Production mode
     if not mt_manager:
         raise HTTPException(status_code=500, detail="VPS connection not configured")
     
@@ -133,13 +539,27 @@ async def connect_account(
 @app.get("/account-info")
 async def get_account_info(user: dict = Depends(verify_firebase_token)):
     """Get the connected MetaTrader account information for the authenticated user"""
-    if not mt_manager:
-        raise HTTPException(status_code=500, detail="VPS connection not configured")
     
     account_data = db.get_user_account(user["uid"])
     
     if not account_data:
         raise HTTPException(status_code=404, detail="No MetaTrader account connected for this user")
+    
+    if DEV_MODE:
+        # Get account info from local MetaTrader terminal
+        result = get_local_account_info(account_data["account_id"])
+        
+        if not result.get("success", False):
+            raise HTTPException(
+                status_code=500, 
+                detail=result.get("error", "Failed to get account information from local terminal")
+            )
+        
+        return result["account"]
+    
+    # Production mode
+    if not mt_manager:
+        raise HTTPException(status_code=500, detail="VPS connection not configured")
     
     try:
         # Get account information from the VPS
@@ -158,13 +578,34 @@ async def place_order(
     user: dict = Depends(verify_firebase_token)
 ):
     """Place a market order for the authenticated user"""
-    if not mt_manager:
-        raise HTTPException(status_code=500, detail="VPS connection not configured")
     
     account_data = db.get_user_account(user["uid"])
     
     if not account_data:
         raise HTTPException(status_code=404, detail="No MetaTrader account connected for this user")
+    
+    if DEV_MODE:
+        # Place order using local MetaTrader terminal
+        result = place_local_order(
+            account_id=account_data["account_id"],
+            symbol=order.symbol,
+            order_type=order.order_type,
+            volume=order.volume,
+            stop_loss=order.stop_loss,
+            take_profit=order.take_profit
+        )
+        
+        if not result.get("success", False):
+            raise HTTPException(
+                status_code=500, 
+                detail=result.get("error", "Failed to place order with local terminal")
+            )
+        
+        return result["order"]
+    
+    # Production mode
+    if not mt_manager:
+        raise HTTPException(status_code=500, detail="VPS connection not configured")
     
     try:
         # Place the order on the VPS
@@ -187,13 +628,27 @@ async def place_order(
 @app.get("/positions")
 async def get_positions(user: dict = Depends(verify_firebase_token)):
     """Get open positions for the authenticated user"""
-    if not mt_manager:
-        raise HTTPException(status_code=500, detail="VPS connection not configured")
     
     account_data = db.get_user_account(user["uid"])
     
     if not account_data:
         raise HTTPException(status_code=404, detail="No MetaTrader account connected for this user")
+    
+    if DEV_MODE:
+        # Get positions from local MetaTrader terminal
+        result = get_local_positions(account_data["account_id"])
+        
+        if not result.get("success", False):
+            raise HTTPException(
+                status_code=500, 
+                detail=result.get("error", "Failed to get positions from local terminal")
+            )
+        
+        return result.get("positions", [])
+    
+    # Production mode
+    if not mt_manager:
+        raise HTTPException(status_code=500, detail="VPS connection not configured")
     
     try:
         # Get positions from the VPS
@@ -212,13 +667,27 @@ async def close_position(
     user: dict = Depends(verify_firebase_token)
 ):
     """Close a specific position for the authenticated user"""
-    if not mt_manager:
-        raise HTTPException(status_code=500, detail="VPS connection not configured")
     
     account_data = db.get_user_account(user["uid"])
     
     if not account_data:
         raise HTTPException(status_code=404, detail="No MetaTrader account connected for this user")
+    
+    if DEV_MODE:
+        # Close position using local MetaTrader terminal
+        result = close_local_position(account_data["account_id"], position_id)
+        
+        if not result.get("success", False):
+            raise HTTPException(
+                status_code=500, 
+                detail=result.get("error", "Failed to close position with local terminal")
+            )
+        
+        return {"success": True, "message": f"Position {position_id} closed successfully (Local Terminal)"}
+    
+    # Production mode
+    if not mt_manager:
+        raise HTTPException(status_code=500, detail="VPS connection not configured")
     
     try:
         # Close the position on the VPS
