@@ -8,9 +8,10 @@ import argparse
 import json
 import os
 import sys
+import MetaTrader5 as mt5
 
-# Path to store account information
-ACCOUNTS_DIR = os.path.expanduser("~/mt_accounts")
+# Import configuration
+from config import MT_TERMINAL_PATH, ACCOUNTS_DIR
 
 def get_account_info(account_id):
     """
@@ -31,33 +32,83 @@ def get_account_info(account_id):
                 "error": f"Account {account_id} not found"
             }
         
-        # Read the account information
+        # Read the account information from file
         with open(account_file, 'r') as f:
-            account_info = json.load(f)
+            stored_account_info = json.load(f)
         
-        # In a real implementation, this is where you would:
-        # 1. Connect to the MetaTrader terminal
-        # 2. Use the terminal's API to get up-to-date account information
-        # 3. Update the stored account information
+        login = stored_account_info.get('login')
+        server = stored_account_info.get('server')
         
-        # For this example, we'll just return the stored information
-        # plus some simulated account metrics
-        account_info.update({
-            "balance": 10000.0,
-            "equity": 10050.0,
-            "margin": 500.0,
-            "free_margin": 9550.0,
-            "margin_level": 2010.0,
-            "leverage": 100,
-            "currency": "USD"
-        })
+        # Initialize MetaTrader
+        if not mt5.initialize(path=MT_TERMINAL_PATH):
+            return {
+                "success": False,
+                "error": f"Failed to initialize MetaTrader: {mt5.last_error()}"
+            }
         
-        return {
-            "success": True,
-            "account": account_info
-        }
+        try:
+            # Login to the account
+            authorized = mt5.login(
+                login=int(login),
+                server=server
+            )
+            
+            if not authorized:
+                return {
+                    "success": False,
+                    "error": f"Failed to login: {mt5.last_error()}"
+                }
+            
+            # Get account information
+            account_info = mt5.account_info()
+            
+            if not account_info:
+                return {
+                    "success": False,
+                    "error": f"Failed to get account info: {mt5.last_error()}"
+                }
+            
+            # Convert account info to dictionary
+            account_info_dict = account_info._asdict()
+            
+            # Update the stored account info with the latest data
+            updated_account_info = {
+                "id": account_id,
+                "login": login,
+                "server": server,
+                "platform": stored_account_info.get('platform', 'mt5'),
+                "name": account_info_dict.get('name', stored_account_info.get('name', 'Unknown')),
+                "currency": account_info_dict.get('currency', stored_account_info.get('currency', 'USD')),
+                "leverage": account_info_dict.get('leverage', stored_account_info.get('leverage', 100)),
+                "balance": account_info_dict.get('balance', 0.0),
+                "equity": account_info_dict.get('equity', 0.0),
+                "margin": account_info_dict.get('margin', 0.0),
+                "free_margin": account_info_dict.get('margin_free', 0.0),
+                "margin_level": account_info_dict.get('margin_level', 0.0),
+                "connected_at": stored_account_info.get('connected_at'),
+                "status": "connected"
+            }
+            
+            # Save the updated account information
+            with open(account_file, 'w') as f:
+                json.dump(updated_account_info, f)
+            
+            return {
+                "success": True,
+                "account": updated_account_info
+            }
+            
+        finally:
+            # Always shutdown MetaTrader
+            mt5.shutdown()
         
     except Exception as e:
+        # Make sure to shutdown MetaTrader if there was an error
+        try:
+            mt5.shutdown()
+        except:
+            pass
+            
         return {
             "success": False,
             "error": str(e)
@@ -65,8 +116,8 @@ def get_account_info(account_id):
 
 def main():
     """Main entry point"""
-    parser = argparse.ArgumentParser(description="Get MetaTrader account information")
-    parser.add_argument('--account_id', required=True, help='Account identifier')
+    parser = argparse.ArgumentParser(description="Get account information")
+    parser.add_argument('--account_id', required=True, help='The account identifier')
     args = parser.parse_args()
     
     result = get_account_info(args.account_id)

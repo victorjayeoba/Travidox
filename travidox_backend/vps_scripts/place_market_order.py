@@ -11,16 +11,10 @@ import sys
 import time
 import random
 from datetime import datetime
+import MetaTrader5 as mt5
 
-# Path to store account information
-ACCOUNTS_DIR = os.path.expanduser("~/mt_accounts")
-# Path to store order information
-ORDERS_DIR = os.path.expanduser("~/mt_orders")
-
-def ensure_orders_dir():
-    """Ensure the orders directory exists"""
-    if not os.path.exists(ORDERS_DIR):
-        os.makedirs(ORDERS_DIR)
+# Import configuration
+from config import MT_TERMINAL_PATH, ACCOUNTS_DIR, ORDERS_DIR, ensure_directories
 
 def place_market_order(order_file):
     """
@@ -33,6 +27,9 @@ def place_market_order(order_file):
         Dictionary with order result
     """
     try:
+        # Ensure directories exist
+        ensure_directories()
+        
         # Read the order parameters
         with open(order_file, 'r') as f:
             order_params = json.load(f)
@@ -58,22 +55,94 @@ def place_market_order(order_file):
                 "success": False,
                 "error": f"Account {account_id} not found"
             }
+            
+        # Read account information
+        with open(account_file, 'r') as f:
+            account_info = json.load(f)
+            
+        login = account_info.get('login')
+        server = account_info.get('server')
         
-        # In a real implementation, this is where you would:
-        # 1. Connect to the MetaTrader terminal
-        # 2. Use the terminal's API to place the market order
-        # 3. Get the order result
+        # Initialize MetaTrader
+        if not mt5.initialize(path=MT_TERMINAL_PATH):
+            return {
+                "success": False,
+                "error": f"Failed to initialize MetaTrader: {mt5.last_error()}"
+            }
+            
+        # Login to the account
+        authorized = mt5.login(
+            login=int(login),
+            server=server
+        )
         
-        # For this example, we'll simulate a successful order placement
-        # Generate a random order ID
-        order_id = random.randint(100000, 999999)
+        if not authorized:
+            error = mt5.last_error()
+            mt5.shutdown()
+            return {
+                "success": False,
+                "error": f"Failed to login: {error}"
+            }
+            
+        # Prepare order request
+        order_type_mt5 = mt5.ORDER_TYPE_BUY if order_type == "BUY" else mt5.ORDER_TYPE_SELL
         
-        # Simulate current market price
-        price = 1.1000 if symbol.upper() == "EURUSD" else 1.3000
+        # Get current price
+        symbol_info = mt5.symbol_info(symbol)
+        if symbol_info is None:
+            mt5.shutdown()
+            return {
+                "success": False,
+                "error": f"Symbol {symbol} not found"
+            }
+            
+        # Make sure the symbol is selected in Market Watch
+        if not symbol_info.visible:
+            if not mt5.symbol_select(symbol, True):
+                mt5.shutdown()
+                return {
+                    "success": False,
+                    "error": f"Failed to select symbol {symbol}"
+                }
+                
+        price = symbol_info.ask if order_type == "BUY" else symbol_info.bid
+        
+        # Prepare request
+        request = {
+            "action": mt5.TRADE_ACTION_DEAL,
+            "symbol": symbol,
+            "volume": float(volume),
+            "type": order_type_mt5,
+            "price": price,
+            "deviation": 20,  # Allow price deviation in points
+            "magic": 12345,   # Expert Advisor ID
+            "comment": "Travidox order",
+            "type_time": mt5.ORDER_TIME_GTC,
+            "type_filling": mt5.ORDER_FILLING_IOC,
+        }
+        
+        # Add stop loss and take profit if provided
+        if stop_loss:
+            request["sl"] = float(stop_loss)
+        if take_profit:
+            request["tp"] = float(take_profit)
+            
+        # Send order
+        result = mt5.order_send(request)
+        
+        if result.retcode != mt5.TRADE_RETCODE_DONE:
+            mt5.shutdown()
+            return {
+                "success": False,
+                "error": f"Order failed: {result.comment} (Code: {result.retcode})"
+            }
+            
+        # Get order details
+        order_info = result._asdict()
         
         # Create order result
         order_result = {
-            "order_id": order_id,
+            "order_id": order_info["order"],
             "account_id": account_id,
             "symbol": symbol,
             "type": order_type,
@@ -86,10 +155,12 @@ def place_market_order(order_file):
         }
         
         # Save the order information
-        ensure_orders_dir()
-        order_file = os.path.join(ORDERS_DIR, f"{order_id}.json")
+        order_file = os.path.join(ORDERS_DIR, f"{order_info['order']}.json")
         with open(order_file, 'w') as f:
             json.dump(order_result, f)
+            
+        # Shutdown MetaTrader
+        mt5.shutdown()
         
         return {
             "success": True,
@@ -97,6 +168,12 @@ def place_market_order(order_file):
         }
         
     except Exception as e:
+        # Make sure to shutdown MetaTrader if there was an error
+        try:
+            mt5.shutdown()
+        except:
+            pass
+            
         return {
             "success": False,
             "error": str(e)

@@ -9,6 +9,7 @@ import requests
 import json
 import os
 from dotenv import load_dotenv
+import MetaTrader5 as mt5
 
 # Load environment variables
 load_dotenv()
@@ -70,45 +71,84 @@ def test_place_order():
     """Test the place order endpoint"""
     print("\n🔍 Testing place order endpoint...")
     
-    # Create a sample order for Exness - try with standard EURUSD
-    order_data = {
-        "symbol": "EURUSD",  # Standard symbol format - try this first
-        "order_type": "BUY",
-        "volume": 0.01,
-        "stop_loss": 1.08,
-        "take_profit": 1.10
-    }
+    # Initialize MT5 to get current prices
+    if not mt5.initialize():
+        print(f"Failed to initialize MT5: {mt5.last_error()}")
+        return
     
-    response = requests.post(
-        f"{API_URL}/place-order",
-        json=order_data
-    )
-    print_response(response)
+    # Try different symbols
+    symbols_to_try = ["EURUSD", "EURUSDz", "EUR/USD"]
     
-    # If the first attempt fails, try with other common Exness symbol formats
-    if response.status_code != 200:
-        print("\n🔍 First symbol attempt failed, trying with EURUSDz...")
-        order_data["symbol"] = "EURUSDz"  # Micro account format
-        response = requests.post(
-            f"{API_URL}/place-order",
-            json=order_data
-        )
-        print_response(response)
+    for symbol in symbols_to_try:
+        print(f"\n🔍 Trying with symbol: {symbol}")
         
-    if response.status_code != 200:
-        print("\n🔍 Second symbol attempt failed, trying with EUR/USD...")
-        order_data["symbol"] = "EUR/USD"  # Alternative format
-        response = requests.post(
-            f"{API_URL}/place-order",
-            json=order_data
-        )
-        print_response(response)
+        # Get symbol info to calculate proper stop levels
+        symbol_info = mt5.symbol_info(symbol)
+        if symbol_info is None:
+            print(f"Symbol {symbol} not found, trying next...")
+            continue
+        
+        # Get current price
+        current_bid = symbol_info.bid
+        current_ask = symbol_info.ask
+        
+        # Get stop level in points
+        stop_level = symbol_info.trade_stops_level
+        
+        # Calculate proper stop loss and take profit with broker's minimum distance
+        # Convert stop level from points to price value
+        point_value = symbol_info.point
+        
+        # If stop_level is 0, use a default minimum distance (50 points is usually safe)
+        if stop_level == 0:
+            print("⚠️ Broker reported stop level of 0, using default minimum distance of 50 points")
+            stop_level = 50
+        
+        min_distance = stop_level * point_value
+        
+        # For BUY order
+        price = current_ask
+        stop_loss = round(price - (min_distance * 2), symbol_info.digits)  # Double the minimum distance
+        take_profit = round(price + (min_distance * 3), symbol_info.digits)  # Triple the minimum distance
+        
+        print(f"Current price: {price}")
+        print(f"Stop level (points): {stop_level}")
+        print(f"Point value: {point_value}")
+        print(f"Min distance: {min_distance}")
+        print(f"Using SL: {stop_loss}, TP: {take_profit}")
+        
+        # Create order with proper stop levels
+        order_data = {
+            "symbol": symbol,
+            "order_type": "BUY",
+            "volume": 0.01,
+            "stop_loss": stop_loss,
+            "take_profit": take_profit
+        }
+        
+        # Try placing the order
+        try:
+            response = requests.post(
+                f"{API_URL}/place-order",
+                json=order_data
+            )
+            print_response(response)
+            
+            if response.status_code == 200:
+                print(f"✅ Order placed successfully with symbol {symbol}")
+                break
+        except Exception as e:
+            print(f"Error placing order: {str(e)}")
+    
+    # Shut down MT5
+    mt5.shutdown()
 
 def main():
     """Run all tests"""
     print("🚀 Starting development mode API tests")
     print("⚠️ Make sure the FastAPI server is running with DEV_MODE=true")
     print("⚠️ Make sure MetaTrader 5 is running and logged into your Exness account")
+    print("⚠️ Make sure AutoTrading is enabled in MetaTrader 5")
     
     test_root()
     test_connect_account()

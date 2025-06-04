@@ -11,14 +11,10 @@ import os
 import time
 import uuid
 from datetime import datetime
+import MetaTrader5 as mt5
 
-# Path to store account information
-ACCOUNTS_DIR = os.path.expanduser("~/mt_accounts")
-
-def ensure_accounts_dir():
-    """Ensure the accounts directory exists"""
-    if not os.path.exists(ACCOUNTS_DIR):
-        os.makedirs(ACCOUNTS_DIR)
+# Import configuration
+from config import MT_TERMINAL_PATH, ACCOUNTS_DIR, ensure_directories
 
 def connect_account(config_file):
     """
@@ -31,6 +27,9 @@ def connect_account(config_file):
         Dictionary with connection result
     """
     try:
+        # Ensure directories exist
+        ensure_directories()
+        
         # Read the configuration file
         with open(config_file, 'r') as f:
             config = json.load(f)
@@ -50,26 +49,65 @@ def connect_account(config_file):
         # Generate a unique account ID
         account_id = str(uuid.uuid4())
         
-        # In a real implementation, this is where you would:
-        # 1. Launch the MetaTrader terminal if not already running
-        # 2. Use the terminal's API to log in with the provided credentials
-        # 3. Verify the connection was successful
+        # Initialize MetaTrader
+        if not mt5.initialize(path=MT_TERMINAL_PATH):
+            return {
+                "success": False,
+                "error": f"Failed to initialize MetaTrader: {mt5.last_error()}"
+            }
         
-        # For this example, we'll simulate a successful connection
+        # Connect to trading account
+        authorized = mt5.login(
+            login=int(login),
+            password=password,
+            server=server
+        )
+        
+        if not authorized:
+            error = mt5.last_error()
+            mt5.shutdown()
+            return {
+                "success": False,
+                "error": f"Failed to login: {error}"
+            }
+        
+        # Get account information
+        account_info = mt5.account_info()
+        if not account_info:
+            mt5.shutdown()
+            return {
+                "success": False,
+                "error": f"Failed to get account info: {mt5.last_error()}"
+            }
+        
+        # Convert account info to dictionary
+        account_info_dict = account_info._asdict()
+        
+        # Create account info to save
         account_info = {
             "id": account_id,
             "login": login,
             "server": server,
             "platform": platform,
+            "name": account_info_dict.get('name', 'Unknown'),
+            "currency": account_info_dict.get('currency', 'USD'),
+            "leverage": account_info_dict.get('leverage', 100),
+            "balance": account_info_dict.get('balance', 0.0),
+            "equity": account_info_dict.get('equity', 0.0),
+            "margin": account_info_dict.get('margin', 0.0),
+            "free_margin": account_info_dict.get('margin_free', 0.0),
+            "margin_level": account_info_dict.get('margin_level', 0.0),
             "connected_at": datetime.now().isoformat(),
             "status": "connected"
         }
         
         # Save the account information (excluding the password)
-        ensure_accounts_dir()
         account_file = os.path.join(ACCOUNTS_DIR, f"{account_id}.json")
         with open(account_file, 'w') as f:
             json.dump(account_info, f)
+        
+        # Shutdown MetaTrader
+        mt5.shutdown()
         
         # Return success response
         return {
@@ -81,6 +119,12 @@ def connect_account(config_file):
         }
         
     except Exception as e:
+        # Make sure to shutdown MetaTrader if there was an error
+        try:
+            mt5.shutdown()
+        except:
+            pass
+        
         return {
             "success": False,
             "error": str(e)
