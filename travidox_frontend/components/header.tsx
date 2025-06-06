@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
 import { Menu, X, TrendingUp } from "lucide-react"
 import { NigeriaStockSlider } from "./nigeria-stock-slider"
 import { useActiveSection } from "@/hooks/useActiveSection"
+import { UserAccountButton } from "./auth/user-account-button"
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -47,7 +47,7 @@ export function Header() {
   }, []);
 
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
@@ -81,9 +81,9 @@ export function Header() {
             })}
           </nav>
 
-          {/* CTA Button */}
+          {/* User Account Button / CTA Button */}
           <div className="hidden md:block">
-            <Button className="bg-green-600 hover:bg-green-700">Get Started</Button>
+            <UserAccountButton />
           </div>
 
           {/* Mobile menu button */}
@@ -111,7 +111,9 @@ export function Header() {
                   </Link>
                 );
               })}
-              <Button className="bg-green-600 hover:bg-green-700 w-full mt-4">Get Started</Button>
+              <div className="mt-4">
+                <UserAccountButton />
+              </div>
             </nav>
           </div>
         )}

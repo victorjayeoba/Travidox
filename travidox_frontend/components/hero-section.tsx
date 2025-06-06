@@ -1,7 +1,12 @@
-import { Button } from "@/components/ui/button"
+"use client"
+
 import { Section } from "@/components/ui/section"
+import { useAuth } from "./auth/auth-provider"
+import { Button } from "@/components/ui/button"
 
 export function HeroSection() {
+  const { openAuthDialog, isAuthenticated } = useAuth();
+  
   return (
     <Section className="bg-gradient-to-br from-green-50 to-emerald-100 py-20 lg:py-32">
       <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -20,8 +25,12 @@ export function HeroSection() {
             </p>
           </div>
 
-          <Button size="lg" className="bg-yellow-400 hover:bg-yellow-500 text-black text-lg px-8 py-4 rounded-full">
-            Start investing
+          <Button 
+            onClick={openAuthDialog}
+            size="lg" 
+            className="bg-yellow-400 hover:bg-yellow-500 text-black text-lg px-8 py-4 rounded-full"
+          >
+            {isAuthenticated ? "View Dashboard" : "Start investing"}
           </Button>
         </div>
 
