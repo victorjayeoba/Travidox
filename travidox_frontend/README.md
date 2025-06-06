@@ -11,24 +11,24 @@ The Nigeria Stock Slider is a feature that displays real-time Nigerian stock dat
 - Sleek auto-scrolling animation with smooth continuous flow
 - Pauses animation on hover or click for easier reading
 - Visual indicators for price changes (green for increase, red for decrease)
-- Efficient caching strategy - data persists until site refresh
+- Always fetches fresh data to ensure up-to-date stock information
 - Dark-themed UI design that fits with modern financial interfaces
 
 ### Implementation
 
 The feature is implemented with these components:
 
-1. **API Route**: `/api/nigeria-stocks` - Proxies data from the external API with server-side caching
-2. **Hook**: `useNigeriaStocks` - Provides data fetching with client-side caching
+1. **API Route**: `/api/nigeria-stocks` - Proxies data from the external API with no caching
+2. **Hook**: `useNigeriaStocks` - Provides fresh data fetching on each component mount
 3. **UI Component**: `NigeriaStockSlider` - Renders the sliding stock ticker using Framer Motion for smooth animations
 
-### Caching Strategy
+### Data Fetching Strategy
 
-The slider uses a two-level caching strategy:
-1. Server-side caching in the API route (data persists until server restart/deployment)
-2. Client-side module-level caching in the hook (data persists until page refresh)
+The slider uses a direct fetching strategy:
+1. API route fetches fresh data with each request (using `cache: 'no-store'`)
+2. Client-side hook fetches fresh data on component mount and provides a refresh function
 
-This ensures minimal API calls to the external service while maintaining a responsive UI.
+This ensures the most up-to-date stock information is always displayed to users.
 
 ### Usage
 

@@ -42,23 +42,7 @@ interface StocksResponse {
   data: NigeriaStock[];
 }
 
-// LocalStorage keys
-const STORAGE_KEY = 'nigeria-stocks-data';
-
 export const useNigeriaStocks = () => {
-  // Get initial state from localStorage if available
-  const getInitialStocks = (): NigeriaStock[] => {
-    if (typeof window === 'undefined') return [];
-    
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      return stored ? JSON.parse(stored) : [];
-    } catch (e) {
-      console.error('Error reading from localStorage:', e);
-      return [];
-    }
-  };
-
   const [stocks, setStocks] = useState<NigeriaStock[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -69,7 +53,14 @@ export const useNigeriaStocks = () => {
       setLoading(true);
       
       // Always fetch fresh data
-      const response = await fetch('/api/nigeria-stocks');
+      const response = await fetch('/api/nigeria-stocks', {
+        cache: 'no-store', // Don't use browser cache
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
+      });
       
       if (!response.ok) {
         throw new Error(`Failed to fetch: ${response.status}`);
@@ -77,13 +68,8 @@ export const useNigeriaStocks = () => {
       
       const data: StocksResponse = await response.json();
       
-      // Set data in component state and localStorage
+      // Set data in component state only (no localStorage)
       setStocks(data.data);
-      
-      // Save to localStorage
-      if (typeof window !== 'undefined') {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data.data));
-      }
       
       setError(null);
     } catch (err) {
@@ -94,17 +80,9 @@ export const useNigeriaStocks = () => {
     }
   }, []);
 
-  // Load stocks from localStorage on initial mount
+  // Always fetch fresh data on mount
   useEffect(() => {
-    const storedStocks = getInitialStocks();
-    
-    if (storedStocks.length > 0) {
-      setStocks(storedStocks);
-      setLoading(false);
-    } else {
-      // If no stored data, fetch from API
-      fetchStocks();
-    }
+    fetchStocks();
   }, [fetchStocks]);
 
   // Return the stocks, loading state, error, and a function to manually refresh
