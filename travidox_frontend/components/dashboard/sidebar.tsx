@@ -1,11 +1,12 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { 
   LayoutDashboard, BookOpen, Shield, Bot, PieChart, 
-  DollarSign, School, ListChecks, Heart, Clock, Settings, ChevronRight
+  DollarSign, School, ListChecks, Heart, Clock, Settings, ChevronRight,
+  X, LogOut
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -17,10 +18,11 @@ interface SidebarItemProps {
   href: string
   active?: boolean
   isNew?: boolean
+  onClick?: () => void
 }
 
-const SidebarItem = ({ icon, label, href, active, isNew }: SidebarItemProps) => (
-  <Link href={href} className="w-full">
+const SidebarItem = ({ icon, label, href, active, isNew, onClick }: SidebarItemProps) => (
+  <Link href={href} className="w-full" onClick={onClick}>
     <Button
       variant="ghost"
       className={cn(
@@ -42,13 +44,57 @@ const SidebarItem = ({ icon, label, href, active, isNew }: SidebarItemProps) => 
 
 export function Sidebar() {
   const pathname = usePathname()
-  const { user } = useAuth()
-  const [balance] = useState("$0")
+  const { user, logout } = useAuth()
+  const [balance] = useState("₦0")
+  const [isMobile, setIsMobile] = useState(false)
+  
+  // Check if screen is mobile
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 1024)
+    }
+    
+    // Set initial value
+    checkIfMobile()
+    
+    // Add event listener for window resize
+    window.addEventListener('resize', checkIfMobile)
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', checkIfMobile)
+  }, [])
+  
+  const closeMenuOnMobile = () => {
+    // Only do something if we're on mobile
+    if (isMobile && window.innerWidth < 1024) {
+      // Try to find parent layout and close sidebar
+      const layoutComponent = document.getElementById('mobile-sidebar')
+      if (layoutComponent) {
+        layoutComponent.classList.add('-translate-x-full')
+        
+        // Find and click the hamburger button to update state
+        const hamburgerButton = document.getElementById('hamburger-button')
+        if (hamburgerButton) {
+          hamburgerButton.click()
+        }
+      }
+    }
+  }
+
+  const handleLogout = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    try {
+      await logout()
+      closeMenuOnMobile()
+    } catch (error) {
+      console.error('Logout failed:', error)
+    }
+  }
 
   return (
-    <aside className="w-64 border-r border-gray-200 h-screen sticky top-0 flex flex-col bg-white">
-      {/* Logo */}
-      <div className="px-4 py-4">
+    <aside className="w-64 border-r border-gray-200 h-screen flex flex-col bg-white overflow-y-auto">
+      {/* Logo - only visible on desktop */}
+      <div className="px-4 py-4 lg:block hidden">
         <Link href="/">
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-green-600 rounded-md flex items-center justify-center">
@@ -58,14 +104,25 @@ export function Sidebar() {
           </div>
         </Link>
       </div>
+      
+      {/* Mobile header */}
+      <div className="lg:hidden flex items-center justify-between px-4 py-3 border-b">
+        <div className="flex items-center space-x-2">
+          <div className="w-8 h-8 bg-green-600 rounded-md flex items-center justify-center">
+            <span className="text-white font-bold">T</span>
+          </div>
+          <span className="text-xl font-bold text-gray-900">Travidox</span>
+        </div>
+      </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 py-2 space-y-1">
+      <nav className="flex-1 px-3 py-4 space-y-1">
         <SidebarItem 
           icon={<PieChart size={18} />} 
           label="My Portfolio" 
           href="/dashboard" 
           active={pathname === '/dashboard'}
+          onClick={closeMenuOnMobile}
         />
         
         <SidebarItem 
@@ -73,6 +130,7 @@ export function Sidebar() {
           label="Dashboard" 
           href="/dashboard/overview" 
           active={pathname === '/dashboard/overview'}
+          onClick={closeMenuOnMobile}
         />
         
         <SidebarItem 
@@ -80,6 +138,7 @@ export function Sidebar() {
           label="Stocks" 
           href="/dashboard/markets" 
           active={pathname.startsWith('/dashboard/markets')}
+          onClick={closeMenuOnMobile}
         />
 
         <SidebarItem 
@@ -87,6 +146,7 @@ export function Sidebar() {
           label="Trading Bot" 
           href="/dashboard/trading-bot" 
           active={pathname.startsWith('/dashboard/trading-bot')}
+          onClick={closeMenuOnMobile}
         />
         
         <SidebarItem 
@@ -94,6 +154,7 @@ export function Sidebar() {
           label="Learn & Earn" 
           href="/dashboard/learn" 
           active={pathname.startsWith('/dashboard/learn')}
+          onClick={closeMenuOnMobile}
         />
         
         <SidebarItem 
@@ -101,6 +162,7 @@ export function Sidebar() {
           label="Certifications" 
           href="/dashboard/certifications" 
           active={pathname.startsWith('/dashboard/certifications')}
+          onClick={closeMenuOnMobile}
         />
         
         <SidebarItem 
@@ -108,6 +170,7 @@ export function Sidebar() {
           label="Security" 
           href="/dashboard/security" 
           active={pathname.startsWith('/dashboard/security')}
+          onClick={closeMenuOnMobile}
         />
         
         <SidebarItem 
@@ -116,6 +179,7 @@ export function Sidebar() {
           href="/dashboard/history" 
           active={pathname.startsWith('/dashboard/history')}
           isNew
+          onClick={closeMenuOnMobile}
         />
 
         <SidebarItem 
@@ -123,12 +187,13 @@ export function Sidebar() {
           label="Settings" 
           href="/dashboard/settings" 
           active={pathname.startsWith('/dashboard/settings')}
+          onClick={closeMenuOnMobile}
         />
       </nav>
 
       {/* User Account */}
       <div className="p-3 border-t border-gray-200">
-        <Link href="/dashboard/profile">
+        <Link href="/dashboard/profile" onClick={closeMenuOnMobile}>
           <div className="flex items-center p-3 rounded-lg hover:bg-gray-100 cursor-pointer">
             <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-semibold">
               {user?.displayName ? user.displayName.charAt(0).toUpperCase() : user?.email?.charAt(0).toUpperCase() || '?'}
@@ -142,6 +207,16 @@ export function Sidebar() {
             <ChevronRight size={16} className="text-gray-400" />
           </div>
         </Link>
+        
+        {/* Logout Button */}
+        <Button 
+          variant="ghost" 
+          className="w-full mt-2 text-red-600 hover:bg-red-50 hover:text-red-700 flex items-center gap-2 justify-start"
+          onClick={handleLogout}
+        >
+          <LogOut size={18} />
+          <span>Logout</span>
+        </Button>
       </div>
     </aside>
   )

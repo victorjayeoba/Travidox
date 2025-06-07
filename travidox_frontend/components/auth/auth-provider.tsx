@@ -13,15 +13,7 @@ import {
 } from 'firebase/auth'
 import { auth, googleProvider } from '@/lib/firebase'
 
-// Debug: Test Firebase connection
-if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
-  console.log('🔥 Firebase Auth Debug:', {
-    auth: auth,
-    config: auth.config,
-    app: auth.app,
-    currentUser: auth.currentUser
-  })
-}
+// Debug: Test Firebase connection removed for security
 
 type AuthMode = 'signIn' | 'signUp'
 

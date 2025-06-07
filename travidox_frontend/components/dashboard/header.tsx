@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Search, Bell, Star, AlertTriangle, ChevronDown } from 'lucide-react'
+import { Search, Bell, Star, AlertTriangle, ChevronDown, Menu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { 
@@ -18,10 +18,18 @@ import { useAuth } from '@/components/auth/auth-provider'
 import { cn } from '@/lib/utils'
 
 interface DashboardHeaderProps {
-  showSearch?: boolean
+  showSearch?: boolean;
+  showMobileMenu?: boolean;
+  isSidebarOpen?: boolean;
+  onMenuClick?: () => void;
 }
 
-export function DashboardHeader({ showSearch = true }: DashboardHeaderProps) {
+export function DashboardHeader({ 
+  showSearch = true,
+  showMobileMenu = false,
+  isSidebarOpen = false,
+  onMenuClick
+}: DashboardHeaderProps) {
   const { user } = useAuth()
   const router = useRouter()
   const [searchQuery, setSearchQuery] = useState('')
@@ -48,9 +56,9 @@ export function DashboardHeader({ showSearch = true }: DashboardHeaderProps) {
   return (
     <header className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 sm:px-6">
       <div className="flex items-center justify-between h-16">
-        {/* Left section: Search */}
+        {/* Left section: Search or logo */}
         {showSearch ? (
-          <form onSubmit={handleSearch} className="w-full max-w-md">
+          <form onSubmit={handleSearch} className="w-full max-w-md ml-auto md:ml-0">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
               <Input 
@@ -62,25 +70,34 @@ export function DashboardHeader({ showSearch = true }: DashboardHeaderProps) {
             </div>
           </form>
         ) : (
-          <div></div>
+          <div className="ml-12 lg:ml-0">
+            <Link href="/">
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-green-600 rounded-md flex items-center justify-center">
+                  <span className="text-white font-bold">T</span>
+                </div>
+                <span className="text-xl font-bold text-gray-900">Travidox</span>
+              </div>
+            </Link>
+          </div>
         )}
         
         {/* Right section: User tools */}
-        <div className="flex items-center space-x-4">
-          {/* Verification status */}
+        <div className="flex items-center space-x-2 md:space-x-4">
+          {/* Verification status - hide on smallest screens */}
           {!isVerified && (
             <Button 
               variant="outline"
-              className="text-yellow-700 border-yellow-300 hover:bg-yellow-50 gap-1 text-xs sm:text-sm"
+              className="hidden sm:flex text-yellow-700 border-yellow-300 hover:bg-yellow-50 gap-1 text-xs"
               onClick={() => router.push('/dashboard/verify-email')}
             >
               <AlertTriangle size={16} />
-              Verify Now
+              <span className="hidden md:inline">Verify Now</span>
             </Button>
           )}
           
-          {/* XP */}
-          <div className="hidden sm:flex items-center gap-1.5 text-yellow-700 bg-yellow-50 px-2.5 py-1 rounded-full">
+          {/* XP - hide on mobile */}
+          <div className="hidden md:flex items-center gap-1.5 text-yellow-700 bg-yellow-50 px-2.5 py-1 rounded-full">
             <Star size={16} className="fill-yellow-500 text-yellow-500" />
             <span className="text-sm font-medium">{userXP} XP</span>
             <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 text-xs">
@@ -122,7 +139,7 @@ export function DashboardHeader({ showSearch = true }: DashboardHeaderProps) {
                     {user?.displayName ? getInitials(user.displayName) : user?.email?.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
-                <ChevronDown size={16} className="text-gray-500" />
+                <ChevronDown size={16} className="text-gray-500 hidden sm:block" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
