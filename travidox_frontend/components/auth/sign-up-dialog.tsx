@@ -4,9 +4,6 @@ import { X, ArrowLeft } from "lucide-react"
 import { 
   Dialog, 
   DialogContent, 
-  DialogHeader, 
-  DialogTitle, 
-  DialogDescription,
   DialogOverlay
 } from "@/components/ui/dialog"
 import { SignUpForm } from "./sign-up-form"
@@ -33,33 +30,31 @@ export function SignUpDialog({ isOpen, onOpenChange }: SignUpDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogOverlay className="bg-black/60 backdrop-blur-sm" />
-      <DialogContent className="sm:max-w-[480px] bg-white/95 backdrop-blur-sm border-0 shadow-xl">
-        <div className="absolute top-4 left-4">
+      <DialogContent className="w-[95vw] max-w-[420px] max-h-[95vh] bg-white backdrop-blur-md border-0 shadow-2xl overflow-y-auto p-0 gap-0">
+        <div className="absolute top-3 left-3 z-10">
           <Button
             variant="ghost"
             size="icon"
-            className="h-8 w-8 rounded-full"
+            className="h-8 w-8 rounded-full bg-gray-100/80 hover:bg-gray-200/80 transition-colors"
             onClick={handleBackToSignIn}
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
         </div>
-        <DialogHeader className="mt-4">
-          <DialogTitle className="text-2xl font-bold text-center">Create Your Account</DialogTitle>
-          <DialogDescription className="text-center">
-            Join thousands of investors building wealth together
-          </DialogDescription>
-        </DialogHeader>
-        <SignUpForm onSuccess={handleSignUpSuccess} switchToSignIn={handleBackToSignIn} />
-        <div className="absolute top-2 right-2">
+        
+        <div className="absolute top-3 right-3 z-10">
           <Button 
             variant="ghost" 
             size="icon" 
-            className="h-8 w-8 rounded-full" 
+            className="h-8 w-8 rounded-full bg-gray-100/80 hover:bg-gray-200/80 transition-colors" 
             onClick={() => onOpenChange(false)}
           >
             <X className="h-4 w-4" />
           </Button>
+        </div>
+        
+        <div className="p-6 pb-8 pt-12">
+          <SignUpForm onSuccess={handleSignUpSuccess} switchToSignIn={handleBackToSignIn} />
         </div>
       </DialogContent>
     </Dialog>

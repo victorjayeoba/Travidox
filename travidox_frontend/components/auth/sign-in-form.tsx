@@ -5,12 +5,15 @@ import { useRouter } from "next/navigation"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { EyeIcon, EyeOffIcon, Loader2 } from "lucide-react"
+import { EyeIcon, EyeOffIcon, Loader2, Mail, Lock, LogIn } from "lucide-react"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "./auth-provider"
 import { SocialAuthButton } from "./social-auth-button"
+import { ForgotPasswordForm } from "./forgot-password-form"
+import { toast } from "sonner"
+import Link from "next/link"
 
 const signInSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -26,7 +29,8 @@ interface SignInFormProps {
 export function SignInForm({ onSuccess }: SignInFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
-  const { switchToSignUp, login, signInWithGoogle, isLoading: authLoading } = useAuth()
+  const [showForgotPassword, setShowForgotPassword] = useState(false)
+  const { login, signInWithGoogle, isLoading: authLoading } = useAuth()
   const router = useRouter()
 
   const form = useForm<SignInValues>({
@@ -42,11 +46,15 @@ export function SignInForm({ onSuccess }: SignInFormProps) {
     
     try {
       await login(data.email, data.password)
+      toast.success("Welcome back! Redirecting to dashboard...")
+      
       if (onSuccess) {
         onSuccess()
       }
-    } catch (error) {
+      
+    } catch (error: any) {
       console.error("Sign in error:", error)
+      toast.error(error.message || "Failed to sign in. Please try again.")
     } finally {
       setIsLoading(false)
     }
@@ -55,103 +63,39 @@ export function SignInForm({ onSuccess }: SignInFormProps) {
   const handleGoogleSignIn = async () => {
     try {
       await signInWithGoogle()
+      toast.success("Welcome back! Redirecting to dashboard...")
+      
       if (onSuccess) {
         onSuccess()
       }
-    } catch (error) {
+      
+    } catch (error: any) {
       console.error("Google sign-in error:", error)
+      toast.error(error.message || "Failed to sign in with Google. Please try again.")
     }
   }
 
-  return (
-    <div className="space-y-6 py-4">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input 
-                    placeholder="you@example.com" 
-                    {...field} 
-                    disabled={isLoading || authLoading}
-                    className="bg-white/80"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <div className="relative">
-                    <Input
-                      type={showPassword ? "text" : "password"}
-                      placeholder="••••••••"
-                      {...field}
-                      disabled={isLoading || authLoading}
-                      className="bg-white/80 pr-10"
-                    />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      className="absolute right-0 top-0 h-full px-3 py-2 text-gray-400"
-                      onClick={() => setShowPassword(!showPassword)}
-                      disabled={isLoading || authLoading}
-                    >
-                      {showPassword ? (
-                        <EyeOffIcon className="h-4 w-4" />
-                      ) : (
-                        <EyeIcon className="h-4 w-4" />
-                      )}
-                    </Button>
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="flex justify-end">
-            <Button
-              variant="link"
-              className="h-auto p-0 text-sm text-green-600"
-              onClick={() => console.log("Forgot password")}
-              disabled={isLoading || authLoading}
-            >
-              Forgot your password?
-            </Button>
-          </div>
-          <Button
-            type="submit"
-            className="w-full bg-green-600 hover:bg-green-700"
-            disabled={isLoading || authLoading}
-          >
-            {isLoading || authLoading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
-              </>
-            ) : (
-              "Sign In"
-            )}
-          </Button>
-        </form>
-      </Form>
+  if (showForgotPassword) {
+    return (
+      <ForgotPasswordForm 
+        onBack={() => setShowForgotPassword(false)}
+        onSuccess={() => setShowForgotPassword(false)}
+      />
+    )
+  }
 
-      <div className="relative flex items-center py-2">
-        <div className="flex-grow border-t border-gray-300"></div>
-        <span className="mx-4 flex-shrink text-xs text-gray-500">OR</span>
-        <div className="flex-grow border-t border-gray-300"></div>
+  return (
+    <div className="space-y-4 w-full">
+      {/* Header */}
+      <div className="text-center space-y-2">
+        <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-3">
+          <LogIn className="w-6 h-6 text-green-600" />
+        </div>
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Welcome Back</h2>
+        <p className="text-gray-600 text-sm">Sign in to your account to continue</p>
       </div>
 
+      {/* Google Sign In */}
       <SocialAuthButton
         icon={
           <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
@@ -177,19 +121,121 @@ export function SignInForm({ onSuccess }: SignInFormProps) {
         onClick={handleGoogleSignIn}
         isLoading={authLoading}
         disabled={isLoading || authLoading}
+        className="h-11 font-medium text-sm"
       />
 
-      <div className="text-center">
-        <span className="text-sm text-gray-500">
-          Don't have an account?{" "}
+      {/* Divider */}
+      <div className="relative flex items-center py-2">
+        <div className="flex-grow border-t border-gray-200"></div>
+        <span className="mx-4 flex-shrink text-xs text-gray-500 bg-white px-2">OR</span>
+        <div className="flex-grow border-t border-gray-200"></div>
+      </div>
+
+      {/* Email/Password Form */}
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium text-gray-700">Email Address</FormLabel>
+                <FormControl>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input 
+                      placeholder="you@example.com" 
+                      {...field} 
+                      disabled={isLoading || authLoading}
+                      className="h-11 pl-10 bg-white border-gray-200 focus:border-green-500 focus:ring-green-500 transition-colors text-gray-900 text-base"
+                    />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium text-gray-700">Password</FormLabel>
+                <FormControl>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input
+                      type={showPassword ? "text" : "password"}
+                      placeholder="••••••••"
+                      {...field}
+                      disabled={isLoading || authLoading}
+                      className="h-11 pl-10 pr-10 bg-white border-gray-200 focus:border-green-500 focus:ring-green-500 transition-colors text-gray-900 text-base"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="absolute right-0 top-0 h-full px-3 py-2 text-gray-400 hover:text-gray-600"
+                      onClick={() => setShowPassword(!showPassword)}
+                      disabled={isLoading || authLoading}
+                    >
+                      {showPassword ? (
+                        <EyeOffIcon className="h-4 w-4" />
+                      ) : (
+                        <EyeIcon className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          {/* Forgot Password Link */}
+          <div className="flex justify-end">
+            <Button
+              type="button"
+              variant="link"
+              className="h-auto p-0 text-sm text-green-600 hover:text-green-500 font-medium"
+              onClick={() => setShowForgotPassword(true)}
+              disabled={isLoading || authLoading}
+            >
+              Forgot your password?
+            </Button>
+          </div>
+          
+          {/* Sign In Button */}
           <Button
-            variant="link"
-            className="h-auto p-0 text-green-600 hover:text-green-500 font-medium"
-            onClick={switchToSignUp}
+            type="submit"
+            className="w-full h-11 bg-green-600 hover:bg-green-700 font-medium transition-colors text-base"
             disabled={isLoading || authLoading}
           >
-            Sign Up
+            {isLoading || authLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 
+                Signing In...
+              </>
+            ) : (
+              <>
+                <LogIn className="mr-2 h-4 w-4" />
+                Sign In
+              </>
+            )}
           </Button>
+        </form>
+      </Form>
+
+      {/* Sign Up Link */}
+      <div className="text-center pt-3 border-t border-gray-100">
+        <span className="text-sm text-gray-600">
+          Don't have an account?{" "}
+          <Link
+            href="/signup"
+            className="text-green-600 hover:text-green-500 font-medium"
+          >
+            Create Account
+          </Link>
         </span>
       </div>
     </div>

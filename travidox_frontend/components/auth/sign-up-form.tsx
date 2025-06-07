@@ -4,7 +4,7 @@ import { useState } from "react"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { EyeIcon, EyeOffIcon, Loader2 } from "lucide-react"
+import { EyeIcon, EyeOffIcon, Loader2, Mail, Lock, User, UserPlus } from "lucide-react"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -12,6 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import Link from "next/link"
 import { useAuth } from "./auth-provider"
 import { SocialAuthButton } from "./social-auth-button"
+import { toast } from "sonner"
 
 const signUpSchema = z.object({
   fullName: z.string().min(2, "Name must be at least 2 characters"),
@@ -55,11 +56,15 @@ export function SignUpForm({ onSuccess, switchToSignIn }: SignUpFormProps) {
     
     try {
       await signUpWithEmail(data.email, data.password, data.fullName)
+      toast.success("Account created successfully! Redirecting to dashboard...")
+      
       if (onSuccess) {
         onSuccess()
       }
-    } catch (error) {
+      
+    } catch (error: any) {
       console.error("Sign up error:", error)
+      toast.error(error.message || "Failed to create account. Please try again.")
     } finally {
       setIsLoading(false)
     }
@@ -68,22 +73,30 @@ export function SignUpForm({ onSuccess, switchToSignIn }: SignUpFormProps) {
   const handleGoogleSignUp = async () => {
     try {
       await signUpWithGoogle()
+      toast.success("Account created successfully! Redirecting to dashboard...")
+      
       if (onSuccess) {
         onSuccess()
       }
-    } catch (error) {
+      
+    } catch (error: any) {
       console.error("Google sign-up error:", error)
+      toast.error(error.message || "Failed to sign up with Google. Please try again.")
     }
   }
 
   return (
-    <div className="space-y-6">
-      <div className="relative flex items-center py-2">
-        <div className="flex-grow border-t border-gray-300"></div>
-        <span className="mx-4 flex-shrink text-xs text-gray-500">SIGN UP WITH</span>
-        <div className="flex-grow border-t border-gray-300"></div>
+    <div className="space-y-4 w-full">
+      {/* Header */}
+      <div className="text-center space-y-2">
+        <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-3">
+          <UserPlus className="w-6 h-6 text-green-600" />
+        </div>
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Create Account</h2>
+        <p className="text-gray-600 text-sm">Join thousands of investors building wealth together</p>
       </div>
 
+      {/* Google Sign Up */}
       <SocialAuthButton
         icon={
           <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
@@ -109,14 +122,17 @@ export function SignUpForm({ onSuccess, switchToSignIn }: SignUpFormProps) {
         onClick={handleGoogleSignUp}
         isLoading={authLoading}
         disabled={isLoading || authLoading}
+        className="h-11 font-medium text-sm"
       />
 
+      {/* Divider */}
       <div className="relative flex items-center py-2">
-        <div className="flex-grow border-t border-gray-300"></div>
-        <span className="mx-4 flex-shrink text-xs text-gray-500">OR WITH EMAIL</span>
-        <div className="flex-grow border-t border-gray-300"></div>
+        <div className="flex-grow border-t border-gray-200"></div>
+        <span className="mx-4 flex-shrink text-xs text-gray-500 bg-white px-2">OR WITH EMAIL</span>
+        <div className="flex-grow border-t border-gray-200"></div>
       </div>
 
+      {/* Email/Password Form */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
@@ -124,14 +140,17 @@ export function SignUpForm({ onSuccess, switchToSignIn }: SignUpFormProps) {
             name="fullName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Full Name</FormLabel>
+                <FormLabel className="text-sm font-medium text-gray-700">Full Name</FormLabel>
                 <FormControl>
-                  <Input 
-                    placeholder="John Doe" 
-                    {...field} 
-                    disabled={isLoading || authLoading}
-                    className="bg-white/80"
-                  />
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input 
+                      placeholder="John Doe" 
+                      {...field} 
+                      disabled={isLoading || authLoading}
+                      className="h-11 pl-10 bg-white border-gray-200 focus:border-green-500 focus:ring-green-500 transition-colors text-gray-900 text-base"
+                    />
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -142,39 +161,45 @@ export function SignUpForm({ onSuccess, switchToSignIn }: SignUpFormProps) {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel className="text-sm font-medium text-gray-700">Email Address</FormLabel>
                 <FormControl>
-                  <Input 
-                    placeholder="you@example.com" 
-                    {...field} 
-                    disabled={isLoading || authLoading}
-                    className="bg-white/80"
-                  />
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input 
+                      placeholder="you@example.com" 
+                      {...field} 
+                      disabled={isLoading || authLoading}
+                      className="h-11 pl-10 bg-white border-gray-200 focus:border-green-500 focus:ring-green-500 transition-colors text-gray-900 text-base"
+                    />
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+          
+          {/* Password Fields */}
           <FormField
             control={form.control}
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel className="text-sm font-medium text-gray-700">Password</FormLabel>
                 <FormControl>
                   <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       type={showPassword ? "text" : "password"}
                       placeholder="••••••••"
                       {...field}
                       disabled={isLoading || authLoading}
-                      className="bg-white/80 pr-10"
+                      className="h-11 pl-10 pr-10 bg-white border-gray-200 focus:border-green-500 focus:ring-green-500 transition-colors text-gray-900 text-base"
                     />
                     <Button
                       type="button"
                       variant="ghost"
                       size="icon"
-                      className="absolute right-0 top-0 h-full px-3 py-2 text-gray-400"
+                      className="absolute right-0 top-0 h-full px-3 py-2 text-gray-400 hover:text-gray-600"
                       onClick={() => setShowPassword(!showPassword)}
                       disabled={isLoading || authLoading}
                     >
@@ -195,21 +220,22 @@ export function SignUpForm({ onSuccess, switchToSignIn }: SignUpFormProps) {
             name="confirmPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Confirm Password</FormLabel>
+                <FormLabel className="text-sm font-medium text-gray-700">Confirm Password</FormLabel>
                 <FormControl>
                   <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       type={showConfirmPassword ? "text" : "password"}
                       placeholder="••••••••"
                       {...field}
                       disabled={isLoading || authLoading}
-                      className="bg-white/80 pr-10"
+                      className="h-11 pl-10 pr-10 bg-white border-gray-200 focus:border-green-500 focus:ring-green-500 transition-colors text-gray-900 text-base"
                     />
                     <Button
                       type="button"
                       variant="ghost"
                       size="icon"
-                      className="absolute right-0 top-0 h-full px-3 py-2 text-gray-400"
+                      className="absolute right-0 top-0 h-full px-3 py-2 text-gray-400 hover:text-gray-600"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                       disabled={isLoading || authLoading}
                     >
@@ -225,26 +251,29 @@ export function SignUpForm({ onSuccess, switchToSignIn }: SignUpFormProps) {
               </FormItem>
             )}
           />
+          
+          {/* Terms and Conditions */}
           <FormField
             control={form.control}
             name="acceptTerms"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md">
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md p-3 border border-gray-100 bg-gray-50/50">
                 <FormControl>
                   <Checkbox
                     checked={field.value}
                     onCheckedChange={field.onChange}
                     disabled={isLoading || authLoading}
+                    className="mt-0.5"
                   />
                 </FormControl>
                 <div className="space-y-1 leading-none">
-                  <FormLabel className="text-sm font-normal">
+                  <FormLabel className="text-sm font-normal text-gray-700 leading-relaxed">
                     I accept the{" "}
-                    <Link href="/terms" className="text-green-600 hover:text-green-500 underline">
+                    <Link href="/terms" className="text-green-600 hover:text-green-500 underline font-medium">
                       Terms of Service
                     </Link>{" "}
                     and{" "}
-                    <Link href="/privacy" className="text-green-600 hover:text-green-500 underline">
+                    <Link href="/privacy" className="text-green-600 hover:text-green-500 underline font-medium">
                       Privacy Policy
                     </Link>
                   </FormLabel>
@@ -253,32 +282,38 @@ export function SignUpForm({ onSuccess, switchToSignIn }: SignUpFormProps) {
               </FormItem>
             )}
           />
+          
+          {/* Sign Up Button */}
           <Button
             type="submit"
-            className="w-full bg-green-600 hover:bg-green-700 mt-4"
+            className="w-full h-11 bg-green-600 hover:bg-green-700 font-medium transition-colors text-base"
             disabled={isLoading || authLoading}
           >
             {isLoading || authLoading ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating account...
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 
+                Creating Account...
               </>
             ) : (
-              "Create Account"
+              <>
+                <UserPlus className="mr-2 h-4 w-4" />
+                Create Account
+              </>
             )}
           </Button>
         </form>
       </Form>
-      <div className="text-center">
-        <span className="text-sm text-gray-500">
+
+      {/* Sign In Link */}
+      <div className="text-center pt-3 border-t border-gray-100">
+        <span className="text-sm text-gray-600">
           Already have an account?{" "}
-          <Button
-            variant="link"
-            className="h-auto p-0 text-green-600 hover:text-green-500 font-medium"
-            onClick={switchToSignIn}
-            disabled={isLoading || authLoading}
+          <Link
+            href="/login"
+            className="text-green-600 hover:text-green-500 font-medium"
           >
             Sign In
-          </Button>
+          </Link>
         </span>
       </div>
     </div>

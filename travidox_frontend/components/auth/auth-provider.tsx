@@ -1,186 +1,181 @@
 "use client"
 
-import { createContext, useContext, useState, ReactNode } from "react"
-import { AuthDialog } from "./auth-dialog"
-import { SignUpDialog } from "./sign-up-dialog"
+import React, { createContext, useContext, useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { 
+  User,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged,
+  updateProfile
+} from 'firebase/auth'
+import { auth, googleProvider } from '@/lib/firebase'
 
-// Mock Firebase Google Auth Response
-interface GoogleAuthUser {
-  uid: string;
-  email: string;
-  displayName: string;
-  photoURL: string;
+// Debug: Test Firebase connection
+if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+  console.log('🔥 Firebase Auth Debug:', {
+    auth: auth,
+    config: auth.config,
+    app: auth.app,
+    currentUser: auth.currentUser
+  })
 }
 
+type AuthMode = 'signIn' | 'signUp'
+
 interface AuthContextType {
-  isAuthenticated: boolean;
-  isAuthDialogOpen: boolean;
-  isSignUpDialogOpen: boolean;
-  user: GoogleAuthUser | null;
-  openAuthDialog: () => void;
-  closeAuthDialog: () => void;
-  openSignUpDialog: () => void;
-  closeSignUpDialog: () => void;
-  switchToSignUp: () => void;
-  switchToSignIn: () => void;
-  login: (email: string, password: string) => Promise<void>;
-  signInWithGoogle: () => Promise<void>;
-  signUpWithEmail: (email: string, password: string, name: string) => Promise<void>;
-  signUpWithGoogle: () => Promise<void>;
-  logout: () => void;
-  isLoading: boolean;
+  user: User | null
+  loading: boolean
+  authMode: AuthMode
+  switchToSignIn: () => void
+  switchToSignUp: () => void
+  login: (email: string, password: string) => Promise<void>
+  signUpWithEmail: (email: string, password: string, fullName: string) => Promise<void>
+  signInWithGoogle: () => Promise<void>
+  signUpWithGoogle: () => Promise<void>
+  logout: () => Promise<void>
+  isLoading: boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false)
-  const [isSignUpDialogOpen, setIsSignUpDialogOpen] = useState(false)
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
-  const [user, setUser] = useState<GoogleAuthUser | null>(null)
+  const [authMode, setAuthMode] = useState<AuthMode>('signIn')
+  const router = useRouter()
 
-  const openAuthDialog = () => {
-    setIsSignUpDialogOpen(false)
-    setIsAuthDialogOpen(true)
-  }
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user)
+      setLoading(false)
+    })
 
-  const closeAuthDialog = () => {
-    setIsAuthDialogOpen(false)
-  }
+    return () => unsubscribe()
+  }, [])
 
-  const openSignUpDialog = () => {
-    setIsAuthDialogOpen(false)
-    setIsSignUpDialogOpen(true)
-  }
-
-  const closeSignUpDialog = () => {
-    setIsSignUpDialogOpen(false)
+  const switchToSignIn = () => {
+    setAuthMode('signIn')
   }
 
   const switchToSignUp = () => {
-    setIsAuthDialogOpen(false)
-    setIsSignUpDialogOpen(true)
-  }
-
-  const switchToSignIn = () => {
-    setIsSignUpDialogOpen(false)
-    setIsAuthDialogOpen(true)
+    setAuthMode('signUp')
   }
 
   const login = async (email: string, password: string) => {
+    setIsLoading(true)
+    console.log('🔐 Starting login process for:', email)
+    
     try {
-      setIsLoading(true)
-      // Mock authentication success
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      const result = await signInWithEmailAndPassword(auth, email, password)
+      console.log('✅ Login successful:', result.user.email)
+      console.log('🚀 Attempting to navigate to dashboard...')
       
-      setUser({
-        uid: "user123",
-        email: email,
-        displayName: email.split("@")[0],
-        photoURL: "",
+      // Small delay to ensure auth state is updated
+      setTimeout(() => {
+        router.push('/dashboard')
+        console.log('📍 Navigation command sent to /dashboard')
+      }, 100)
+    } catch (error: any) {
+      console.error('❌ Login error:', error)
+      throw new Error(error.message || 'Failed to login')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const signUpWithEmail = async (email: string, password: string, fullName: string) => {
+    setIsLoading(true)
+    console.log('📝 Starting signup process for:', email, 'with name:', fullName)
+    
+    try {
+      const result = await createUserWithEmailAndPassword(auth, email, password)
+      console.log('✅ Signup successful:', result.user.email)
+      
+      // Update the user's profile with their full name
+      await updateProfile(result.user, {
+        displayName: fullName
       })
-      setIsAuthenticated(true)
-      closeAuthDialog()
-    } catch (error) {
-      console.error("Login error:", error)
+      console.log('✅ Profile updated with display name:', fullName)
+      console.log('🚀 Attempting to navigate to dashboard...')
+      
+      // Small delay to ensure auth state is updated
+      setTimeout(() => {
+        router.push('/dashboard')
+        console.log('📍 Navigation command sent to /dashboard')
+      }, 100)
+    } catch (error: any) {
+      console.error('❌ Sign up error:', error)
+      throw new Error(error.message || 'Failed to create account')
     } finally {
       setIsLoading(false)
     }
   }
 
   const signInWithGoogle = async () => {
+    setIsLoading(true)
+    console.log('🔍 Starting Google signin...')
+    
     try {
-      setIsLoading(true)
-      // Mock Google authentication
-      await new Promise(resolve => setTimeout(resolve, 1500))
+      const result = await signInWithPopup(auth, googleProvider)
+      console.log('✅ Google signin successful:', result.user.email)
+      console.log('🚀 Attempting to navigate to dashboard...')
       
-      // Simulate successful Google login
-      setUser({
-        uid: "google123",
-        email: "user@gmail.com",
-        displayName: "Google User",
-        photoURL: "https://lh3.googleusercontent.com/a/default-user",
-      })
-      setIsAuthenticated(true)
-      closeAuthDialog()
-      closeSignUpDialog()
-    } catch (error) {
-      console.error("Google sign-in error:", error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const signUpWithEmail = async (email: string, password: string, name: string) => {
-    try {
-      setIsLoading(true)
-      // Mock signup process
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      
-      setUser({
-        uid: "newuser123",
-        email: email,
-        displayName: name,
-        photoURL: "",
-      })
-      setIsAuthenticated(true)
-      closeSignUpDialog()
-    } catch (error) {
-      console.error("Sign up error:", error)
+      // Small delay to ensure auth state is updated
+      setTimeout(() => {
+        router.push('/dashboard')
+        console.log('📍 Navigation command sent to /dashboard')
+      }, 100)
+    } catch (error: any) {
+      console.error('❌ Google sign in error:', error)
+      throw new Error(error.message || 'Failed to sign in with Google')
     } finally {
       setIsLoading(false)
     }
   }
 
   const signUpWithGoogle = async () => {
-    // For simplicity, we'll use the same function for both sign in and sign up with Google
-    await signInWithGoogle()
+    // For Google, sign up and sign in are the same
+    return signInWithGoogle()
   }
 
-  const logout = () => {
-    setIsAuthenticated(false)
-    setUser(null)
+  const logout = async () => {
+    setIsLoading(true)
+    try {
+      await signOut(auth)
+      router.push('/')
+    } catch (error: any) {
+      console.error('Logout error:', error)
+      throw new Error(error.message || 'Failed to logout')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
-  return (
-    <AuthContext.Provider
-      value={{
-        isAuthenticated,
-        isAuthDialogOpen,
-        isSignUpDialogOpen,
-        user,
-        openAuthDialog,
-        closeAuthDialog,
-        openSignUpDialog,
-        closeSignUpDialog,
-        switchToSignUp,
-        switchToSignIn,
-        login,
-        signInWithGoogle,
-        signUpWithEmail,
-        signUpWithGoogle,
-        logout,
-        isLoading,
-      }}
-    >
-      {children}
-      <AuthDialog
-        isOpen={isAuthDialogOpen}
-        onOpenChange={setIsAuthDialogOpen}
-      />
-      <SignUpDialog
-        isOpen={isSignUpDialogOpen}
-        onOpenChange={setIsSignUpDialogOpen}
-      />
-    </AuthContext.Provider>
-  )
+  const value = {
+    user,
+    loading,
+    authMode,
+    switchToSignIn,
+    switchToSignUp,
+    login,
+    signUpWithEmail,
+    signInWithGoogle,
+    signUpWithGoogle,
+    logout,
+    isLoading,
+  }
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
 export function useAuth() {
   const context = useContext(AuthContext)
   if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider")
+    throw new Error('useAuth must be used within an AuthProvider')
   }
   return context
 } 

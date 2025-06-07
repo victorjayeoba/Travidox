@@ -1,0 +1,151 @@
+"use client"
+
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { Search, Bell, Star, AlertTriangle, ChevronDown } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger 
+} from '@/components/ui/dropdown-menu'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
+import { useAuth } from '@/components/auth/auth-provider'
+import { cn } from '@/lib/utils'
+
+interface DashboardHeaderProps {
+  showSearch?: boolean
+}
+
+export function DashboardHeader({ showSearch = true }: DashboardHeaderProps) {
+  const { user } = useAuth()
+  const router = useRouter()
+  const [searchQuery, setSearchQuery] = useState('')
+  
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (searchQuery.trim()) {
+      router.push(`/dashboard/search?q=${encodeURIComponent(searchQuery)}`)
+    }
+  }
+  
+  const isVerified = user?.emailVerified || false
+  const userXP = 1250 // Mock XP value
+  const userLevel = Math.floor(userXP / 500) + 1
+  
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase())
+      .slice(0, 2)
+      .join('')
+  }
+  
+  return (
+    <header className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 sm:px-6">
+      <div className="flex items-center justify-between h-16">
+        {/* Left section: Search */}
+        {showSearch ? (
+          <form onSubmit={handleSearch} className="w-full max-w-md">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input 
+                placeholder="Search stocks, markets, news..."
+                className="pl-10 w-full"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+          </form>
+        ) : (
+          <div></div>
+        )}
+        
+        {/* Right section: User tools */}
+        <div className="flex items-center space-x-4">
+          {/* Verification status */}
+          {!isVerified && (
+            <Button 
+              variant="outline"
+              className="text-yellow-700 border-yellow-300 hover:bg-yellow-50 gap-1 text-xs sm:text-sm"
+              onClick={() => router.push('/dashboard/verify-email')}
+            >
+              <AlertTriangle size={16} />
+              Verify Now
+            </Button>
+          )}
+          
+          {/* XP */}
+          <div className="hidden sm:flex items-center gap-1.5 text-yellow-700 bg-yellow-50 px-2.5 py-1 rounded-full">
+            <Star size={16} className="fill-yellow-500 text-yellow-500" />
+            <span className="text-sm font-medium">{userXP} XP</span>
+            <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 text-xs">
+              Lvl {userLevel}
+            </Badge>
+          </div>
+          
+          {/* Notifications */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="relative">
+                <Bell size={20} />
+                <span className="absolute top-0 right-0 h-2.5 w-2.5 rounded-full bg-red-500"></span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-80">
+              <div className="p-2 font-medium border-b">Notifications</div>
+              <div className="py-2 px-3 text-sm bg-blue-50 border-l-4 border-blue-500 m-2">
+                <div className="font-medium">Welcome to Travidox!</div>
+                <p className="text-gray-500">Start your investment journey today.</p>
+              </div>
+              <div className="py-2 px-3 border-b text-sm m-2">
+                <div className="font-medium">Market update</div>
+                <p className="text-gray-500">S&P 500 up by 1.2% today.</p>
+              </div>
+              <DropdownMenuItem className="justify-center text-sm text-blue-600">
+                View all notifications
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          
+          {/* User menu */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm" className="gap-2">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={user?.photoURL || undefined} alt={user?.displayName || 'User'} />
+                  <AvatarFallback className="bg-green-100 text-green-700 text-sm font-semibold">
+                    {user?.displayName ? getInitials(user.displayName) : user?.email?.charAt(0).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <ChevronDown size={16} className="text-gray-500" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <div className="px-3 py-2 text-sm">
+                <div className="font-medium">{user?.displayName || user?.email?.split('@')[0]}</div>
+                <div className="text-gray-500 truncate">{user?.email}</div>
+              </div>
+              <DropdownMenuItem onClick={() => router.push('/dashboard/profile')}>
+                Profile
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push('/dashboard/settings')}>
+                Settings
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push('/dashboard/support')}>
+                Help & Support
+              </DropdownMenuItem>
+              <DropdownMenuItem className="text-red-600" onClick={() => router.push('/api/auth/logout')}>
+                Sign out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+    </header>
+  )
+} 
