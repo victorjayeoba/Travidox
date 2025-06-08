@@ -181,7 +181,7 @@ export default function DashboardOverviewPage() {
               </div>
             ) : news.length > 0 ? (
               <div className="space-y-4">
-                {news.slice(0, 3).map((item, index) => (
+                {news.map((item, index) => (
                   <article key={index} className={index < news.length - 1 ? "pb-4 border-b border-gray-100" : ""}>
                     <Badge variant="outline" className="mb-2">
                       {item.category}
