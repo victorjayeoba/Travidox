@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Search, Bell, Star, AlertTriangle, ChevronDown, Menu } from 'lucide-react'
+import { Search, Bell, Star, AlertTriangle, ChevronDown, Menu, DollarSign } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { 
@@ -15,6 +15,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { useAuth } from '@/components/auth/auth-provider'
+import { useUserProfile } from '@/hooks/useUserProfile'
 import { cn } from '@/lib/utils'
 
 interface DashboardHeaderProps {
@@ -31,6 +32,7 @@ export function DashboardHeader({
   onMenuClick
 }: DashboardHeaderProps) {
   const { user } = useAuth()
+  const { profile, loading: profileLoading } = useUserProfile()
   const router = useRouter()
   const [searchQuery, setSearchQuery] = useState('')
   
@@ -42,8 +44,11 @@ export function DashboardHeader({
   }
   
   const isVerified = user?.emailVerified || false
-  const userXP = 1250 // Mock XP value
-  const userLevel = Math.floor(userXP / 500) + 1
+  // Use the XP from user profile, or fall back to 0
+  const userXP = profile?.xp || 0
+  // Account balance is the same as XP in this implementation
+  const accountBalance = profile?.balance || 0
+
   
   const getInitials = (name: string) => {
     return name
@@ -100,9 +105,12 @@ export function DashboardHeader({
           <div className="hidden md:flex items-center gap-1.5 text-yellow-700 bg-yellow-50 px-2.5 py-1 rounded-full">
             <Star size={16} className="fill-yellow-500 text-yellow-500" />
             <span className="text-sm font-medium">{userXP} XP</span>
-            <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 text-xs">
-              Lvl {userLevel}
-            </Badge>
+          </div>
+          
+          {/* Account Balance - hide on mobile */}
+          <div className="hidden md:flex items-center gap-1.5 text-green-700 bg-green-50 px-2.5 py-1 rounded-full">
+            <DollarSign size={16} className="text-green-500" />
+            <span className="text-sm font-medium">₦{accountBalance.toFixed(2)}</span>
           </div>
           
           {/* Notifications */}

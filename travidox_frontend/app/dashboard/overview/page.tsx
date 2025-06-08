@@ -6,16 +6,37 @@ import { StockCard } from '@/components/dashboard/stock-card'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
+import { useNigeriaStocks } from '@/hooks/useNigeriaStocks'
+import { useEffect, useState } from 'react'
+import { useUserProfile } from '@/hooks/useUserProfile'
 
-// Mock data for demonstration
-const topStocks = [
-  { symbol: 'SXTC', name: 'China SXT Pharmaceuticals Inc', price: 2.83, change: 0.74, logo: '/images/stocks/sxtc.png' },
-  { symbol: 'PTHL', name: 'Phelon Holdings Ltd.', price: 15.01, change: 4.53, logo: '/images/stocks/pthl.png' },
-  { symbol: 'BRLS', name: 'Borealis Foods Inc', price: 6.22, change: 1.01, logo: '/images/stocks/brls.png' }
-]
+// Removed mock data as we'll use real data from API
 
 export default function DashboardOverviewPage() {
   const { user } = useAuth()
+  const { stocks, loading } = useNigeriaStocks()
+  const [topGainers, setTopGainers] = useState<any[]>([])
+  const { profile } = useUserProfile()
+  
+  // Process stocks data to find top gainers
+  useEffect(() => {
+    if (stocks && stocks.length > 0) {
+      // Map stocks to a consistent format
+      const normalizedStocks = stocks.map(stock => ({
+        symbol: stock.symbol || stock.Symbol || '',
+        name: stock.name || stock.Name || '',
+        price: stock.price || stock.Last || 0,
+        change: stock.change || stock.Chg || 0,
+        logo: null // API doesn't provide logos
+      }));
+      
+      // Sort by change in descending order to get top gainers
+      const sorted = [...normalizedStocks].sort((a, b) => b.change - a.change);
+      
+      // Take top 3 gainers
+      setTopGainers(sorted.slice(0, 3));
+    }
+  }, [stocks]);
   
   return (
     <div className="space-y-6">
@@ -55,13 +76,19 @@ export default function DashboardOverviewPage() {
       <section>
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold text-gray-900">Top Gainers</h2>
-          <Link href="/dashboard/stocks/top-gainers" className="text-green-600 hover:underline text-sm flex items-center">
+          <Link href="/dashboard/markets" className="text-green-600 hover:underline text-sm flex items-center">
             View all Top Stocks
           </Link>
         </div>
         
         <div className="space-y-3">
-          {topStocks.map((stock) => (
+          {loading ? (
+            <div className="flex justify-center items-center py-10">
+              <div className="animate-spin h-6 w-6 border-3 border-primary border-t-transparent rounded-full mr-2" />
+              <span>Loading top stocks...</span>
+            </div>
+          ) : topGainers.length > 0 ? (
+            topGainers.map((stock) => (
             <StockCard 
               key={stock.symbol}
               symbol={stock.symbol}
@@ -70,7 +97,12 @@ export default function DashboardOverviewPage() {
               change={stock.change}
               logo={stock.logo}
             />
-          ))}
+            ))
+          ) : (
+            <div className="text-center py-4 text-gray-500">
+              No stock data available
+            </div>
+          )}
         </div>
       </section>
 
@@ -128,7 +160,7 @@ export default function DashboardOverviewPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="text-3xl font-bold text-gray-900">$0.00</div>
+              <div className="text-3xl font-bold text-gray-900">₦{(profile?.balance || 0).toFixed(2)}</div>
               <div className="text-sm text-gray-500">Start investing to build your portfolio</div>
               <div className="pt-4">
                 <Link href="/dashboard/portfolio/create">
