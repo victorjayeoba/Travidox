@@ -103,21 +103,21 @@ export function NigeriaStockSlider() {
                 <span className="text-[10px] text-gray-500">{stock.Symbol}</span>
               </div>
               <div className="flex flex-col items-end">
-                <span className={`font-bold text-sm ${getPriceColor(stock.Chg)}`}>
-                  ₦{stock.Last.toLocaleString()}
+                <span className={`font-bold text-sm ${getPriceColor(stock.Chg ?? 0)}`}>
+                  ₦{(stock.Last ?? 0).toLocaleString()}
                 </span>
                 <div className="flex items-center gap-1">
-                  {stock.Chg > 0 ? (
+                  {(stock.Chg ?? 0) > 0 ? (
                     <ArrowUp className="w-3 h-3 text-green-600" />
-                  ) : stock.Chg < 0 ? (
+                  ) : (stock.Chg ?? 0) < 0 ? (
                     <ArrowDown className="w-3 h-3 text-red-500" />
                   ) : (
                     <span className="w-3 h-3" />
                   )}
                   <span 
-                    className={`text-[10px] font-medium ${getPriceColor(stock.Chg)}`}
+                    className={`text-[10px] font-medium ${getPriceColor(stock.Chg ?? 0)}`}
                   >
-                    {stock.ChgPct > 0 ? "+" : ""}{stock.ChgPct.toFixed(2)}%
+                    {(stock.ChgPct ?? 0) > 0 ? "+" : ""}{(stock.ChgPct ?? 0).toFixed(2)}%
                   </span>
                 </div>
               </div>
