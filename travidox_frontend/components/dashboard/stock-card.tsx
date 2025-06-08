@@ -1,6 +1,7 @@
 "use client"
 
 import { Card, CardContent } from '@/components/ui/card'
+import { TrendingUp, TrendingDown, Minus } from 'lucide-react'
 
 interface StockCardProps {
   symbol: string
@@ -17,10 +18,29 @@ export function StockCard({
   price,
   logo
 }: StockCardProps) {
-  const isPositive = change >= 0
-  const changeColor = isPositive ? 'text-green-500' : 'text-red-500'
-  const changeText = isPositive ? `+$${change.toFixed(2)}` : `-$${Math.abs(change).toFixed(2)}`
-  const changePercent = isPositive ? `(+${(change / (price - change) * 100).toFixed(2)}%)` : `(-${(Math.abs(change) / (price + change) * 100).toFixed(2)}%)`
+  // Determine color and icon based on change value
+  let changeColor = 'text-gray-500'  // Default black/gray for no change
+  let ChangeIcon = Minus
+  
+  if (change > 0) {
+    changeColor = 'text-green-500'
+    ChangeIcon = TrendingUp
+  } else if (change < 0) {
+    changeColor = 'text-red-500'
+    ChangeIcon = TrendingDown
+  }
+  
+  const changeText = change === 0 
+    ? `₦0.00` 
+    : change > 0 
+      ? `+₦${change.toFixed(2)}` 
+      : `-₦${Math.abs(change).toFixed(2)}`
+      
+  const changePercent = change === 0 
+    ? `(0.00%)` 
+    : change > 0 
+      ? `(+${(change / (price - change) * 100).toFixed(2)}%)` 
+      : `(-${(Math.abs(change) / (price + change) * 100).toFixed(2)}%)`
 
   return (
     <Card className="hover:shadow-md transition-shadow">
@@ -41,8 +61,10 @@ export function StockCard({
         </div>
         
         <div className="text-right">
-          <div className={changeColor}>
-            {changeText} {changePercent}
+          <div className="font-medium">₦{price.toFixed(2)}</div>
+          <div className={`flex items-center justify-end gap-1 ${changeColor}`}>
+            <ChangeIcon size={14} />
+            <span>{changeText} {changePercent}</span>
           </div>
         </div>
       </CardContent>
