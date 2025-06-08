@@ -7,3 +7,4 @@ echo "Fixing imports..."
 
 echo "Running build..."
 npm run build
+

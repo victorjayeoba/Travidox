@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { ArrowLeft, Download, Share2, Award, Loader2, CheckCircle } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
-import { fetchCourseProgress, getCertificate, Certificate} from '@/lib/firebase-courses'
+import { fetchCourseProgress, getCertificate, Certificate } from '@/lib/firebase-courses'
 import { getCourseById } from '@/lib/course-data'
 import { toast } from 'sonner'
 
