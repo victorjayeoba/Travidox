@@ -5,6 +5,7 @@ import { useEffect } from 'react'
 import Link from 'next/link'
 import { BarChart3, TrendingUp, Wallet, ArrowUpRight, Plus } from 'lucide-react'
 import { useAuth } from '@/components/auth/auth-provider'
+import { useUserProfile } from '@/hooks/useUserProfile'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { StockCard } from '@/components/dashboard/stock-card'
@@ -22,6 +23,7 @@ const portfolioAssets = [
 
 export default function DashboardPage() {
   const { user, loading } = useAuth()
+  const { profile } = useUserProfile()
   const router = useRouter()
   
   useEffect(() => {
@@ -53,6 +55,9 @@ export default function DashboardPage() {
   const totalValue = portfolioAssets.reduce((total, asset) => total + asset.value, 0)
   const totalChange = portfolioAssets.reduce((total, asset) => total + asset.change, 0)
   const percentChange = totalValue > 0 ? (totalChange / (totalValue - totalChange)) * 100 : 0
+  
+  // Get user balance from profile
+  const userBalance = profile?.balance || 0
   
   return (
     <div className="space-y-6">
@@ -100,7 +105,7 @@ export default function DashboardPage() {
           <CardContent className="flex items-center">
             <Wallet className="h-9 w-9 text-green-500 mr-3" />
             <div>
-              <div className="text-2xl font-bold">$245.32</div>
+              <div className="text-2xl font-bold">₦{userBalance.toFixed(2)}</div>
               <div className="text-sm text-gray-500">Available to invest</div>
             </div>
           </CardContent>

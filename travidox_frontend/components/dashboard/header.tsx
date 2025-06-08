@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Search, Bell, Star, AlertTriangle, ChevronDown, Menu, DollarSign } from 'lucide-react'
+import { Search, Bell, Star, AlertTriangle, ChevronDown, Menu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { 
@@ -46,8 +46,6 @@ export function DashboardHeader({
   const isVerified = user?.emailVerified || false
   // Use the XP from user profile, or fall back to 0
   const userXP = profile?.xp || 0
-  // Account balance is the same as XP in this implementation
-  const accountBalance = profile?.balance || 0
 
   
   const getInitials = (name: string) => {
@@ -105,12 +103,6 @@ export function DashboardHeader({
           <div className="hidden md:flex items-center gap-1.5 text-yellow-700 bg-yellow-50 px-2.5 py-1 rounded-full">
             <Star size={16} className="fill-yellow-500 text-yellow-500" />
             <span className="text-sm font-medium">{userXP} XP</span>
-          </div>
-          
-          {/* Account Balance - hide on mobile */}
-          <div className="hidden md:flex items-center gap-1.5 text-green-700 bg-green-50 px-2.5 py-1 rounded-full">
-            <DollarSign size={16} className="text-green-500" />
-            <span className="text-sm font-medium">₦{accountBalance.toFixed(2)}</span>
           </div>
           
           {/* Notifications */}
