@@ -1,6 +1,0 @@
-{
-  "version": 2,
-  "buildCommand": "chmod +x build-vercel.sh && ./build-vercel.sh",
-  "outputDirectory": ".next",
-  "installCommand": "npm install --platform=linux --arch=x64"
-} 

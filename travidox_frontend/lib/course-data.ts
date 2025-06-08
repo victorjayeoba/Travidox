@@ -309,7 +309,7 @@ The stock market is a marketplace where shares of publicly traded companies are 
 
 ## Market Makers
 - Provide liquidity to markets
-- Profit from bid-ask spreads
+   - Profit from bid-ask spreads
 - Help maintain orderly markets
 - Include specialized firms and bank trading desks`
           },
@@ -852,7 +852,7 @@ No single indicator is perfect. For robust cycle analysis:
           }
         ]
       },
-      {
+      { 
         id: "m3-2",
         title: "Sector Performance Analysis",
         description: "Learn how to analyze sector performance across different economic phases",
@@ -1036,7 +1036,7 @@ Historical data shows distinct performance patterns:
         id: "m3-3",
         title: "Identifying Rotation Signals",
         description: "Master the techniques for identifying optimal sector rotation timing",
-        duration: "45 min",
+        duration: "45 min", 
         isCompleted: false,
         order: 3,
         content: [

@@ -316,18 +316,18 @@ export default function CertificationPage() {
       ) : (
         <>
           {/* Course header */}
-          <div className="space-y-4">
+            <div className="space-y-4">
             <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
               <div className="flex items-start gap-4">
                 <div className="w-20 h-20 rounded-md overflow-hidden bg-gray-100 flex items-center justify-center">
                   <IconComponent name={courseData.icon} />
-                </div>
-                <div>
-                  <Badge className={statusBadges[status]}>
-                    {status === 'in-progress' ? 'In Progress' : 
-                     status === 'completed' ? 'Completed' : 'Not Started'}
-                  </Badge>
-                  <h1 className="text-3xl font-bold mt-2">{courseData.title}</h1>
+                  </div>
+                  <div>
+                    <Badge className={statusBadges[status]}>
+                      {status === 'in-progress' ? 'In Progress' : 
+                       status === 'completed' ? 'Completed' : 'Not Started'}
+                    </Badge>
+                    <h1 className="text-3xl font-bold mt-2">{courseData.title}</h1>
                   <p className="text-lg text-gray-600 mt-1">{courseData.subtitle}</p>
                   <div className="flex items-center mt-2 gap-2">
                     <div className="flex items-center">
@@ -350,7 +350,7 @@ export default function CertificationPage() {
                       <div className="flex items-center gap-1 text-sm text-green-600">
                         <Award size={16} />
                         <span>Certificate Included</span>
-                      </div>
+                </div>
                     )}
                   </div>
                 </div>
@@ -391,16 +391,16 @@ export default function CertificationPage() {
                 <Progress value={progressPercentage} className="h-2" />
               </div>
             )}
-          </div>
-          
+            </div>
+            
           {/* Course content tabs */}
           <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="grid w-full md:w-auto md:inline-grid grid-cols-3 md:grid-cols-3">
-              <TabsTrigger value="overview">Overview</TabsTrigger>
+                <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="content">Course Content</TabsTrigger>
               <TabsTrigger value="reviews">Reviews</TabsTrigger>
-            </TabsList>
-            
+              </TabsList>
+              
             <TabsContent value="overview" className="mt-6">
               <div className="grid gap-6 md:grid-cols-3">
                 <div className="col-span-2 space-y-6">
@@ -569,21 +569,21 @@ export default function CertificationPage() {
                             ))}
                           </ul>
                           <div className="p-4 flex justify-end border-t">
-                            <Button 
-                              size="sm" 
+                          <Button 
+                            size="sm" 
                               onClick={() => handleStartModule(module)}
                             >
                               {module.isCompleted ? 'Review Module' : module.isCurrent ? 'Continue Module' : 'Start Module'}
-                            </Button>
+                          </Button>
                           </div>
                         </AccordionContent>
                       </AccordionItem>
                     ))}
                   </Accordion>
-                </CardContent>
-              </Card>
-            </TabsContent>
-            
+                      </CardContent>
+                    </Card>
+              </TabsContent>
+              
             <TabsContent value="reviews" className="mt-6">
               <Card>
                 <CardHeader>
@@ -603,9 +603,9 @@ export default function CertificationPage() {
                       </div>
                       <div className="text-sm text-gray-500">
                         {courseData.totalStudents || courseReviews.length} students
-                      </div>
-                    </div>
-                    
+                  </div>
+                </div>
+                
                     <div className="md:col-span-3">
                       {courseReviews.length > 0 ? (
                         <div className="space-y-6">
@@ -619,10 +619,10 @@ export default function CertificationPage() {
                                     ) : (
                                       <AvatarFallback>
                                         {review.userName.split(' ').map((n: string) => n[0]).join('')}
-                                      </AvatarFallback>
-                                    )}
-                                  </Avatar>
-                                  <div>
+                        </AvatarFallback>
+                      )}
+                    </Avatar>
+                    <div>
                                     <h4 className="font-medium">{review.userName}</h4>
                                     <div className="flex items-center mt-1">
                                       {renderRatingStars(review.rating)}
@@ -630,9 +630,9 @@ export default function CertificationPage() {
                                         {new Date(review.createdAt.toDate()).toLocaleDateString()}
                                       </span>
                                     </div>
-                                  </div>
-                                </div>
-                              </div>
+                    </div>
+                  </div>
+                </div>
                               <p className="text-gray-700">{review.comment}</p>
                               
                               {review.replyFromInstructor && (
@@ -643,27 +643,27 @@ export default function CertificationPage() {
                                   <p className="mt-2 text-sm">{review.replyFromInstructor.text}</p>
                                 </div>
                               )}
-                            </div>
+                    </div>
                           ))}
-                        </div>
+                    </div>
                       ) : (
                         <div className="flex flex-col items-center justify-center py-12">
                           <p className="text-gray-500 mb-4">No reviews yet for this course.</p>
                           <p className="text-sm text-gray-400">Be the first to share your experience!</p>
-                        </div>
+                    </div>
                       )}
                     </div>
                   </div>
                 </CardContent>
               </Card>
-            </TabsContent>
-          </Tabs>
+              </TabsContent>
+            </Tabs>
         </>
       )}
       
       {/* Learning Interface */}
       {isLearning && currentModule && (
-        <LearningInterface 
+        <LearningInterface
           course={{
             id: courseData.id,
             title: courseData.title
@@ -677,11 +677,11 @@ export default function CertificationPage() {
       )}
       
       {/* Review Dialog */}
-      <ReviewDialog 
+      <ReviewDialog
         open={showReview}
         onOpenChange={setShowReview}
         onSubmit={handleSubmitReview}
       />
     </div>
   );
-}
+} 

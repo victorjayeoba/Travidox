@@ -518,17 +518,17 @@ export function LearningInterface({
 
   return (
     <div className="fixed inset-0 bg-white z-50 flex flex-col">
-      {/* Header */}
+        {/* Header */}
       <div className="border-b p-4 flex items-center justify-between bg-white">
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={onClose}>
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <div>
+          <div className="flex items-center gap-4">
+            <Button variant="ghost" size="icon" onClick={onClose}>
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <div>
             <h2 className="font-semibold">{course.title}</h2>
             <p className="text-sm text-gray-500">{module.title}</p>
           </div>
-        </div>
+            </div>
         <div className="flex items-center gap-4">
           <div className="hidden md:flex items-center gap-2">
             <Button 
@@ -553,7 +553,7 @@ export function LearningInterface({
             className="w-48 hidden md:block" 
           />
         </div>
-      </div>
+        </div>
 
       {/* Main content area */}
       <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
@@ -677,7 +677,7 @@ export function LearningInterface({
               </div>
             </div>
           )}
-          
+
           {/* Text content */}
           {currentContent.type === 'text' && (
             <div className="p-6 max-w-4xl mx-auto w-full">
@@ -718,7 +718,7 @@ export function LearningInterface({
               </Button>
             </div>
           )}
-          
+
           {/* Quiz content */}
           {currentContent.type === 'quiz' && (
             <div className="p-6 max-w-4xl mx-auto w-full">
@@ -727,12 +727,12 @@ export function LearningInterface({
               <div className="bg-gray-50 border rounded-lg p-6 mb-6">
                 <h3 className="text-lg font-medium mb-4">{currentContent.quiz?.[0].question}</h3>
                 
-                <RadioGroup
-                  value={quizAnswer?.toString()}
-                  onValueChange={(value) => setQuizAnswer(parseInt(value))}
-                  className="space-y-4"
-                >
-                  {currentContent.quiz?.[0].options.map((option, index) => (
+              <RadioGroup
+                value={quizAnswer?.toString()}
+                onValueChange={(value) => setQuizAnswer(parseInt(value))}
+                className="space-y-4"
+              >
+                {currentContent.quiz?.[0].options.map((option, index) => (
                     <div 
                       key={index} 
                       className={`flex items-center space-x-2 p-3 rounded-md border ${
@@ -757,9 +757,9 @@ export function LearningInterface({
                       {showQuizExplanation && index === currentContent.quiz?.[0].correctAnswer && (
                         <CheckCircle className="h-5 w-5 text-green-500" />
                       )}
-                    </div>
-                  ))}
-                </RadioGroup>
+                  </div>
+                ))}
+              </RadioGroup>
                 
                 {showQuizExplanation && currentContent.quiz?.[0].explanation && (
                   <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-md">
@@ -769,13 +769,13 @@ export function LearningInterface({
                 )}
                 
                 {!showQuizExplanation && (
-                  <Button
-                    className="mt-6"
-                    onClick={handleQuizSubmit}
-                    disabled={quizAnswer === null}
-                  >
-                    Submit Answer
-                  </Button>
+              <Button
+                className="mt-6"
+                onClick={handleQuizSubmit}
+                disabled={quizAnswer === null}
+              >
+                Submit Answer
+              </Button>
                 )}
                 
                 {showQuizExplanation && (
@@ -910,7 +910,7 @@ export function LearningInterface({
             </div>
           )}
         </div>
-        
+
         {/* Sidebar panels */}
         {(showNotes || showResources) && (
           <div className="border-t md:border-t-0 md:border-l w-full md:w-80 flex-shrink-0 overflow-auto">
@@ -998,22 +998,22 @@ export function LearningInterface({
 
       {/* Bottom navigation */}
       <div className="border-t p-4 flex items-center justify-between bg-white">
-        <Button
-          variant="outline"
-          onClick={handlePrevContent}
-          disabled={contentIndex === 0}
-        >
-          <ChevronLeft className="h-4 w-4 mr-2" />
-          Previous
-        </Button>
-        
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-500">
-            {contentIndex + 1} of {module.content.length}
-          </span>
-        </div>
+          <Button
+            variant="outline"
+            onClick={handlePrevContent}
+            disabled={contentIndex === 0}
+          >
+            <ChevronLeft className="h-4 w-4 mr-2" />
+            Previous
+          </Button>
+          
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-500">
+              {contentIndex + 1} of {module.content.length}
+            </span>
+          </div>
 
-        {contentIndex === module.content.length - 1 ? (
+          {contentIndex === module.content.length - 1 ? (
           <Button 
             onClick={handleModuleComplete}
             disabled={loading}
@@ -1023,15 +1023,15 @@ export function LearningInterface({
             ) : (
               <CheckCircle className="h-4 w-4 mr-2" />
             )}
-            Complete Module
-          </Button>
-        ) : (
-          <Button onClick={handleNextContent}>
-            Next
-            <ChevronRight className="h-4 w-4 ml-2" />
-          </Button>
-        )}
+              Complete Module
+            </Button>
+          ) : (
+            <Button onClick={handleNextContent}>
+              Next
+              <ChevronRight className="h-4 w-4 ml-2" />
+            </Button>
+          )}
       </div>
     </div>
   );
-}
+} 
