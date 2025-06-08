@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNigeriaNews } from '@/hooks/useNigeriaNews'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -15,13 +15,19 @@ export default function NewsPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   
-  // Extract unique categories from news
-  const categories = news && news.length > 0 
+  // Debug: Log the news data to see what we're getting
+  useEffect(() => {
+    console.log('News data:', news)
+    console.log('Total news articles:', news?.length || 0)
+  }, [news])
+  
+  // Extract unique categories from news - ensure news is an array
+  const categories = Array.isArray(news) && news.length > 0 
     ? Array.from(new Set(news.map(item => item.category)))
     : []
   
-  // Filter news based on search query and selected category
-  const filteredNews = news.filter(item => {
+  // Filter news based on search query and selected category - ensure news is an array
+  const filteredNews = Array.isArray(news) ? news.filter(item => {
     const matchesSearch = searchQuery === '' || 
       item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -30,7 +36,13 @@ export default function NewsPage() {
     const matchesCategory = !selectedCategory || item.category === selectedCategory
     
     return matchesSearch && matchesCategory
-  })
+  }) : []
+  
+  // Debug: Log filtered results
+  useEffect(() => {
+    console.log('Filtered news:', filteredNews)
+    console.log('Total filtered articles:', filteredNews.length)
+  }, [filteredNews])
   
   // Format relative time for news items
   const getRelativeTime = (dateString: string) => {
@@ -76,6 +88,13 @@ export default function NewsPage() {
         </Button>
       </div>
       
+      {/* Debug info - remove this after debugging */}
+      {process.env.NODE_ENV === 'development' && (
+        <div className="text-sm text-gray-600 bg-gray-100 p-2 rounded">
+          Debug: Total articles: {news?.length || 0}, Filtered: {filteredNews.length}, Loading: {loading.toString()}
+        </div>
+      )}
+      
       {/* Show mock data notice if using mock data */}
       {isMockData && (
         <MockDataNotice message="Using demo news data - external news API is unavailable" />
@@ -116,20 +135,23 @@ export default function NewsPage() {
             onClick={() => setSelectedCategory(null)}
             style={{ cursor: 'pointer' }}
           >
-            All
+            All ({Array.isArray(news) ? news.length : 0})
           </Badge>
           
-          {categories.map((category) => (
-            <Badge 
-              key={category}
-              variant="outline" 
-              className={selectedCategory === category ? "bg-gray-100" : ""}
-              onClick={() => setSelectedCategory(category)}
-              style={{ cursor: 'pointer' }}
-            >
-              {category}
-            </Badge>
-          ))}
+          {categories.map((category) => {
+            const categoryCount = Array.isArray(news) ? news.filter(item => item.category === category).length : 0
+            return (
+              <Badge 
+                key={category}
+                variant="outline" 
+                className={selectedCategory === category ? "bg-gray-100" : ""}
+                onClick={() => setSelectedCategory(category)}
+                style={{ cursor: 'pointer' }}
+              >
+                {category} ({categoryCount})
+              </Badge>
+            )
+          })}
         </div>
       </div>
       
@@ -142,7 +164,7 @@ export default function NewsPage() {
       ) : filteredNews.length > 0 ? (
         <div className="space-y-6">
           {filteredNews.map((item, index) => (
-            <Card key={index}>
+            <Card key={`${item.title}-${index}`}>
               <CardContent className="p-5">
                 <div className="flex justify-between items-start mb-3">
                   <Badge variant="outline" className="mt-1">
@@ -183,6 +205,9 @@ export default function NewsPage() {
         <div className="text-center py-12 text-gray-500">
           <div className="text-lg font-medium mb-2">No news articles found</div>
           <p>Try adjusting your search criteria or check back later for updates.</p>
+          {Array.isArray(news) && news.length > 0 && (
+            <p className="mt-2 text-sm">Total articles available: {news.length}</p>
+          )}
         </div>
       )}
     </div>
