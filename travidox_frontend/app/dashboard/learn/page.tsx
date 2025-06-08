@@ -87,7 +87,7 @@ export default function LearnPage() {
       setCompletingCourse(null);
     }
   };
-  
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -106,8 +106,8 @@ export default function LearnPage() {
         <CardHeader className="pb-3">
           <CardTitle>Your Learning Progress</CardTitle>
           <CardDescription>Track your course completion and learning journey</CardDescription>
-        </CardHeader>
-        <CardContent>
+          </CardHeader>
+          <CardContent>
           <div className="space-y-4">
             <div>
               <div className="flex justify-between mb-1 text-sm">
@@ -115,7 +115,7 @@ export default function LearnPage() {
                 <span className="font-medium">{completedCourses.length}/{courses.length}</span>
               </div>
               <Progress value={(completedCourses.length / courses.length) * 100} className="h-2" />
-            </div>
+              </div>
             
             <div className="grid grid-cols-2 gap-4 pt-2">
               <div className="bg-blue-50 rounded-lg p-4">
@@ -127,10 +127,10 @@ export default function LearnPage() {
                 <div className="text-2xl font-bold">₦{(profile?.balance || 0).toFixed(2)}</div>
               </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
-      
+            </div>
+          </CardContent>
+        </Card>
+        
       {/* Course List */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {courses.map((course) => {
@@ -154,8 +154,8 @@ export default function LearnPage() {
                   )}
                 </div>
                 <CardDescription>{course.description}</CardDescription>
-              </CardHeader>
-              <CardContent>
+                </CardHeader>
+                <CardContent>
                 <div className="space-y-4">
                   <div className="flex justify-between text-sm">
                     <div className="flex items-center text-gray-500">
@@ -163,14 +163,14 @@ export default function LearnPage() {
                       {course.duration}
                     </div>
                     <div className="text-gray-500">Level: {course.level}</div>
-                  </div>
-                  
+            </div>
+            
                   <div className="pt-2">
                     {isCompleted ? (
                       <Button variant="outline" className="w-full" onClick={() => router.push(`/dashboard/learn/${course.id}`)}>
                         Review Course
                       </Button>
-                    ) : (
+                  ) : (
                       <Button 
                         className="w-full"
                         onClick={() => handleCompleteCourse(course.id, course.xpReward)}
@@ -188,11 +188,11 @@ export default function LearnPage() {
                     )}
                   </div>
                 </div>
-              </CardContent>
+          </CardContent>
             </Card>
           );
         })}
-      </div>
+            </div>
     </div>
   );
 } 
