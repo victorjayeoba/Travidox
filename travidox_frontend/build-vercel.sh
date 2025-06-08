@@ -19,8 +19,12 @@ fi
 echo "Installing dependencies for Linux..."
 npm install --platform=linux --arch=x64 --no-optional
 
+# Fix import paths
+echo "Fixing import paths..."
+node vercel-fix-imports.js
+
 # Build the application
 echo "Building the application..."
-npm run build
+NODE_OPTIONS="--max-old-space-size=4096" npm run build
 
 echo "Build process completed!" 
