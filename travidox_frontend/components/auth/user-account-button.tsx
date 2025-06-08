@@ -16,7 +16,7 @@ import { useAuth } from "./auth-provider"
 import { User, LogOut, Settings, BarChart3 } from "lucide-react"
 
 export function UserAccountButton() {
-  const { user, logout, isLoading } = useAuth()
+  const { user, logout, isLoading, openAuthDialog } = useAuth()
   const router = useRouter()
 
   const handleLogout = async () => {
@@ -92,15 +92,14 @@ export function UserAccountButton() {
         disabled={isLoading}
         className="hidden sm:flex"
       >
-        Sign In
+        Log in
       </Button>
       <Button 
         onClick={() => router.push('/signup')}
         className="bg-green-600 hover:bg-green-700 text-sm sm:text-base px-3 sm:px-4"
         disabled={isLoading}
       >
-        <span className="sm:hidden">Join</span>
-        <span className="hidden sm:inline">Get Started</span>
+        Sign up
       </Button>
     </div>
   )

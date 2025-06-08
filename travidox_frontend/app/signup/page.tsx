@@ -74,7 +74,10 @@ export default function SignUpPage() {
       <main className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
         <div className="w-full max-w-md">
           <div className="bg-white rounded-2xl shadow-xl p-8">
-            <SignUpForm onSuccess={handleSignUpSuccess} switchToSignIn={switchToSignIn} />
+            <SignUpForm 
+              onSuccess={handleSignUpSuccess} 
+              onSwitchToSignIn={switchToSignIn} 
+            />
           </div>
           
           {/* Footer Links */}

@@ -29,6 +29,10 @@ interface AuthContextType {
   signUpWithGoogle: () => Promise<void>
   logout: () => Promise<void>
   isLoading: boolean
+  isAuthenticated: boolean
+  openAuthDialog: () => void
+  isAuthDialogOpen: boolean
+  setIsAuthDialogOpen: (isOpen: boolean) => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -38,6 +42,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [authMode, setAuthMode] = useState<AuthMode>('signIn')
+  const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -55,6 +60,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const switchToSignUp = () => {
     setAuthMode('signUp')
+  }
+
+  const openAuthDialog = () => {
+    if (user) {
+      router.push('/dashboard')
+    } else {
+      setIsAuthDialogOpen(true)
+    }
   }
 
   const login = async (email: string, password: string) => {
@@ -159,6 +172,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signUpWithGoogle,
     logout,
     isLoading,
+    isAuthenticated: !!user,
+    openAuthDialog,
+    isAuthDialogOpen,
+    setIsAuthDialogOpen,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

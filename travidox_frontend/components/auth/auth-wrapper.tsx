@@ -1,16 +1,15 @@
 "use client"
 
 import { useAuth } from "./auth-provider"
-import { AuthModal } from "./auth-modal"
+import { AuthDialog } from "./auth-dialog"
 
 export function AuthWrapper() {
-  const { isAuthModalOpen, closeAuthModal, authModalDefaultTab } = useAuth()
-
+  const { isAuthDialogOpen, setIsAuthDialogOpen } = useAuth()
+  
   return (
-    <AuthModal
-      isOpen={isAuthModalOpen}
-      onOpenChange={closeAuthModal}
-      defaultTab={authModalDefaultTab}
+    <AuthDialog 
+      isOpen={isAuthDialogOpen} 
+      onOpenChange={setIsAuthDialogOpen}
     />
   )
 } 

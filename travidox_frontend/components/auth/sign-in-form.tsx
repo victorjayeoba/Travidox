@@ -24,9 +24,10 @@ type SignInValues = z.infer<typeof signInSchema>
 
 interface SignInFormProps {
   onSuccess?: () => void
+  onSwitchToSignUp?: () => void
 }
 
-export function SignInForm({ onSuccess }: SignInFormProps) {
+export function SignInForm({ onSuccess, onSwitchToSignUp }: SignInFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [showForgotPassword, setShowForgotPassword] = useState(false)
@@ -237,6 +238,21 @@ export function SignInForm({ onSuccess }: SignInFormProps) {
             Create Account
           </Link>
         </span>
+      </div>
+
+      {/* Don't have an account section */}
+      <div className="text-center pt-2">
+        <p className="text-sm text-gray-600">
+          Don't have an account?{" "}
+          <Button
+            type="button"
+            variant="link"
+            className="h-auto p-0 text-green-600 hover:text-green-500 font-medium"
+            onClick={onSwitchToSignUp}
+          >
+            Sign up
+          </Button>
+        </p>
       </div>
     </div>
   )

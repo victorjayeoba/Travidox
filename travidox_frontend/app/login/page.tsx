@@ -22,6 +22,10 @@ export default function LoginPage() {
     // Navigation is handled in the auth provider
   }
 
+  const switchToSignUp = () => {
+    router.push('/signup')
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -70,7 +74,10 @@ export default function LoginPage() {
       <main className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
         <div className="w-full max-w-md space-y-8">
           <div className="bg-white rounded-2xl shadow-xl p-8">
-            <SignInForm onSuccess={handleLoginSuccess} />
+            <SignInForm 
+              onSuccess={handleLoginSuccess} 
+              onSwitchToSignUp={switchToSignUp}
+            />
           </div>
           
           {/* Footer Links */}

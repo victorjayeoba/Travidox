@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { X, ArrowLeft } from "lucide-react"
 import { 
   Dialog, 
@@ -7,7 +8,9 @@ import {
   DialogOverlay
 } from "@/components/ui/dialog"
 import { SignInForm } from "./sign-in-form"
+import { SignUpForm } from "./sign-up-form"
 import { Button } from "@/components/ui/button"
+import { useAuth } from "./auth-provider"
 
 interface AuthDialogProps {
   isOpen: boolean
@@ -15,6 +18,8 @@ interface AuthDialogProps {
 }
 
 export function AuthDialog({ isOpen, onOpenChange }: AuthDialogProps) {
+  const { authMode, switchToSignIn, switchToSignUp } = useAuth()
+  
   const handleSuccess = () => {
     onOpenChange(false)
   }
@@ -35,7 +40,28 @@ export function AuthDialog({ isOpen, onOpenChange }: AuthDialogProps) {
         </div>
         
         <div className="p-6 pb-8">
-          <SignInForm onSuccess={handleSuccess} />
+          {authMode === 'signIn' ? (
+            <SignInForm 
+              onSuccess={handleSuccess} 
+              onSwitchToSignUp={switchToSignUp} 
+            />
+          ) : (
+            <>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="mb-4 -ml-2"
+                onClick={switchToSignIn}
+              >
+                <ArrowLeft className="h-4 w-4 mr-1" />
+                Back to login
+              </Button>
+              <SignUpForm 
+                onSuccess={handleSuccess} 
+                onSwitchToSignIn={switchToSignIn} 
+              />
+            </>
+          )}
         </div>
       </DialogContent>
     </Dialog>

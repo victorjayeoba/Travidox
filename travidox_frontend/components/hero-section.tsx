@@ -3,9 +3,19 @@
 import { Section } from "@/components/ui/section"
 import { useAuth } from "./auth/auth-provider"
 import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation"
 
 export function HeroSection() {
-  const { openAuthDialog, isAuthenticated } = useAuth();
+  const { user, openAuthDialog, isAuthenticated } = useAuth();
+  const router = useRouter();
+  
+  const handleCTAClick = () => {
+    if (isAuthenticated) {
+      router.push('/dashboard');
+    } else {
+      openAuthDialog();
+    }
+  };
   
   return (
     <Section className="bg-gradient-to-br from-green-50 to-emerald-100 py-20 lg:py-32">
@@ -26,7 +36,7 @@ export function HeroSection() {
           </div>
 
           <Button 
-            onClick={openAuthDialog}
+            onClick={handleCTAClick}
             size="lg" 
             className="bg-yellow-400 hover:bg-yellow-500 text-black text-lg px-8 py-4 rounded-full"
           >

@@ -4,7 +4,8 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { 
   Search, HelpCircle, FileText, MessageCircle, Video, Book, ChevronDown,
-  ArrowRight, Phone, Mail, ExternalLink, Lightbulb, BookOpen, Gift, ShieldCheck
+  ArrowRight, Phone, Mail, ExternalLink, Lightbulb, BookOpen, Gift, ShieldCheck,
+  Users as UsersIcon
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -255,44 +256,30 @@ export default function HelpCenterPage() {
       {/* FAQs Section */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4 sm:px-6">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2 text-center">
+            Frequently Asked Questions
+          </h2>
+          <p className="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
+            Find quick answers to common questions about our platform, services, and features.
+          </p>
+          
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
-              Frequently Asked Questions
-            </h2>
-            
             {filteredFAQs.length > 0 ? (
               filteredFAQs.map((faq, index) => (
-                <FAQItem
-                  key={index}
-                  question={faq.question}
-                  answer={faq.answer}
-                />
+                <FAQItem key={index} question={faq.question} answer={faq.answer} />
               ))
             ) : (
               <div className="text-center py-8">
-                <Lightbulb className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600 mb-2">No results found for "{searchQuery}"</p>
-                <p className="text-gray-500 text-sm mb-4">Try a different search term or browse our help categories</p>
-                <Button 
-                  variant="outline" 
-                  className="text-purple-600 border-purple-600 hover:bg-purple-50"
-                  onClick={() => setSearchQuery('')}
-                >
+                <Lightbulb className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
+                <h3 className="text-xl font-medium text-gray-900 mb-2">No results found</h3>
+                <p className="text-gray-600 mb-6">
+                  We couldn't find any FAQs matching your search. Try a different query or contact our support team.
+                </p>
+                <Button variant="outline" onClick={() => setSearchQuery('')}>
                   Clear Search
                 </Button>
               </div>
             )}
-            
-            <div className="text-center mt-8">
-              <Link href="/support/help/all-faqs">
-                <Button variant="outline" className="text-purple-600 border-purple-600 hover:bg-purple-50">
-                  <span className="flex items-center">
-                    View All FAQs
-                    <ArrowRight className="ml-1 w-4 h-4" />
-                  </span>
-                </Button>
-              </Link>
-            </div>
           </div>
         </div>
       </section>
@@ -300,63 +287,50 @@ export default function HelpCenterPage() {
       {/* Contact Support Section */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6">
-          <div className="max-w-4xl mx-auto text-center mb-12">
+          <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
               Still Need Help?
             </h2>
-            <p className="text-lg text-gray-600">
-              Our support team is ready to assist you with any questions or issues you may have.
+            <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
+              Our support team is ready to assist you with any questions or concerns you may have.
             </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            {/* Contact Option 1 */}
-            <div className="bg-white rounded-xl border border-gray-200 p-6 text-center hover:shadow-lg transition-shadow duration-300">
-              <div className="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MessageCircle className="w-7 h-7 text-purple-600" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">Live Chat</h3>
-              <p className="text-gray-600 mb-4">
-                Chat with our support team in real-time for immediate assistance.
-              </p>
-              <Button className="bg-purple-600 hover:bg-purple-700 text-white w-full">
-                Start Chat
-              </Button>
-              <p className="text-sm text-gray-500 mt-3">Available 24/7</p>
-            </div>
             
-            {/* Contact Option 2 */}
-            <div className="bg-white rounded-xl border border-gray-200 p-6 text-center hover:shadow-lg transition-shadow duration-300">
-              <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Mail className="w-7 h-7 text-blue-600" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">Email Support</h3>
-              <p className="text-gray-600 mb-4">
-                Send us an email with your question and we'll get back to you promptly.
-              </p>
-              <Link href="mailto:support@travidox.com" className="w-full">
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white w-full">
-                  Email Us
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Contact Option 1 */}
+              <div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow duration-300">
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <MessageCircle className="w-6 h-6 text-blue-600" />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">Chat Support</h3>
+                <p className="text-gray-600 mb-4">Chat with our support team in real-time for immediate assistance.</p>
+                <Button variant="outline" className="w-full">
+                  Start Chat
                 </Button>
-              </Link>
-              <p className="text-sm text-gray-500 mt-3">Response within 24 hours</p>
-            </div>
-            
-            {/* Contact Option 3 */}
-            <div className="bg-white rounded-xl border border-gray-200 p-6 text-center hover:shadow-lg transition-shadow duration-300">
-              <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Phone className="w-7 h-7 text-green-600" />
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">Phone Support</h3>
-              <p className="text-gray-600 mb-4">
-                Speak directly with a support representative for personalized help.
-              </p>
-              <Link href="tel:+2349012345678" className="w-full">
-                <Button className="bg-green-600 hover:bg-green-700 text-white w-full">
-                  Call Us
+              
+              {/* Contact Option 2 */}
+              <div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow duration-300">
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Phone className="w-6 h-6 text-green-600" />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">Call Us</h3>
+                <p className="text-gray-600 mb-4">Speak directly with our customer support representatives.</p>
+                <Button variant="outline" className="w-full">
+                  +234 800 123 4567
                 </Button>
-              </Link>
-              <p className="text-sm text-gray-500 mt-3">8am-8pm WAT, Mon-Fri</p>
+              </div>
+              
+              {/* Contact Option 3 */}
+              <div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow duration-300">
+                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Mail className="w-6 h-6 text-purple-600" />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">Email Support</h3>
+                <p className="text-gray-600 mb-4">Send us an email and we'll get back to you within 24 hours.</p>
+                <Button variant="outline" className="w-full">
+                  support@travidox.com
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -381,7 +355,7 @@ export default function HelpCenterPage() {
                 className="bg-gray-50 rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow duration-300 flex items-center"
               >
                 <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <Users className="w-6 h-6 text-purple-600" />
+                  <UsersIcon className="w-6 h-6 text-purple-600" />
                 </div>
                 <div className="ml-4 text-left">
                   <h3 className="text-lg font-bold text-gray-900 flex items-center">

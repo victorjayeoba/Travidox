@@ -31,10 +31,10 @@ type SignUpValues = z.infer<typeof signUpSchema>
 
 interface SignUpFormProps {
   onSuccess?: () => void
-  switchToSignIn?: () => void
+  onSwitchToSignIn?: () => void
 }
 
-export function SignUpForm({ onSuccess, switchToSignIn }: SignUpFormProps) {
+export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -305,16 +305,18 @@ export function SignUpForm({ onSuccess, switchToSignIn }: SignUpFormProps) {
       </Form>
 
       {/* Sign In Link */}
-      <div className="text-center pt-3 border-t border-gray-100">
-        <span className="text-sm text-gray-600">
+      <div className="text-center pt-2">
+        <p className="text-sm text-gray-600">
           Already have an account?{" "}
-          <Link
-            href="/login"
-            className="text-green-600 hover:text-green-500 font-medium"
+          <Button
+            type="button"
+            variant="link"
+            className="h-auto p-0 text-green-600 hover:text-green-500 font-medium"
+            onClick={onSwitchToSignIn}
           >
-            Sign In
-          </Link>
-        </span>
+            Sign in
+          </Button>
+        </p>
       </div>
     </div>
   )
