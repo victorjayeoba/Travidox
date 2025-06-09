@@ -89,9 +89,9 @@ export function SignInForm({ onSuccess, onSwitchToSignUp }: SignInFormProps) {
     <div className="space-y-4 w-full">
       {/* Header */}
       <div className="text-center space-y-2">
-        <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-3">
+        {/* <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-3">
           <LogIn className="w-6 h-6 text-green-600" />
-        </div>
+        </div> */}
         <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Welcome Back</h2>
         <p className="text-gray-600 text-sm">Sign in to your account to continue</p>
       </div>
@@ -122,11 +122,11 @@ export function SignInForm({ onSuccess, onSwitchToSignUp }: SignInFormProps) {
         onClick={handleGoogleSignIn}
         isLoading={authLoading}
         disabled={isLoading || authLoading}
-        className="h-11 font-medium text-sm"
+        className="h-11 sm:h-12 font-medium"
       />
 
       {/* Divider */}
-      <div className="relative flex items-center py-2">
+      <div className="relative flex items-center py-2 sm:py-3">
         <div className="flex-grow border-t border-gray-200"></div>
         <span className="mx-4 flex-shrink text-xs text-gray-500 bg-white px-2">OR</span>
         <div className="flex-grow border-t border-gray-200"></div>
@@ -134,7 +134,7 @@ export function SignInForm({ onSuccess, onSwitchToSignUp }: SignInFormProps) {
 
       {/* Email/Password Form */}
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 sm:space-y-4">
           <FormField
             control={form.control}
             name="email"
@@ -143,12 +143,12 @@ export function SignInForm({ onSuccess, onSwitchToSignUp }: SignInFormProps) {
                 <FormLabel className="text-sm font-medium text-gray-700">Email Address</FormLabel>
                 <FormControl>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
                     <Input 
                       placeholder="you@example.com" 
                       {...field} 
                       disabled={isLoading || authLoading}
-                      className="h-11 pl-10 bg-white border-gray-200 focus:border-green-500 focus:ring-green-500 transition-colors text-gray-900 text-base"
+                      className="h-11 sm:h-12 pl-10 sm:pl-12 bg-white border-gray-200 focus:border-green-500 focus:ring-green-500 transition-colors text-gray-900 text-base"
                     />
                   </div>
                 </FormControl>
@@ -164,13 +164,13 @@ export function SignInForm({ onSuccess, onSwitchToSignUp }: SignInFormProps) {
                 <FormLabel className="text-sm font-medium text-gray-700">Password</FormLabel>
                 <FormControl>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
                     <Input
                       type={showPassword ? "text" : "password"}
                       placeholder="••••••••"
                       {...field}
                       disabled={isLoading || authLoading}
-                      className="h-11 pl-10 pr-10 bg-white border-gray-200 focus:border-green-500 focus:ring-green-500 transition-colors text-gray-900 text-base"
+                      className="h-11 sm:h-12 pl-10 sm:pl-12 pr-10 bg-white border-gray-200 focus:border-green-500 focus:ring-green-500 transition-colors text-gray-900 text-base"
                     />
                     <Button
                       type="button"
@@ -181,9 +181,9 @@ export function SignInForm({ onSuccess, onSwitchToSignUp }: SignInFormProps) {
                       disabled={isLoading || authLoading}
                     >
                       {showPassword ? (
-                        <EyeOffIcon className="h-4 w-4" />
+                        <EyeOffIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                       ) : (
-                        <EyeIcon className="h-4 w-4" />
+                        <EyeIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                       )}
                     </Button>
                   </div>
@@ -209,51 +209,23 @@ export function SignInForm({ onSuccess, onSwitchToSignUp }: SignInFormProps) {
           {/* Sign In Button */}
           <Button
             type="submit"
-            className="w-full h-11 bg-green-600 hover:bg-green-700 font-medium transition-colors text-base"
+            className="w-full h-11 sm:h-12 bg-green-600 hover:bg-green-700 font-medium transition-colors text-base"
             disabled={isLoading || authLoading}
           >
             {isLoading || authLoading ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 
+                <Loader2 className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-spin" /> 
                 Signing In...
               </>
             ) : (
               <>
-                <LogIn className="mr-2 h-4 w-4" />
+                <LogIn className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                 Sign In
               </>
             )}
           </Button>
         </form>
       </Form>
-
-      {/* Sign Up Link */}
-      <div className="text-center pt-3 border-t border-gray-100">
-        <span className="text-sm text-gray-600">
-          Don't have an account?{" "}
-          <Link
-            href="/signup"
-            className="text-green-600 hover:text-green-500 font-medium"
-          >
-            Create Account
-          </Link>
-        </span>
-      </div>
-
-      {/* Don't have an account section */}
-      <div className="text-center pt-2">
-        <p className="text-sm text-gray-600">
-          Don't have an account?{" "}
-          <Button
-            type="button"
-            variant="link"
-            className="h-auto p-0 text-green-600 hover:text-green-500 font-medium"
-            onClick={onSwitchToSignUp}
-          >
-            Sign up
-          </Button>
-        </p>
-      </div>
     </div>
   )
 } 

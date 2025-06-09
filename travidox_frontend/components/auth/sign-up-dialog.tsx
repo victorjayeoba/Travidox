@@ -29,8 +29,8 @@ export function SignUpDialog({ isOpen, onOpenChange }: SignUpDialogProps) {
   
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogOverlay className="bg-black/60 backdrop-blur-sm" />
-      <DialogContent className="w-[95vw] max-w-[420px] max-h-[95vh] bg-white backdrop-blur-md border-0 shadow-2xl overflow-y-auto p-0 gap-0">
+      <DialogOverlay className="bg-black/60 backdrop-blur-sm fixed inset-0 transition-all duration-300" />
+      <DialogContent className="w-[95vw] max-w-[420px] max-h-[95vh] bg-white backdrop-blur-md border-0 shadow-2xl overflow-y-auto p-0 gap-0 rounded-2xl fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 transition-all duration-300">
         <div className="absolute top-3 left-3 z-10">
           <Button
             variant="ghost"

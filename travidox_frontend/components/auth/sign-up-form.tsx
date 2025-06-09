@@ -31,10 +31,10 @@ type SignUpValues = z.infer<typeof signUpSchema>
 
 interface SignUpFormProps {
   onSuccess?: () => void
-  onSwitchToSignIn?: () => void
+  switchToSignIn?: () => void
 }
 
-export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
+export function SignUpForm({ onSuccess, switchToSignIn }: SignUpFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -89,9 +89,9 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
     <div className="space-y-4 w-full">
       {/* Header */}
       <div className="text-center space-y-2">
-        <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-3">
+        {/* <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-3">
           <UserPlus className="w-6 h-6 text-green-600" />
-        </div>
+        </div> */}
         <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Create Account</h2>
         <p className="text-gray-600 text-sm">Join thousands of investors building wealth together</p>
       </div>
@@ -122,11 +122,11 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
         onClick={handleGoogleSignUp}
         isLoading={authLoading}
         disabled={isLoading || authLoading}
-        className="h-11 font-medium text-sm"
+        className="h-11 sm:h-12 font-medium"
       />
 
       {/* Divider */}
-      <div className="relative flex items-center py-2">
+      <div className="relative flex items-center py-2 sm:py-3">
         <div className="flex-grow border-t border-gray-200"></div>
         <span className="mx-4 flex-shrink text-xs text-gray-500 bg-white px-2">OR WITH EMAIL</span>
         <div className="flex-grow border-t border-gray-200"></div>
@@ -134,7 +134,7 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
 
       {/* Email/Password Form */}
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 sm:space-y-4">
           <FormField
             control={form.control}
             name="fullName"
@@ -143,12 +143,12 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
                 <FormLabel className="text-sm font-medium text-gray-700">Full Name</FormLabel>
                 <FormControl>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
                     <Input 
                       placeholder="John Doe" 
                       {...field} 
                       disabled={isLoading || authLoading}
-                      className="h-11 pl-10 bg-white border-gray-200 focus:border-green-500 focus:ring-green-500 transition-colors text-gray-900 text-base"
+                      className="h-11 sm:h-12 pl-10 sm:pl-12 bg-white border-gray-200 focus:border-green-500 focus:ring-green-500 transition-colors text-gray-900 text-base"
                     />
                   </div>
                 </FormControl>
@@ -164,12 +164,12 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
                 <FormLabel className="text-sm font-medium text-gray-700">Email Address</FormLabel>
                 <FormControl>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
                     <Input 
                       placeholder="you@example.com" 
                       {...field} 
                       disabled={isLoading || authLoading}
-                      className="h-11 pl-10 bg-white border-gray-200 focus:border-green-500 focus:ring-green-500 transition-colors text-gray-900 text-base"
+                      className="h-11 sm:h-12 pl-10 sm:pl-12 bg-white border-gray-200 focus:border-green-500 focus:ring-green-500 transition-colors text-gray-900 text-base"
                     />
                   </div>
                 </FormControl>
@@ -187,13 +187,13 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
                 <FormLabel className="text-sm font-medium text-gray-700">Password</FormLabel>
                 <FormControl>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
                     <Input
                       type={showPassword ? "text" : "password"}
                       placeholder="••••••••"
                       {...field}
                       disabled={isLoading || authLoading}
-                      className="h-11 pl-10 pr-10 bg-white border-gray-200 focus:border-green-500 focus:ring-green-500 transition-colors text-gray-900 text-base"
+                      className="h-11 sm:h-12 pl-10 sm:pl-12 pr-10 bg-white border-gray-200 focus:border-green-500 focus:ring-green-500 transition-colors text-gray-900 text-base"
                     />
                     <Button
                       type="button"
@@ -204,9 +204,9 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
                       disabled={isLoading || authLoading}
                     >
                       {showPassword ? (
-                        <EyeOffIcon className="h-4 w-4" />
+                        <EyeOffIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                       ) : (
-                        <EyeIcon className="h-4 w-4" />
+                        <EyeIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                       )}
                     </Button>
                   </div>
@@ -223,13 +223,13 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
                 <FormLabel className="text-sm font-medium text-gray-700">Confirm Password</FormLabel>
                 <FormControl>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
                     <Input
                       type={showConfirmPassword ? "text" : "password"}
                       placeholder="••••••••"
                       {...field}
                       disabled={isLoading || authLoading}
-                      className="h-11 pl-10 pr-10 bg-white border-gray-200 focus:border-green-500 focus:ring-green-500 transition-colors text-gray-900 text-base"
+                      className="h-11 sm:h-12 pl-10 sm:pl-12 pr-10 bg-white border-gray-200 focus:border-green-500 focus:ring-green-500 transition-colors text-gray-900 text-base"
                     />
                     <Button
                       type="button"
@@ -240,9 +240,9 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
                       disabled={isLoading || authLoading}
                     >
                       {showConfirmPassword ? (
-                        <EyeOffIcon className="h-4 w-4" />
+                        <EyeOffIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                       ) : (
-                        <EyeIcon className="h-4 w-4" />
+                        <EyeIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                       )}
                     </Button>
                   </div>
@@ -257,23 +257,23 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
             control={form.control}
             name="acceptTerms"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md p-3 border border-gray-100 bg-gray-50/50">
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 py-1">
                 <FormControl>
                   <Checkbox
                     checked={field.value}
                     onCheckedChange={field.onChange}
                     disabled={isLoading || authLoading}
-                    className="mt-0.5"
+                    className="data-[state=checked]:bg-green-600 data-[state=checked]:border-green-600"
                   />
                 </FormControl>
                 <div className="space-y-1 leading-none">
-                  <FormLabel className="text-sm font-normal text-gray-700 leading-relaxed">
+                  <FormLabel className="text-sm text-gray-700">
                     I accept the{" "}
-                    <Link href="/terms" className="text-green-600 hover:text-green-500 underline font-medium">
+                    <Link href="/legal/terms" className="text-green-600 hover:text-green-500 transition-colors">
                       Terms of Service
                     </Link>{" "}
                     and{" "}
-                    <Link href="/privacy" className="text-green-600 hover:text-green-500 underline font-medium">
+                    <Link href="/legal/privacy" className="text-green-600 hover:text-green-500 transition-colors">
                       Privacy Policy
                     </Link>
                   </FormLabel>
@@ -286,38 +286,23 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
           {/* Sign Up Button */}
           <Button
             type="submit"
-            className="w-full h-11 bg-green-600 hover:bg-green-700 font-medium transition-colors text-base"
+            className="w-full h-11 sm:h-12 bg-green-600 hover:bg-green-700 font-medium transition-colors text-base mt-2"
             disabled={isLoading || authLoading}
           >
             {isLoading || authLoading ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 
+                <Loader2 className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-spin" /> 
                 Creating Account...
               </>
             ) : (
               <>
-                <UserPlus className="mr-2 h-4 w-4" />
-                Create Account
+                <UserPlus className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                Join Now
               </>
             )}
           </Button>
         </form>
       </Form>
-
-      {/* Sign In Link */}
-      <div className="text-center pt-2">
-        <p className="text-sm text-gray-600">
-          Already have an account?{" "}
-          <Button
-            type="button"
-            variant="link"
-            className="h-auto p-0 text-green-600 hover:text-green-500 font-medium"
-            onClick={onSwitchToSignIn}
-          >
-            Sign in
-          </Button>
-        </p>
-      </div>
     </div>
   )
 } 

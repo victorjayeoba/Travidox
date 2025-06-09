@@ -72,20 +72,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (email: string, password: string) => {
     setIsLoading(true)
-    console.log('🔐 Starting login process for:', email)
     
     try {
       const result = await signInWithEmailAndPassword(auth, email, password)
-      console.log('✅ Login successful:', result.user.email)
-      console.log('🚀 Attempting to navigate to dashboard...')
       
       // Small delay to ensure auth state is updated
       setTimeout(() => {
         router.push('/dashboard')
-        console.log('📍 Navigation command sent to /dashboard')
       }, 100)
     } catch (error: any) {
-      console.error('❌ Login error:', error)
       throw new Error(error.message || 'Failed to login')
     } finally {
       setIsLoading(false)
@@ -94,26 +89,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signUpWithEmail = async (email: string, password: string, fullName: string) => {
     setIsLoading(true)
-    console.log('📝 Starting signup process for:', email, 'with name:', fullName)
     
     try {
       const result = await createUserWithEmailAndPassword(auth, email, password)
-      console.log('✅ Signup successful:', result.user.email)
       
       // Update the user's profile with their full name
       await updateProfile(result.user, {
         displayName: fullName
       })
-      console.log('✅ Profile updated with display name:', fullName)
-      console.log('🚀 Attempting to navigate to dashboard...')
       
       // Small delay to ensure auth state is updated
       setTimeout(() => {
         router.push('/dashboard')
-        console.log('📍 Navigation command sent to /dashboard')
       }, 100)
     } catch (error: any) {
-      console.error('❌ Sign up error:', error)
       throw new Error(error.message || 'Failed to create account')
     } finally {
       setIsLoading(false)
@@ -122,20 +111,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signInWithGoogle = async () => {
     setIsLoading(true)
-    console.log('🔍 Starting Google signin...')
     
     try {
       const result = await signInWithPopup(auth, googleProvider)
-      console.log('✅ Google signin successful:', result.user.email)
-      console.log('🚀 Attempting to navigate to dashboard...')
       
       // Small delay to ensure auth state is updated
       setTimeout(() => {
         router.push('/dashboard')
-        console.log('📍 Navigation command sent to /dashboard')
       }, 100)
     } catch (error: any) {
-      console.error('❌ Google sign in error:', error)
       throw new Error(error.message || 'Failed to sign in with Google')
     } finally {
       setIsLoading(false)
@@ -153,7 +137,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await signOut(auth)
       router.push('/')
     } catch (error: any) {
-      console.error('Logout error:', error)
       throw new Error(error.message || 'Failed to logout')
     } finally {
       setIsLoading(false)
