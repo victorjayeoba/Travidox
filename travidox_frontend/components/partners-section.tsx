@@ -24,7 +24,7 @@ const partnersData = [
   { name: "GDG Quantitative Finance (OAU) Community", logo: "/GDG.png" },
 ]
 
-// Custom CSS for partner styling
+// Custom CSS for partner stylinsg
 const styles = `
   .partner-item {
     display: flex;

@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { StockCard } from '@/components/dashboard/stock-card'
 import { Badge } from '@/components/ui/badge'
 import { useNigeriaStocks } from '@/hooks/useNigeriaStocks'
+import { usePortfolio } from '@/hooks/usePortfolio'
 import MockDataNotice from '@/components/dashboard/MockDataNotice'
 
 export default function MarketsPage() {
@@ -15,7 +16,22 @@ export default function MarketsPage() {
   const [selectedFilter, setSelectedFilter] = useState('')
   
   // Use the Nigeria stocks hook
-  const { stocks, loading, error, isMockData, refresh } = useNigeriaStocks();
+  const { stocks, loading, error, isMockData, refresh } = useNigeriaStocks()
+  
+  // Use portfolio hook to update stock prices
+  const { updatePrices } = usePortfolio()
+  
+  // Update portfolio prices when stocks data changes
+  useEffect(() => {
+    if (!loading && stocks.length > 0) {
+      // Add a small delay to prevent rapid consecutive updates
+      const timer = setTimeout(() => {
+        updatePrices(stocks);
+      }, 500);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [stocks, loading, updatePrices]);
   
   // Handle normalized stock data
   const normalizeStock = (stock: any) => ({
@@ -24,19 +40,19 @@ export default function MarketsPage() {
     price: stock.price || stock.Last || 0,
     change: stock.change || stock.Chg || 0,
     sector: stock.sector || stock.PairType || 'Uncategorized'
-  });
+  })
   
-  const normalizedStocks = stocks.map(normalizeStock);
+  const normalizedStocks = stocks.map(normalizeStock)
   
   const filteredStocks = normalizedStocks.filter(stock => 
     (selectedSector === 'All' || stock.sector === selectedSector) &&
     (selectedFilter === '' || 
      (selectedFilter === 'Gainers' && stock.change > 0) ||
      (selectedFilter === 'Losers' && stock.change < 0))
-  );
+  )
   
   // Extract unique sectors for filters
-  const sectors = ['All', ...Array.from(new Set(normalizedStocks.map(stock => stock.sector)))];
+  const sectors = ['All', ...Array.from(new Set(normalizedStocks.map(stock => stock.sector)))]
   
   return (
     <div className="space-y-6">

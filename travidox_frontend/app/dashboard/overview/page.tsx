@@ -6,16 +6,62 @@ import { StockCard } from '@/components/dashboard/stock-card'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
+import { useNigeriaStocks } from '@/hooks/useNigeriaStocks'
+import { useNigeriaNews } from '@/hooks/useNigeriaNews'
+import { useEffect, useState } from 'react'
+import { useUserProfile } from '@/hooks/useUserProfile'
+import { RefreshCcw, AlertCircle } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import MockDataNotice from '@/components/dashboard/MockDataNotice'
 
-// Mock data for demonstration
-const topStocks = [
-  { symbol: 'SXTC', name: 'China SXT Pharmaceuticals Inc', price: 2.83, change: 0.74, logo: '/images/stocks/sxtc.png' },
-  { symbol: 'PTHL', name: 'Phelon Holdings Ltd.', price: 15.01, change: 4.53, logo: '/images/stocks/pthl.png' },
-  { symbol: 'BRLS', name: 'Borealis Foods Inc', price: 6.22, change: 1.01, logo: '/images/stocks/brls.png' }
-]
+// Removed mock data as we'll use real data from API
 
 export default function DashboardOverviewPage() {
   const { user } = useAuth()
+  const { stocks, loading: stocksLoading } = useNigeriaStocks()
+  const { news, loading: newsLoading, error: newsError, isMockData: isNewsMockData, refresh: refreshNews } = useNigeriaNews()
+  const [topGainers, setTopGainers] = useState<any[]>([])
+  const { profile } = useUserProfile()
+  
+  // Process stocks data to find top gainers
+  useEffect(() => {
+    if (stocks && stocks.length > 0) {
+      // Map stocks to a consistent format
+      const normalizedStocks = stocks.map(stock => ({
+        symbol: stock.symbol || stock.Symbol || '',
+        name: stock.name || stock.Name || '',
+        price: stock.price || stock.Last || 0,
+        change: stock.change || stock.Chg || 0,
+        logo: null // API doesn't provide logos
+      }));
+      
+      // Sort by change in descending order to get top gainers
+      const sorted = [...normalizedStocks].sort((a, b) => b.change - a.change);
+      
+      // Take top 3 gainers
+      setTopGainers(sorted.slice(0, 3));
+    }
+  }, [stocks]);
+
+  // Format relative time for news items
+  const getRelativeTime = (dateString: string) => {
+    try {
+      const now = new Date();
+      const date = new Date(dateString);
+      const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+      
+      if (isNaN(diffInHours)) return dateString; // Fallback to the original string
+      
+      if (diffInHours < 1) return 'Just now';
+      if (diffInHours < 24) return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+      if (diffInHours < 48) return 'Yesterday';
+      if (diffInHours < 168) return `${Math.floor(diffInHours / 24)} days ago`;
+      
+      return dateString; // For older dates, use the original date string
+    } catch (error) {
+      return dateString; // In case of parsing errors, return the original string
+    }
+  };
   
   return (
     <div className="space-y-6">
@@ -55,13 +101,19 @@ export default function DashboardOverviewPage() {
       <section>
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold text-gray-900">Top Gainers</h2>
-          <Link href="/dashboard/stocks/top-gainers" className="text-green-600 hover:underline text-sm flex items-center">
+          <Link href="/dashboard/markets" className="text-green-600 hover:underline text-sm flex items-center">
             View all Top Stocks
           </Link>
         </div>
         
         <div className="space-y-3">
-          {topStocks.map((stock) => (
+          {stocksLoading ? (
+            <div className="flex justify-center items-center py-10">
+              <div className="animate-spin h-6 w-6 border-3 border-primary border-t-transparent rounded-full mr-2" />
+              <span>Loading top stocks...</span>
+            </div>
+          ) : topGainers.length > 0 ? (
+            topGainers.map((stock) => (
             <StockCard 
               key={stock.symbol}
               symbol={stock.symbol}
@@ -70,65 +122,100 @@ export default function DashboardOverviewPage() {
               change={stock.change}
               logo={stock.logo}
             />
-          ))}
+            ))
+          ) : (
+            <div className="text-center py-4 text-gray-500">
+              No stock data available
+            </div>
+          )}
         </div>
       </section>
 
       {/* Market News */}
       <section>
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Market News</h2>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-bold text-gray-900">Market News</h2>
+          <Button 
+            variant="outline" 
+            size="sm"
+            className="gap-2"
+            onClick={refreshNews}
+            disabled={newsLoading}
+          >
+            {newsLoading ? (
+              <div className="animate-spin h-4 w-4 border-2 border-primary border-t-transparent rounded-full" />
+            ) : (
+              <RefreshCcw size={14} />
+            )}
+            Refresh
+          </Button>
+        </div>
+        
+        {/* Show mock data notice if using mock data */}
+        {isNewsMockData && (
+          <MockDataNotice message="Using demo news data - external news API is unavailable" />
+        )}
+        
+        {/* Error display */}
+        {newsError && !isNewsMockData && (
+          <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4 rounded-md">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <AlertCircle className="h-5 w-5 text-red-500" />
+              </div>
+              <div className="ml-3">
+                <p className="text-sm text-red-700">
+                  {newsError}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+        
         <Card>
           <CardContent className="p-5">
-            <div className="space-y-4">
-              <article className="pb-4 border-b border-gray-100">
-                <Badge variant="outline" className="mb-2">
-                  Business
-                </Badge>
-                <h3 className="font-medium mb-1 hover:text-green-600">
-                  <Link href="/dashboard/news/1">
-                    Global markets climb as investors monitor geopolitical developments
-                  </Link>
-                </h3>
-                <time className="text-xs text-gray-500">5 hours ago</time>
-              </article>
-              
-              <article className="pb-4 border-b border-gray-100">
-                <Badge variant="outline" className="mb-2">
-                  Technology
-                </Badge>
-                <h3 className="font-medium mb-1 hover:text-green-600">
-                  <Link href="/dashboard/news/2">
-                    Tech stocks lead rally as AI sector sees continued investment
-                  </Link>
-                </h3>
-                <time className="text-xs text-gray-500">8 hours ago</time>
-              </article>
-              
-              <article>
-                <Badge variant="outline" className="mb-2">
-                  Nigeria
-                </Badge>
-                <h3 className="font-medium mb-1 hover:text-green-600">
-                  <Link href="/dashboard/news/3">
-                    Nigerian Stock Exchange closes higher as banking sector strengthens
-                  </Link>
-                </h3>
-                <time className="text-xs text-gray-500">Yesterday</time>
-              </article>
-            </div>
+            {newsLoading ? (
+              <div className="flex justify-center items-center py-10">
+                <div className="animate-spin h-6 w-6 border-3 border-primary border-t-transparent rounded-full mr-2" />
+                <span>Loading news...</span>
+              </div>
+            ) : news.length > 0 ? (
+              <div className="space-y-4">
+                {news.map((item, index) => (
+                  <article key={index} className={index < news.length - 1 ? "pb-4 border-b border-gray-100" : ""}>
+                    <Badge variant="outline" className="mb-2">
+                      {item.category}
+                    </Badge>
+                    <h3 className="font-medium mb-1 hover:text-green-600">
+                      <Link href={item.link} target="_blank" rel="noopener noreferrer">
+                        {item.title}
+                      </Link>
+                    </h3>
+                    <div className="flex justify-between items-center">
+                      <time className="text-xs text-gray-500">{getRelativeTime(item.date)}</time>
+                      <span className="text-xs text-gray-500">{item.source}</span>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-4 text-gray-500">
+                No news articles available
+              </div>
+            )}
           </CardContent>
         </Card>
       </section>
 
       {/* Portfolio Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
             <CardTitle>Portfolio Value</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="text-3xl font-bold text-gray-900">$0.00</div>
+              <div className="text-3xl font-bold text-gray-900">₦{(profile?.balance || 0).toFixed(2)}</div>
               <div className="text-sm text-gray-500">Start investing to build your portfolio</div>
               <div className="pt-4">
                 <Link href="/dashboard/portfolio/create">
@@ -173,7 +260,7 @@ export default function DashboardOverviewPage() {
             </div>
           </CardContent>
         </Card>
-      </div>
+      </div> */}
     </div>
   )
 } 

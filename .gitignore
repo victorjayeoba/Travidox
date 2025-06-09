@@ -40,10 +40,15 @@ travidox_frontend/.next/
 travidox_frontend/out/
 travidox_frontend/npm-debug.log*
 travidox_frontend/yarn-debug.log*
-travidox_frontend/yarn-error.log*
+travidox_frontend/yarn-err'
+or.log*
+
+# Scrape API specific ignores
+Scrape_API/node_modules/
 
 # IDE specific files
 .idea/
 .vscode/
 *.swp
 *.swo 
+../test.php

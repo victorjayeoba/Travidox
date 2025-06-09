@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Search, Bell, Star, AlertTriangle, ChevronDown, Menu } from 'lucide-react'
@@ -15,6 +15,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { useAuth } from '@/components/auth/auth-provider'
+import { useUserProfile, XP_BALANCE_UPDATE_EVENT } from '@/hooks/useUserProfile'
 import { cn } from '@/lib/utils'
 
 interface DashboardHeaderProps {
@@ -31,8 +32,37 @@ export function DashboardHeader({
   onMenuClick
 }: DashboardHeaderProps) {
   const { user } = useAuth()
+  const { profile, loading: profileLoading } = useUserProfile()
   const router = useRouter()
   const [searchQuery, setSearchQuery] = useState('')
+  const [xpValue, setXpValue] = useState(0)
+  
+  // Initialize XP from profile and listen for updates
+  useEffect(() => {
+    if (profile) {
+      setXpValue(profile.xp)
+    }
+    
+    // Create a handler for XP update events
+    const handleXpUpdate = () => {
+      // Get the latest profile from localStorage
+      if (user) {
+        const storedProfile = localStorage.getItem(`userProfile_${user.uid}`)
+        if (storedProfile) {
+          const parsedProfile = JSON.parse(storedProfile)
+          setXpValue(parsedProfile.xp)
+        }
+      }
+    }
+    
+    // Listen for XP update events
+    window.addEventListener(XP_BALANCE_UPDATE_EVENT, handleXpUpdate)
+    
+    // Cleanup
+    return () => {
+      window.removeEventListener(XP_BALANCE_UPDATE_EVENT, handleXpUpdate)
+    }
+  }, [profile, user])
   
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -42,9 +72,7 @@ export function DashboardHeader({
   }
   
   const isVerified = user?.emailVerified || false
-  const userXP = 1250 // Mock XP value
-  const userLevel = Math.floor(userXP / 500) + 1
-  
+
   const getInitials = (name: string) => {
     return name
       .split(' ')
@@ -53,8 +81,44 @@ export function DashboardHeader({
       .join('')
   }
   
+  // Animation for XP display
+  const animateXpChange = (oldValue: number, newValue: number) => {
+    if (oldValue === newValue) return;
+    
+    // Add a CSS class for animation
+    const xpElement = document.getElementById('xp-display');
+    if (xpElement) {
+      xpElement.classList.add('xp-updated');
+      
+      // Remove the class after animation completes
+      setTimeout(() => {
+        xpElement.classList.remove('xp-updated');
+      }, 1500);
+    }
+  };
+  
+  // Watch for XP changes and animate
+  useEffect(() => {
+    if (profile && profile.xp !== xpValue && xpValue !== 0) {
+      animateXpChange(xpValue, profile.xp);
+    }
+  }, [profile, xpValue]);
+  
   return (
     <header className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 sm:px-6">
+      {/* Add animation styles */}
+      <style jsx global>{`
+        @keyframes xpPulse {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.2); color: #f59e0b; }
+          100% { transform: scale(1); }
+        }
+        
+        .xp-updated {
+          animation: xpPulse 1.5s ease;
+        }
+      `}</style>
+      
       <div className="flex items-center justify-between h-16">
         {/* Left section: Search or logo */}
         {showSearch ? (
@@ -97,12 +161,12 @@ export function DashboardHeader({
           )}
           
           {/* XP - hide on mobile */}
-          <div className="hidden md:flex items-center gap-1.5 text-yellow-700 bg-yellow-50 px-2.5 py-1 rounded-full">
+          <div 
+            id="xp-display"
+            className="hidden md:flex items-center gap-1.5 text-yellow-700 bg-yellow-50 px-2.5 py-1 rounded-full"
+          >
             <Star size={16} className="fill-yellow-500 text-yellow-500" />
-            <span className="text-sm font-medium">{userXP} XP</span>
-            <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 text-xs">
-              Lvl {userLevel}
-            </Badge>
+            <span className="text-sm font-medium">{xpValue} XP</span>
           </div>
           
           {/* Notifications */}
