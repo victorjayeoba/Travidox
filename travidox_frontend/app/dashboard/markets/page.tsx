@@ -15,7 +15,7 @@ export default function MarketsPage() {
   const [selectedSector, setSelectedSector] = useState('All')
   const [selectedFilter, setSelectedFilter] = useState('')
   
-  // Use the Nigeria stocks hook
+  // Use the Nigefria stocks hook
   const { stocks, loading, error, isMockData, refresh } = useNigeriaStocks()
   
   // Use portfolio hook to update stock prices
