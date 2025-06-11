@@ -9,6 +9,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { fetchCourseProgress, getCertificate, Certificate } from '@/lib/firebase-courses'
 import { getCourseById } from '@/lib/course-data'
 import { toast } from 'sonner'
+import Image from 'next/image'
 
 export default function CertificatePage() {
   const params = useParams()
@@ -60,20 +61,101 @@ export default function CertificatePage() {
     loadCertificate()
   }, [user?.uid, courseData, router, slug])
   
-  // Download certificate as PDF
+  // Format date nicely
+  const formatDate = (timestamp: any) => {
+    if (!timestamp) return '';
+    const date = new Date(timestamp.toDate());
+    return date.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+  }
+  
+  // Download certificate as image
   const handleDownload = async () => {
-    if (!certificateRef.current) return
+    if (!certificateRef.current || !certificate) return
     
     try {
       setGenerating(true)
       
-      // Mock PDF generation
-      setTimeout(() => {
-        toast.success('Certificate downloaded successfully')
-        setGenerating(false)
-      }, 1500)
+      // Create a link element
+      const link = document.createElement('a')
+      
+      // Set link properties
+      link.download = `Travidox_Certificate_${courseData.title.replace(/\s+/g, '_') || certificate.courseName.replace(/\s+/g, '_')}.png`
+      
+      // Open certificate in a new tab to allow the user to download/print it
+      const certificateWindow = window.open('', '_blank')
+      
+      if (certificateWindow) {
+        // Write certificate HTML to the new window
+        certificateWindow.document.write(`
+          <html>
+            <head>
+              <title>Travidox Certificate - ${courseData.title || certificate.courseName}</title>
+              <style>
+                body { margin: 0; padding: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; }
+                .certificate-container { border: 8px solid #fde68a; padding: 2rem; width: 100%; max-width: 800px; margin: 2rem auto; background-color: white; }
+                .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+                .brand { font-size: 1.5rem; font-weight: bold; color: #059669; }
+                .title { font-size: 2rem; font-weight: bold; margin-bottom: 0.5rem; font-family: serif; }
+                .subtitle { color: #6b7280; margin-bottom: 2rem; }
+                .name { font-size: 2.25rem; font-weight: bold; margin: 2rem 0; color: #92400e; font-family: serif; }
+                .course-name { font-size: 1.75rem; font-weight: bold; margin: 2rem 0; font-family: serif; }
+                .details { display: flex; justify-content: center; gap: 3rem; text-align: center; }
+                .details-label { color: #6b7280; font-size: 0.875rem; }
+                .footer { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-between; }
+                .verification { font-size: 0.875rem; color: #6b7280; }
+                .verification-code { font-family: monospace; }
+                .print-button { margin-top: 2rem; padding: 0.75rem 1.5rem; background-color: #059669; color: white; border: none; border-radius: 0.25rem; cursor: pointer; font-size: 1rem; }
+                @media print {
+                  .print-button { display: none; }
+                }
+              </style>
+            </head>
+            <body>
+              <div class="certificate-container">
+                <div class="header">
+                  <div class="brand">${certificate.brandedName || 'TRAVIDOX'}</div>
+                  <div>Certificate of Excellence</div>
+                </div>
+                <div class="title">Certificate of Completion</div>
+                <div class="subtitle">This certifies that</div>
+                <div class="name">${certificate.userName}</div>
+                <div>has successfully completed the course</div>
+                <div class="course-name">${courseData.title || certificate.courseName}</div>
+                <div class="details">
+                  <div>
+                    <div class="details-label">Issue Date</div>
+                    <div>${formatDate(certificate.issueDate)}</div>
+                  </div>
+                  <div>
+                    <div class="details-label">Certificate ID</div>
+                    <div>${certificate.id.substring(0, 8)}</div>
+                  </div>
+                </div>
+                <div class="footer">
+                  <div class="verification">
+                    Verify this certificate using code: 
+                    <span class="verification-code">${certificate.verificationCode}</span>
+                  </div>
+                  <div class="brand">${certificate.brandedName || 'TRAVIDOX'}</div>
+                </div>
+              </div>
+              <button class="print-button" onclick="window.print()">Print / Save as PDF</button>
+            </body>
+          </html>
+        `)
+        
+        toast.success('Certificate opened in new tab - use Print or Save as PDF')
+      } else {
+        toast.error('Please allow pop-ups to download the certificate')
+      }
+      
+      setGenerating(false)
     } catch (error) {
-      console.error('Error generating PDF:', error)
+      console.error('Error generating certificate:', error)
       toast.error('Failed to download certificate')
       setGenerating(false)
     }
@@ -134,14 +216,6 @@ export default function CertificatePage() {
             </div>
             
             <div className="flex gap-3">
-              <Button 
-                variant="outline" 
-                onClick={handleShare}
-              >
-                <Share2 className="h-4 w-4 mr-2" />
-                Share
-              </Button>
-              
               <Button
                 onClick={handleDownload}
                 disabled={generating}
@@ -151,7 +225,7 @@ export default function CertificatePage() {
                 ) : (
                   <Download className="h-4 w-4 mr-2" />
                 )}
-                Download PDF
+                Get Certificate
               </Button>
             </div>
           </div>
@@ -163,8 +237,15 @@ export default function CertificatePage() {
               className="bg-gradient-to-r from-blue-50 to-purple-50 text-center p-12 min-h-[500px] flex flex-col items-center justify-center"
             >
               <div className="border-8 border-amber-100 p-8 w-full max-w-4xl mx-auto bg-white bg-opacity-90">
-                <div className="flex justify-center mb-6">
-                  <Award className="h-16 w-16 text-amber-600" />
+                {/* Travidox Logo & Branding */}
+                <div className="flex justify-between items-center mb-8">
+                  <div className="text-xl font-bold text-green-600">{certificate.brandedName || 'TRAVIDOX'}</div>
+                  <div className="flex justify-center">
+                    <Award className="h-16 w-16 text-amber-600" />
+                  </div>
+                  <div className="text-right text-sm text-gray-500">
+                    Certificate of Excellence
+                  </div>
                 </div>
                 
                 <h2 className="text-2xl font-serif mb-1">Certificate of Completion</h2>
@@ -186,7 +267,7 @@ export default function CertificatePage() {
                   <div>
                     <p className="text-gray-600 text-sm">Issue Date</p>
                     <p className="font-medium">
-                      {new Date(certificate.issueDate.toDate()).toLocaleDateString()}
+                      {formatDate(certificate.issueDate)}
                     </p>
                   </div>
                   
@@ -197,9 +278,12 @@ export default function CertificatePage() {
                 </div>
                 
                 <div className="mt-8 pt-8 border-t border-gray-200">
-                  <p className="text-sm text-gray-500">
-                    Verify this certificate at <span className="font-mono">verification code: {certificate.verificationCode.substring(0, 8)}</span>
-                  </p>
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm text-gray-500">
+                      Verify this certificate at <span className="font-mono">verification code: {certificate.verificationCode}</span>
+                    </p>
+                    <div className="text-green-600 font-bold">{certificate.brandedName || 'TRAVIDOX'}</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -212,7 +296,7 @@ export default function CertificatePage() {
             <div>
               <h3 className="font-medium text-green-800 mb-1">This certificate is verified and authentic</h3>
               <p className="text-green-700 text-sm">
-                Your achievement is officially recognized. Share your success with potential employers and colleagues.
+                Your achievement is officially recognized by Travidox. Share your success with potential employers and colleagues.
               </p>
             </div>
           </div>

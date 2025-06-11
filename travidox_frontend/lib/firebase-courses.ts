@@ -18,6 +18,7 @@ import {
 } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import app from './firebase';
+import { addCompletedCourse, addCertificateToUser, updateUserXP } from './firebase-user';
 
 // Initialize Firestore and Storage
 const db = getFirestore(app);
@@ -84,6 +85,8 @@ export interface Certificate {
   expiryDate?: Timestamp;
   certificateUrl: string;
   verificationCode: string;
+  issuer?: string;
+  brandedName?: string;
 }
 
 // Interface for user notes
@@ -212,21 +215,39 @@ export async function enrollInCourse(
     const courseDocRef = doc(db, 'courses', courseId);
     const courseDoc = await getDoc(courseDocRef);
     
+    // Get course title for user profile
+    let courseTitle = "Course";
+    
     if (!courseDoc.exists()) {
       // Create a basic course document for tracking
       await setDoc(courseDocRef, {
         id: courseId,
-        title: "Course",
+        title: courseTitle,
         enrollmentCount: 1,
         students: [userId],
         createdAt: serverTimestamp()
       });
     } else {
       // Update course enrollment count
+      courseTitle = courseDoc.data().title || courseTitle;
       await updateDoc(courseDocRef, {
         enrollmentCount: increment(1),
         students: arrayUnion(userId)
       });
+    }
+    
+    // Update user profile - add course to enrolled courses
+    const userRef = doc(db, 'users', userId);
+    const userDoc = await getDoc(userRef);
+    
+    if (userDoc.exists()) {
+      // Add courseId to enrolledCourses array in user profile
+      await updateDoc(userRef, {
+        enrolledCourses: arrayUnion(courseId)
+      });
+      
+      // Award XP for enrolling in a new course
+      await updateUserXP(userId, 10);
     }
     
     return true;
@@ -421,7 +442,7 @@ export async function completeModule(
             userName = updatedUserSnapshot.data().displayName;
           }
           
-          // Create a demo certificate
+          // Create a certificate with Travidox branding
           const certificateData: Certificate = {
             id: certificateId,
             userId,
@@ -430,36 +451,30 @@ export async function completeModule(
             userName,
             issueDate: Timestamp.now(),
             certificateUrl: `/certificates/${certificateId}.pdf`,
-            verificationCode: Math.random().toString(36).substring(2, 15)
+            verificationCode: Math.random().toString(36).substring(2, 15),
+            issuer: "Travidox Learning Platform",
+            brandedName: "TRAVIDOX"
           };
           
           await setDoc(certificateRef, certificateData);
         }
       }
       
-      // Update user stats
-      const userRef = doc(db, 'users', userId);
-      const userSnapshot = await getDoc(userRef);
-      
       // Get course name
       const courseRef = doc(db, 'courses', courseId);
       const courseSnapshot = await getDoc(courseRef);
       const courseName = courseSnapshot.exists() ? courseSnapshot.data().title : "Course";
       
-      if (userSnapshot.exists()) {
-        // Update completed courses count
-        const userData = userSnapshot.data();
-        const completedCourses = userData.completedCourses || 0;
-        
-        await updateDoc(userRef, {
-          completedCourses: completedCourses + 1,
-          lastCompletedCourse: {
-            courseId,
-            courseName,
-            completedAt: Timestamp.now()
-          }
-        });
+      // Update user profile with completed course and add XP
+      await addCompletedCourse(userId, courseId, courseName);
+      
+      // Add certificate to user profile
+      if (certificateId) {
+        await addCertificateToUser(userId, certificateId);
       }
+      
+      // Award XP for completing a course (this is in addition to the XP in addCompletedCourse)
+      await updateUserXP(userId, 50);
     }
     
     await updateDoc(docRef, updateData);
@@ -537,6 +552,10 @@ export async function submitQuizAttempt(
         await updateDoc(progressRef, {
           quizScores
         });
+        
+        // Award XP for passing a quiz - amount based on score
+        const xpAmount = Math.floor(score / 10) * 5; // 5 XP per 10% score
+        await updateUserXP(userId, xpAmount);
       }
     }
     
@@ -623,6 +642,11 @@ export async function submitAssignment(
     await updateDoc(progressRef, {
       assignmentSubmissions: submissions
     });
+    
+    // Award XP for submitting assignment (only for first submission)
+    if (existingIndex < 0) {
+      await updateUserXP(userId, 15);
+    }
     
     return true;
   } catch (error) {

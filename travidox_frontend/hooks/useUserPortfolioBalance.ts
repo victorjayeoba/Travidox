@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useUserProfile, XP_BALANCE_UPDATE_EVENT } from '@/hooks/useUserProfile';
 import { usePortfolio } from '@/hooks/usePortfolio';
 import { useAuth } from '@/components/auth/auth-provider';
+import { updateUserXP } from '@/lib/firebase-user';
 
 // This hook connects the user's balance with portfolio transactions
 export const useUserPortfolioBalance = () => {
@@ -24,6 +25,7 @@ export const useUserPortfolioBalance = () => {
   // Ensure balance and XP are synchronized
   useEffect(() => {
     if (profile && profile.balance !== profile.xp) {
+      console.log('Force synchronizing XP and balance in useUserPortfolioBalance');
       // Force synchronization if they're out of sync
       setXpAndBalance(profile.xp);
     }
@@ -47,30 +49,12 @@ export const useUserPortfolioBalance = () => {
     const success = await originalBuyStock(stock, quantity);
 
     if (success) {
-      // Update user balance and XP in localStorage
-      const newBalance = (profile.balance || 0) - totalCost;
-      const updatedProfile = {
-        ...profile,
-        xp: newBalance, // Set XP equal to balance
-        balance: newBalance
-      };
-
-      localStorage.setItem(`userProfile_${user.uid}`, JSON.stringify(updatedProfile));
-
-      // In a real app, you would update your backend here
-      // await fetch(`/api/user-profile/${user.uid}`, {
-      //   method: 'PUT',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(updatedProfile)
-      // });
-
-      // Trigger the XP/balance update event
-      window.dispatchEvent(new Event(XP_BALANCE_UPDATE_EVENT));
-
-      // Force a page reload to update all components
-      // This is a simple solution for demo purposes
-      // In a production app, you'd use state management or context
-      // window.location.reload(); - No longer needed with event system
+      // Update user XP and balance directly in Firestore
+      const newAmount = profile.xp - totalCost;
+      await setXpAndBalance(newAmount);
+      
+      // No need to update localStorage or trigger events manually
+      // as setXpAndBalance handles that
     }
 
     return success;
@@ -90,28 +74,12 @@ export const useUserPortfolioBalance = () => {
     const success = await originalSellStock(symbol, quantity, currentPrice);
 
     if (success) {
-      // Update user balance and XP in localStorage
-      const newBalance = (profile.balance || 0) + totalValue;
-      const updatedProfile = {
-        ...profile,
-        xp: newBalance, // Set XP equal to balance
-        balance: newBalance
-      };
-
-      localStorage.setItem(`userProfile_${user.uid}`, JSON.stringify(updatedProfile));
-
-      // In a real app, you would update your backend here
-      // await fetch(`/api/user-profile/${user.uid}`, {
-      //   method: 'PUT',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(updatedProfile)
-      // });
-
-      // Trigger the XP/balance update event
-      window.dispatchEvent(new Event(XP_BALANCE_UPDATE_EVENT));
-
-      // Force a page reload to update all components
-      // window.location.reload(); - No longer needed with event system
+      // Update user XP and balance directly in Firestore
+      const newAmount = profile.xp + totalValue;
+      await setXpAndBalance(newAmount);
+      
+      // No need to update localStorage or trigger events manually
+      // as setXpAndBalance handles that
     }
 
     return success;
