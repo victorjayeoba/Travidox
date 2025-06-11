@@ -67,6 +67,7 @@ export function Footer() {
                 variant="outline" 
                 size="sm" 
                 className="border-green-500 text-green-500 hover:bg-green-500 hover:text-white text-xs md:text-sm"
+                defaultRoute="signup"
               />
               
               <div className="flex space-x-2">

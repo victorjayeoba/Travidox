@@ -40,6 +40,7 @@ export default function StockTradingPage() {
                 <AuthButton 
                   size="lg" 
                   className="bg-green-500 hover:bg-green-600 text-white rounded-lg"
+                  defaultRoute="signup"
                 />
                 <Button size="lg" variant="outline" className="text-white border-white hover:bg-white/10 rounded-lg">
                   <Link href="#features" className="flex items-center">
@@ -282,6 +283,7 @@ export default function StockTradingPage() {
               <AuthButton 
                 size="lg" 
                 className="bg-green-500 hover:bg-green-600 text-white"
+                defaultRoute="signup"
               />
               <Button variant="outline" size="lg" className="text-white border-white hover:bg-white/10">
                 <Link href="/products/demo-trading">Try Demo Account</Link>

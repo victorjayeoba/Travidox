@@ -6,14 +6,14 @@ import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
 
 export function HeroSection() {
-  const { user, openAuthDialog, isAuthenticated } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const router = useRouter();
   
   const handleCTAClick = () => {
     if (isAuthenticated) {
       router.push('/dashboard');
     } else {
-      openAuthDialog();
+      router.push('/signup');
     }
   };
   

@@ -42,6 +42,7 @@ export default function CertificationsPage() {
                 <AuthButton 
                   size="lg" 
                   className="bg-green-500 hover:bg-green-600 text-white rounded-lg"
+                  defaultRoute="signup"
                 />
                 <Button size="lg" variant="outline" className="text-white border-white hover:bg-white/10 rounded-lg">
                   <Link href="#certifications" className="flex items-center">
@@ -412,6 +413,7 @@ export default function CertificationsPage() {
               <AuthButton 
                 size="lg" 
                 className="bg-white text-amber-900 hover:bg-gray-100 rounded-lg"
+                defaultRoute="signup"
               />
               <Button 
                 size="lg" 

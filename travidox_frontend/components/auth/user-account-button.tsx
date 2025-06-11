@@ -14,12 +14,10 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useAuth } from "./auth-provider"
 import { User, LogOut, Settings, BarChart3, ArrowRight } from "lucide-react"
-import { AuthModal } from "./auth-modal"
 
 export function UserAccountButton() {
   const { user, logout, isLoading } = useAuth()
   const router = useRouter()
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
 
   const handleLogout = async () => {
@@ -88,27 +86,19 @@ export function UserAccountButton() {
 
   // If user is not logged in, show only the Get Started button
   return (
-    <>
-      <div className="flex items-center">
-        <Button 
-          onClick={() => {
-            setIsAuthModalOpen(true)
-          }}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          className={`bg-green-600 hover:bg-green-700 text-sm sm:text-base px-4 sm:px-6 py-2 rounded-lg transition-all duration-300 transform ${isHovered ? 'scale-105 shadow-lg' : 'shadow-md'} flex items-center gap-1`}
-          disabled={isLoading}
-        >
-          Get Started
-          {/* <ArrowRight className={`h-4 w-4 ml-1 transition-transform duration-300 ${isHovered ? 'translate-x-1' : ''}`} /> */}
-        </Button>
-      </div>
-      
-      <AuthModal 
-        isOpen={isAuthModalOpen}
-        onOpenChange={setIsAuthModalOpen}
-        defaultTab="signup"
-      />
-    </>
+    <div className="flex items-center">
+      <Button 
+        onClick={() => {
+          router.push('/signup')
+        }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className={`bg-green-600 hover:bg-green-700 text-sm sm:text-base px-4 sm:px-6 py-2 rounded-lg transition-all duration-300 transform ${isHovered ? 'scale-105 shadow-lg' : 'shadow-md'} flex items-center gap-1`}
+        disabled={isLoading}
+      >
+        Get Started
+        {/* <ArrowRight className={`h-4 w-4 ml-1 transition-transform duration-300 ${isHovered ? 'translate-x-1' : ''}`} /> */}
+      </Button>
+    </div>
   )
 } 
