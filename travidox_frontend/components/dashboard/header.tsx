@@ -119,34 +119,43 @@ export function DashboardHeader({
         }
       `}</style>
       
-      <div className="flex items-center justify-between h-16">
-        {/* Left section: Search or logo */}
-        {showSearch ? (
-          <form onSubmit={handleSearch} className="w-full max-w-md ml-auto md:ml-0">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
-              <Input 
-                placeholder="Search stocks, markets, news..."
-                className="pl-10 w-full"
+      <div className="h-16 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          {/* Mobile menu toggle */}
+          {showMobileMenu && (
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="md:hidden"
+              onClick={onMenuClick}
+            >
+              <Menu className="h-5 w-5" />
+              <span className="sr-only">Toggle menu</span>
+            </Button>
+          )}
+          
+          {/* Logo */}
+          <Link href="/dashboard" className="flex items-center gap-2">
+            <div className="bg-green-600 text-white p-1.5 rounded text-sm font-bold">TX</div>
+            <span className="font-bold text-gray-800 hidden sm:inline-block">Travidox</span>
+          </Link>
+        </div>
+        
+        <div className="flex-1 max-w-md mx-4 hidden md:block">
+          {showSearch && (
+            <form onSubmit={handleSearch} className="relative">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
+              <Input
+                type="text"
+                placeholder="Search stocks, courses..."
+                className="pl-9 bg-gray-50 border-gray-200"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-            </div>
-          </form>
-        ) : (
-          <div className="ml-12 lg:ml-0">
-            <Link href="/">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-green-600 rounded-md flex items-center justify-center">
-                  <span className="text-white font-bold">T</span>
-                </div>
-                <span className="text-xl font-bold text-gray-900">Travidox</span>
-              </div>
-            </Link>
-          </div>
-        )}
+            </form>
+          )}
+        </div>
         
-        {/* Right section: User tools */}
         <div className="flex items-center space-x-2 md:space-x-4">
           {/* Verification status - hide on smallest screens */}
           {!isVerified && (
@@ -166,62 +175,77 @@ export function DashboardHeader({
             className="hidden md:flex items-center gap-1.5 text-yellow-700 bg-yellow-50 px-2.5 py-1 rounded-full"
           >
             <Star size={16} className="fill-yellow-500 text-yellow-500" />
-            <span className="text-sm font-medium">{xpValue} XP</span>
+            <span className="text-sm font-medium">{xpValue.toFixed(2)} XP</span>
           </div>
           
           {/* Notifications */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="relative">
-                <Bell size={20} />
-                <span className="absolute top-0 right-0 h-2.5 w-2.5 rounded-full bg-red-500"></span>
+              <Button variant="outline" size="icon" className="relative">
+                <Bell className="h-5 w-5" />
+                <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
+                <span className="sr-only">Notifications</span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-80">
-              <div className="p-2 font-medium border-b">Notifications</div>
-              <div className="py-2 px-3 text-sm bg-blue-50 border-l-4 border-blue-500 m-2">
-                <div className="font-medium">Welcome to Travidox!</div>
-                <p className="text-gray-500">Start your investment journey today.</p>
+            <DropdownMenuContent align="end" className="w-[280px]">
+              <div className="px-4 py-3 font-medium border-b border-gray-100">
+                Notifications
               </div>
-              <div className="py-2 px-3 border-b text-sm m-2">
-                <div className="font-medium">Market update</div>
-                <p className="text-gray-500">S&P 500 up by 1.2% today.</p>
+              <div className="py-2">
+                <DropdownMenuItem className="flex flex-col items-start px-4 py-2 cursor-pointer">
+                  <div className="font-medium text-sm">New market update available</div>
+                  <div className="text-xs text-gray-500 mt-1">5 minutes ago</div>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="flex flex-col items-start px-4 py-2 cursor-pointer">
+                  <div className="font-medium text-sm">Your watchlist is trending up</div>
+                  <div className="text-xs text-gray-500 mt-1">1 hour ago</div>
+                </DropdownMenuItem>
               </div>
-              <DropdownMenuItem className="justify-center text-sm text-blue-600">
-                View all notifications
-              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
           
           {/* User menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="gap-2">
+              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                 <Avatar className="h-8 w-8">
                   <AvatarImage src={user?.photoURL || undefined} alt={user?.displayName || 'User'} />
-                  <AvatarFallback className="bg-green-100 text-green-700 text-sm font-semibold">
-                    {user?.displayName ? getInitials(user.displayName) : user?.email?.charAt(0).toUpperCase()}
+                  <AvatarFallback className="bg-green-100 text-green-800">
+                    {user?.displayName ? getInitials(user.displayName) : 'U'}
                   </AvatarFallback>
                 </Avatar>
-                <ChevronDown size={16} className="text-gray-500 hidden sm:block" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <div className="px-3 py-2 text-sm">
-                <div className="font-medium">{user?.displayName || user?.email?.split('@')[0]}</div>
-                <div className="text-gray-500 truncate">{user?.email}</div>
+            <DropdownMenuContent align="end" className="w-56">
+              <div className="flex items-center justify-start gap-2 p-2 border-b border-gray-100">
+                <div className="flex flex-col space-y-1 leading-none">
+                  {user?.displayName && (
+                    <p className="font-medium">{user.displayName}</p>
+                  )}
+                  {user?.email && (
+                    <p className="w-[200px] truncate text-sm text-gray-500">
+                      {user.email}
+                    </p>
+                  )}
+                </div>
               </div>
-              <DropdownMenuItem onClick={() => router.push('/dashboard/profile')}>
+              <DropdownMenuItem 
+                className="cursor-pointer"
+                onClick={() => router.push('/dashboard/profile')}
+              >
                 Profile
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => router.push('/dashboard/settings')}>
+              <DropdownMenuItem 
+                className="cursor-pointer"
+                onClick={() => router.push('/dashboard/settings')}
+              >
                 Settings
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => router.push('/dashboard/support')}>
-                Help & Support
-              </DropdownMenuItem>
-              <DropdownMenuItem className="text-red-600" onClick={() => router.push('/api/auth/logout')}>
-                Sign out
+              <DropdownMenuItem 
+                className="text-red-600 cursor-pointer" 
+                onClick={() => router.push('/api/auth/logout')}
+              >
+                Logout
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

@@ -72,7 +72,7 @@ export function Leaderboard({
                   </div>
                 </div>
                 <div className="font-semibold text-sm">
-                  {user.xp.toLocaleString()} XP
+                  {user.xp.toFixed(2)} XP
                 </div>
               </div>
             ))

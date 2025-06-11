@@ -96,7 +96,7 @@ export default function LearnPage() {
         <div className="flex items-center gap-2">
           <Badge variant="outline" className="flex items-center gap-1.5 bg-green-50 text-green-800">
             <Star className="h-3.5 w-3.5 fill-green-500 text-green-500" />
-            <span>{profile?.xp || 0} XP</span>
+            <span>{(profile?.xp || 0).toFixed(2)} XP</span>
           </Badge>
         </div>
       </div>
@@ -120,7 +120,7 @@ export default function LearnPage() {
             <div className="grid grid-cols-2 gap-4 pt-2">
               <div className="bg-blue-50 rounded-lg p-4">
                 <div className="text-sm text-blue-600 mb-1">Total XP Earned</div>
-                <div className="text-2xl font-bold">{profile?.xp || 0} XP</div>
+                <div className="text-2xl font-bold">{(profile?.xp || 0).toFixed(2)} XP</div>
               </div>
               <div className="bg-green-50 rounded-lg p-4">
                 <div className="text-sm text-green-600 mb-1">Balance Earned</div>
@@ -134,7 +134,7 @@ export default function LearnPage() {
       {/* Course List */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {courses.map((course) => {
-          const isCompleted = completedCourses.includes(course.id);
+          const isCompleted = "course-1"
           
           return (
             <Card key={course.id} className={isCompleted ? 'border-green-200 bg-green-50' : ''}>

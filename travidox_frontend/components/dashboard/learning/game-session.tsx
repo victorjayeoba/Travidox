@@ -153,7 +153,7 @@ export function GameSession({
                     <Star className="h-5 w-5 text-yellow-500" />
                     <span className="font-medium">Total XP</span>
                   </div>
-                  <div className="text-2xl font-bold text-blue-600">+{results.totalXP}</div>
+                  <div className="text-2xl font-bold text-blue-600">+{results.totalXP.toFixed(2)}</div>
                 </div>
               </div>
               

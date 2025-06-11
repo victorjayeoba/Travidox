@@ -2,21 +2,10 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/components/auth/auth-provider';
+import { getUserProfile, updateUserXP, UserProfile } from '@/lib/firebase-user';
 
-interface UserProfile {
-  userId: string;
-  displayName: string | null;
-  email: string | null;
-  xp: number;
-  balance: number;
-  completedCourses: string[];
-  isVerified: boolean;
-  joinDate: string;
-  lastActive: string;
-}
-
-// Create a global event for XP/balance updates
-export const XP_BALANCE_UPDATE_EVENT = 'xp-balance-update';
+// Event name for XP/balance updates
+export const XP_BALANCE_UPDATE_EVENT = 'xp_balance_update';
 
 export const useUserProfile = () => {
   const { user } = useAuth();
@@ -24,19 +13,7 @@ export const useUserProfile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Function to get the latest profile from localStorage
-  const getLatestProfile = useCallback(() => {
-    if (!user) return null;
-    
-    const storedProfile = localStorage.getItem(`userProfile_${user.uid}`);
-    if (storedProfile) {
-      return JSON.parse(storedProfile);
-    }
-    return null;
-  }, [user]);
-
-  // In a real implementation, this would fetch from your backend API
-  // For now, we're simulating API behavior with local storage
+  // Fetch the user profile from Firestore
   useEffect(() => {
     const fetchUserProfile = async () => {
       if (!user) {
@@ -47,36 +24,29 @@ export const useUserProfile = () => {
 
       try {
         setLoading(true);
-        // In a real implementation, this would be a fetch call to your API
-        // const response = await fetch(`/api/user-profile/${user.uid}`);
-        // const data = await response.json();
         
-        // For demonstration, we'll use localStorage to persist data between sessions
-        const storedProfile = getLatestProfile();
+        // Get profile from Firestore
+        const userProfile = await getUserProfile(user.uid);
         
-        if (storedProfile) {
-          // If we have stored profile data, use it
-          setProfile(storedProfile);
+        if (userProfile) {
+          // Ensure XP and balance are synchronized on load
+          if (userProfile.xp !== userProfile.balance) {
+            console.log('Synchronizing XP and balance on profile load');
+            // Use the XP value as the source of truth
+            const syncedProfile = await updateUserXP(user.uid, 0);
+            const updatedProfile = await getUserProfile(user.uid);
+            if (updatedProfile) {
+              setProfile(updatedProfile);
+            } else {
+              setProfile(userProfile);
+            }
+          } else {
+            setProfile(userProfile);
+          }
         } else {
-          // If not, create a new profile with default values
-          const newProfile: UserProfile = {
-            userId: user.uid,
-            displayName: user.displayName,
-            email: user.email,
-            xp: 0, // XP starts at 0 for new users
-            balance: 0, // Balance starts at 0 for new users (same as XP)
-            completedCourses: [],
-            isVerified: user.emailVerified,
-            joinDate: user.metadata.creationTime || new Date().toISOString(),
-            lastActive: user.metadata.lastSignInTime || new Date().toISOString()
-          };
-          
-          // Store in localStorage (in real app, this would be saved to backend)
-          localStorage.setItem(`userProfile_${user.uid}`, JSON.stringify(newProfile));
-          setProfile(newProfile);
+          console.error('User profile not found in Firestore');
+          setError('Failed to load user profile');
         }
-        
-        setError(null);
       } catch (err) {
         console.error('Error fetching user profile:', err);
         setError('Failed to load user profile');
@@ -88,10 +58,12 @@ export const useUserProfile = () => {
     fetchUserProfile();
 
     // Listen for XP/balance updates from other components
-    const handleXpBalanceUpdate = () => {
-      const updatedProfile = getLatestProfile();
-      if (updatedProfile) {
-        setProfile(updatedProfile);
+    const handleXpBalanceUpdate = async () => {
+      if (user) {
+        const updatedProfile = await getUserProfile(user.uid);
+        if (updatedProfile) {
+          setProfile(updatedProfile);
+        }
       }
     };
 
@@ -102,39 +74,26 @@ export const useUserProfile = () => {
     return () => {
       window.removeEventListener(XP_BALANCE_UPDATE_EVENT, handleXpBalanceUpdate);
     };
-  }, [user, getLatestProfile]);
+  }, [user]);
 
   // Function to update XP and balance when a course is completed
   const addXpAndUpdateBalance = async (amount: number, courseId: string) => {
     if (!user || !profile) return;
     
     try {
-      // Check if course was already completed
-      if (profile.completedCourses.includes(courseId)) {
-        return;
+      // Add XP to user profile in Firestore - this also updates balance in our updated function
+      const levelUp = await updateUserXP(user.uid, amount);
+      
+      // Get updated profile
+      const updatedProfile = await getUserProfile(user.uid);
+      
+      if (updatedProfile) {
+        // Verify the balance and XP are equal
+        if (updatedProfile.xp !== updatedProfile.balance) {
+          console.warn('XP and balance are out of sync after update');
+        }
+        setProfile(updatedProfile);
       }
-      
-      // Create updated profile
-      const updatedProfile = {
-        ...profile,
-        xp: profile.xp + amount,
-        balance: profile.xp + amount, // Ensure balance is EXACTLY the same as XP
-        completedCourses: [...profile.completedCourses, courseId],
-        lastActive: new Date().toISOString()
-      };
-      
-      // In a real app, you would send this to your backend
-      // await fetch(`/api/user-profile/${user.uid}`, {
-      //   method: 'PUT',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(updatedProfile)
-      // });
-      
-      // For demo, update localStorage
-      localStorage.setItem(`userProfile_${user.uid}`, JSON.stringify(updatedProfile));
-      
-      // Update local state
-      setProfile(updatedProfile);
       
       // Dispatch event to notify other components about the update
       window.dispatchEvent(new Event(XP_BALANCE_UPDATE_EVENT));
@@ -151,19 +110,23 @@ export const useUserProfile = () => {
     if (!user || !profile) return;
     
     try {
-      // Create updated profile with the same value for both XP and balance
-      const updatedProfile = {
-        ...profile,
-        xp: amount,
-        balance: amount,
-        lastActive: new Date().toISOString()
-      };
+      // This is a simplified version - in a real app you'd have a proper API
+      // Here we just calculate the difference and update
+      const difference = amount - profile.xp;
       
-      // Update localStorage
-      localStorage.setItem(`userProfile_${user.uid}`, JSON.stringify(updatedProfile));
+      // Update XP in Firestore (positive or negative change) - this also updates balance
+      await updateUserXP(user.uid, difference);
       
-      // Update local state
-      setProfile(updatedProfile);
+      // Get updated profile
+      const updatedProfile = await getUserProfile(user.uid);
+      
+      if (updatedProfile) {
+        // Verify the balance and XP are equal
+        if (updatedProfile.xp !== updatedProfile.balance) {
+          console.warn('XP and balance are out of sync after setting values');
+        }
+        setProfile(updatedProfile);
+      }
       
       // Dispatch event to notify other components about the update
       window.dispatchEvent(new Event(XP_BALANCE_UPDATE_EVENT));

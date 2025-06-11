@@ -24,7 +24,7 @@ interface StockPurchaseModalProps {
     symbol: string
     name: string
     price: number
-    change: number
+    change?: number
   }
   ownedQuantity?: number
 }
@@ -148,6 +148,11 @@ export function StockPurchaseModal({
   
   const totalCost = stock.price * quantity
   
+  // Handle undefined change value
+  const showChange = typeof stock.change === 'number';
+  const changeValue = showChange ? stock.change.toFixed(2) : '0.00';
+  const changeDirection = showChange && stock.change < 0;
+  
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-[425px]">
@@ -155,12 +160,14 @@ export function StockPurchaseModal({
           <DialogTitle className="text-center">{stock.symbol}</DialogTitle>
           <DialogDescription className="text-center">
             {stock.name} - ₦{stock.price.toFixed(2)}
-            <span 
-              className={`ml-2 inline-flex items-center ${stock.change >= 0 ? 'text-green-500' : 'text-red-500'}`}
-            >
-              <ArrowUpRight className={`h-3.5 w-3.5 ${stock.change < 0 ? 'rotate-180' : ''}`} />
-              {stock.change.toFixed(2)}
-            </span>
+            {showChange && (
+              <span 
+                className={`ml-2 inline-flex items-center ${changeDirection ? 'text-red-500' : 'text-green-500'}`}
+              >
+                <ArrowUpRight className={`h-3.5 w-3.5 ${changeDirection ? 'rotate-180' : ''}`} />
+                {changeValue}
+              </span>
+            )}
           </DialogDescription>
         </DialogHeader>
         

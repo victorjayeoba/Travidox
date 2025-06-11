@@ -12,6 +12,7 @@ import {
   updateProfile
 } from 'firebase/auth'
 import { auth, googleProvider } from '@/lib/firebase'
+import { createOrUpdateUserProfile, UserProfile } from '@/lib/firebase-user'
 
 // Debug: Test Firebase connection removed for security
 
@@ -19,6 +20,7 @@ type AuthMode = 'signIn' | 'signUp'
 
 interface AuthContextType {
   user: User | null
+  userProfile: UserProfile | null
   loading: boolean
   authMode: AuthMode
   switchToSignIn: () => void
@@ -39,6 +41,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [authMode, setAuthMode] = useState<AuthMode>('signIn')
@@ -46,8 +49,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter()
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setUser(user)
+      
+      // Create or update user profile in Firestore
+      if (user) {
+        try {
+          const profile = await createOrUpdateUserProfile(user)
+          setUserProfile(profile)
+        } catch (error) {
+          console.error("Error updating user profile:", error)
+        }
+      } else {
+        setUserProfile(null)
+      }
+      
       setLoading(false)
     })
 
@@ -76,6 +92,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const result = await signInWithEmailAndPassword(auth, email, password)
       
+      // Create or update user profile in Firestore
+      const profile = await createOrUpdateUserProfile(result.user)
+      setUserProfile(profile)
+      
       // Small delay to ensure auth state is updated
       setTimeout(() => {
         router.push('/dashboard')
@@ -98,6 +118,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         displayName: fullName
       })
       
+      // Create or update user profile in Firestore
+      const profile = await createOrUpdateUserProfile(result.user)
+      setUserProfile(profile)
+      
       // Small delay to ensure auth state is updated
       setTimeout(() => {
         router.push('/dashboard')
@@ -114,6 +138,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     
     try {
       const result = await signInWithPopup(auth, googleProvider)
+      
+      // Create or update user profile in Firestore
+      const profile = await createOrUpdateUserProfile(result.user)
+      setUserProfile(profile)
       
       // Small delay to ensure auth state is updated
       setTimeout(() => {
@@ -145,6 +173,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const value = {
     user,
+    userProfile,
     loading,
     authMode,
     switchToSignIn,
