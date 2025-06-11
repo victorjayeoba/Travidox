@@ -39,7 +39,7 @@ export function DashboardHeader({
   
   // Initialize XP from profile and listen for updates
   useEffect(() => {
-    if (profile) {
+    if (profile && typeof profile.xp === 'number') {
       setXpValue(profile.xp)
     }
     
@@ -49,8 +49,14 @@ export function DashboardHeader({
       if (user) {
         const storedProfile = localStorage.getItem(`userProfile_${user.uid}`)
         if (storedProfile) {
-          const parsedProfile = JSON.parse(storedProfile)
-          setXpValue(parsedProfile.xp)
+          try {
+            const parsedProfile = JSON.parse(storedProfile)
+            if (parsedProfile && typeof parsedProfile.xp === 'number') {
+              setXpValue(parsedProfile.xp)
+            }
+          } catch (error) {
+            console.error('Error parsing stored profile:', error)
+          }
         }
       }
     }
@@ -175,7 +181,7 @@ export function DashboardHeader({
             className="hidden md:flex items-center gap-1.5 text-yellow-700 bg-yellow-50 px-2.5 py-1 rounded-full"
           >
             <Star size={16} className="fill-yellow-500 text-yellow-500" />
-            <span className="text-sm font-medium">{xpValue.toFixed(2)} XP</span>
+            <span className="text-sm font-medium">{(xpValue || 0).toFixed(2)} XP</span>
           </div>
           
           {/* Notifications */}
