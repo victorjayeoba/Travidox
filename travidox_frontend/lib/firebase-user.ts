@@ -6,7 +6,13 @@ import {
   updateDoc, 
   increment,
   serverTimestamp,
-  Timestamp
+  Timestamp,
+  arrayUnion,
+  collection,
+  query,
+  orderBy,
+  limit,
+  getDocs
 } from 'firebase/firestore';
 import { User } from 'firebase/auth';
 import app from './firebase';
@@ -28,6 +34,7 @@ export interface UserProfile {
   level: number;
   completedCourses: number;
   enrolledCourses: string[];
+  completedQuizzes: string[];
   certificates: string[];
   bio: string;
   isVerified: boolean;
@@ -39,6 +46,13 @@ export interface UserProfile {
   lastCompletedCourse?: {
     courseId: string;
     courseName: string;
+    completedAt: Timestamp;
+  };
+  lastCompletedQuiz?: {
+    quizId: string;
+    quizName: string;
+    score: number;
+    totalQuestions: number;
     completedAt: Timestamp;
   };
   achievements: string[];
@@ -79,6 +93,7 @@ export async function createOrUpdateUserProfile(user: User): Promise<UserProfile
       level: 1,
       completedCourses: 0,
       enrolledCourses: [],
+      completedQuizzes: [],
       certificates: [],
       bio: '',
       isVerified: user.emailVerified,
@@ -240,5 +255,103 @@ export async function addCertificateToUser(
   } catch (error) {
     console.error('Error adding certificate to user:', error);
     return false;
+  }
+}
+
+/**
+ * Add a completed quiz to user profile
+ */
+export async function addCompletedQuiz(
+  userId: string, 
+  quizId: string, 
+  quizName: string,
+  score: number,
+  totalQuestions: number,
+  xpEarned: number
+): Promise<boolean> {
+  try {
+    const userRef = doc(db, 'users', userId);
+    const userSnap = await getDoc(userRef);
+    
+    if (!userSnap.exists()) {
+      return false;
+    }
+    
+    // Update the user profile with the completed quiz
+    await updateDoc(userRef, {
+      completedQuizzes: arrayUnion(quizId),
+      lastCompletedQuiz: {
+        quizId,
+        quizName,
+        score,
+        totalQuestions,
+        completedAt: Timestamp.now()
+      }
+    });
+    
+    // Award XP for completing the quiz
+    await updateUserXP(userId, xpEarned);
+    
+    return true;
+  } catch (error) {
+    console.error('Error adding completed quiz:', error);
+    return false;
+  }
+}
+
+/**
+ * Fetch all users for the leaderboard, sorted by XP
+ */
+export async function getLeaderboardUsers(limitCount: number = 50): Promise<UserProfile[]> {
+  try {
+    const usersRef = collection(db, 'users');
+    const q = query(
+      usersRef,
+      orderBy('xp', 'desc'),
+      limit(limitCount)
+    );
+    
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => doc.data() as UserProfile);
+  } catch (error) {
+    console.error('Error fetching leaderboard users:', error);
+    return [];
+  }
+}
+
+/**
+ * Get users for the weekly leaderboard
+ * In a real application, this would query users based on activity within the current week
+ */
+export async function getWeeklyLeaderboardUsers(limitCount: number = 20): Promise<(UserProfile & { weeklyXP: number })[]> {
+  try {
+    const usersRef = collection(db, 'users');
+    // In a real app, we would use a more sophisticated query to get weekly activity
+    // This is a simplified version that just gets users and calculates a "weekly XP" value
+    const q = query(
+      usersRef,
+      orderBy('lastLoginAt', 'desc'), // Prioritize recently active users
+      limit(limitCount)
+    );
+    
+    const snapshot = await getDocs(q);
+    
+    // Add a "weeklyXP" field for demonstration
+    // In a real app, you would track weekly XP separately in the database
+    return snapshot.docs.map(doc => {
+      const userData = doc.data() as UserProfile;
+      
+      // For demonstration, calculate "weekly XP" as a percentage of total XP
+      // In a real app, you'd have actual weekly XP data
+      const weeklyXP = Math.floor(userData.xp * (0.1 + Math.random() * 0.2)); // 10-30% of total XP
+      
+      return {
+        ...userData,
+        weeklyXP
+      };
+    });
+  } catch (error) {
+    console.error('Error fetching weekly leaderboard users:', error);
+    return [];
   }
 } 

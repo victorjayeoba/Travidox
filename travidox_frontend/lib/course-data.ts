@@ -107,30 +107,30 @@ const instructors: Instructor[] = [
   {
     id: "inst-1",
     name: "John Thompson",
-    title: "Market Education Expert & Professional Trader",
+    title: "Nigerian Financial Literacy Expert",
     avatar: "/instructors/john.jpg",
-    bio: "John Thompson is a seasoned trader with over 15 years of experience in the financial markets. He previously worked as a portfolio manager at Goldman Sachs and now dedicates his time to teaching aspiring traders."
+    bio: "John Thompson is a certified financial educator with over 15 years of experience teaching Nigerians how to build wealth through strategic investments in local markets."
   },
   {
     id: "inst-2",
     name: "Sarah Chen",
-    title: "Technical Analysis Specialist",
+    title: "Nigerian Stock Market Specialist",
     avatar: "/instructors/sarah.jpg",
-    bio: "Sarah is a certified technical analyst with expertise in Japanese candlestick patterns and chart analysis. She has authored two books on technical trading strategies."
+    bio: "Sarah is a certified technical analyst specializing in the Nigerian Stock Exchange with expertise in local market patterns and Nigerian economic indicators."
   },
   {
     id: "inst-3",
     name: "Michael Rodriguez",
-    title: "Risk Management Professional",
+    title: "Forex Trading Professional",
     avatar: "/instructors/michael.jpg",
-    bio: "Michael has worked with hedge funds for over a decade specializing in risk assessment and management. He holds a Ph.D. in Financial Mathematics from MIT."
+    bio: "Michael has worked with Nigerian traders for over a decade, specializing in forex risk management strategies tailored to the unique challenges of the Nigerian market."
   },
   {
     id: "inst-4",
     name: "Emma Wilson",
-    title: "Sector Analysis Expert",
+    title: "Nigerian Investment Strategist",
     avatar: "/instructors/emma.jpg",
-    bio: "Emma is an experienced sector analyst who has helped institutional investors optimize their portfolios through strategic sector rotation. She previously worked at Blackrock's research division."
+    bio: "Emma is an experienced Nigerian investment advisor who has helped thousands of local investors optimize their portfolios through strategic asset allocation."
   }
 ];
 
@@ -139,426 +139,255 @@ const instructors: Instructor[] = [
  * Contains all courses available on the platform
  */
 export const coursesData: Course[] = [
+  // 🟢 BEGINNER LEVEL COURSES
   {
-    id: "course-1",
-    title: "Stock Market Fundamentals",
-    subtitle: "Master the essential concepts and terminology for successful trading",
-    category: "Market Education",
-    subcategory: "Market Basics",
-    description: "Master the essential concepts and terminology that every stock market investor needs to understand before trading.",
+    id: "course-b1",
+    title: "Money Moves 101: Introduction to Financial Literacy",
+    subtitle: "Master the basics of money management for Nigerians",
+    category: "Financial Literacy",
+    subcategory: "Beginner",
+    description: "Learn the fundamentals of money management, savings, budgeting and debt management tailored for Nigerians.",
     longDescription: `
-This comprehensive course is designed to build a solid foundation for anyone looking to enter the stock market. You'll learn the core concepts, terminology, and principles that drive financial markets.
+This comprehensive course is designed to build a solid foundation for anyone looking to improve their financial literacy in Nigeria. You'll learn the core concepts, terminology, and principles of effective money management.
 
 ### What You'll Learn:
-- Understand how stock markets function and their role in the economy
-- Learn about different market participants and their impact
-- Decode financial statements and key metrics
-- Develop basic skills to evaluate investment opportunities
-- Build a strategic mindset for long-term investing success
+- Understand the basics of personal finance and money management
+- Develop effective budgeting strategies for the Nigerian context
+- Learn smart ways to save money despite inflation challenges
+- Master debt management techniques that work in Nigeria
+- Build a strategic mindset for long-term financial success
 
 ### Course Features:
 - 8 modules with over 4 hours of video content
-- Interactive quizzes to reinforce learning
-- Downloadable resources and cheat sheets
-- Real-world examples and case studies
+- Interactive budget templates and financial calculators
+- Downloadable resources adapted for the Nigerian economy
+- Real-world examples of successful Nigerian savers
 - Certificate of completion
 
-Whether you're a complete beginner or have some exposure to the markets, this course will provide the structured knowledge you need to confidently begin your investment journey.
+Whether you're just starting your financial journey or want to improve your money habits, this course provides the structured knowledge you need to take control of your finances in Nigeria.
     `,
-    tags: ["Market Basics", "Trading Fundamentals", "Investment Strategy", "Financial Literacy"],
+    tags: ["Financial Literacy", "Budgeting", "Savings", "Debt Management"],
     estimatedHours: 4,
     difficulty: "beginner",
     icon: "BookText",
-    coverImage: "/courses/stock-market-fundamentals.jpg",
+    coverImage: "/courses/financial-literacy.jpg",
     instructor: instructors[0],
-    lastUpdated: "March 15, 2024",
+    lastUpdated: "May 15, 2024",
     createdAt: "January 10, 2024",
     language: "English",
     modules: [
       { 
-        id: "m1-1", 
-        title: "Introduction to Stock Market", 
-        description: "Learn the fundamental concepts of stock markets and how they function",
+        id: "m-b1-1", 
+        title: "Financial Literacy Fundamentals", 
+        description: "Learn the basic concepts of financial literacy and why they matter",
         duration: "45 min", 
         isCompleted: false,
         order: 1,
         content: [
           {
-            id: "c1-1-1",
+            id: "c-b1-1-1",
             type: "video",
-            title: "What is the Stock Market?",
+            title: "Introduction to Financial Literacy in Nigeria",
             duration: "15 min",
-            videoUrl: "https://example.com/video1.mp4",
-            content: "An introduction to the stock market and its role in the global economy."
+            videoUrl: "https://www.youtube.com/watch?v=pZDRC07SABQ",
+            content: "An introduction to financial literacy and its importance in the Nigerian context."
           },
           {
-            id: "c1-1-2",
+            id: "c-b1-1-2",
             type: "text",
-            title: "Understanding Market Basics",
+            title: "Financial Literacy Basics for Nigerians",
             duration: "15 min",
-            content: `# Understanding the Stock Market
+            content: `# Financial Literacy Basics for Nigerians
 
-## What is the Stock Market?
-The stock market is a marketplace where shares of publicly traded companies are bought and sold. It serves several important functions:
+## What is Financial Literacy?
+Financial literacy refers to the knowledge and skills needed to make effective and informed money management decisions. In Nigeria, having strong financial literacy skills is crucial due to the unique economic challenges we face:
 
-1. Capital Formation: Companies raise money by selling shares to investors
-2. Price Discovery: The market determines the value of companies through supply and demand
-3. Liquidity: Investors can easily buy and sell their investments
-4. Risk Management: Investors can diversify their portfolios
+1. **High Inflation Rates**: Understanding how to preserve purchasing power
+2. **Currency Fluctuations**: Managing the effects of Naira volatility
+3. **Diverse Investment Options**: Navigating between traditional savings, stocks, and alternative investments
+4. **Economic Uncertainty**: Building financial resilience in an unpredictable environment
 
-## Key Concepts
+## Why Financial Literacy Matters in Nigeria
 
-### Stocks and Shares
-- A stock represents ownership in a company
-- Each share represents a portion of the company's ownership
-- Shareholders have voting rights and may receive dividends
-- Stock prices reflect company performance and market sentiment`
+- Helps you make better financial decisions despite economic challenges
+- Enables you to build wealth even in high-inflation environments
+- Provides tools to avoid common financial mistakes and scams
+- Creates a pathway to financial independence and security
+- Empowers you to teach good money habits to your family and community`
           },
           {
-            id: "c1-1-3",
+            id: "c-b1-1-3",
             type: "quiz",
-            title: "Market Basics Quiz",
+            title: "Financial Literacy Fundamentals Quiz",
             duration: "15 min",
-            content: "Test your understanding of stock market fundamentals",
+            content: "Test your understanding of financial literacy basics",
             quiz: [
               {
-                id: "q1-1-1",
-                question: "What does owning a share of stock represent?",
+                id: "q-b1-1-1",
+                question: "Which of these is NOT a key component of financial literacy?",
                 options: [
-                  "A loan to the company",
-                  "Ownership in the company",
-                  "A fixed interest payment",
-                  "A government bond"
-                ],
-                correctAnswer: 1,
-                explanation: "When you own a share of stock, you own a small piece of the company. This gives you certain rights, including potential dividends and voting on company matters."
-              },
-              {
-                id: "q1-1-2",
-                question: "Which of the following is NOT a function of the stock market?",
-                options: [
-                  "Price discovery",
-                  "Capital formation",
-                  "Creating money supply",
-                  "Providing liquidity"
+                  "Budgeting",
+                  "Saving",
+                  "Gambling",
+                  "Investing"
                 ],
                 correctAnswer: 2,
-                explanation: "The stock market doesn't create money supply - that's the role of central banks and the banking system. The stock market facilitates capital formation, price discovery, and provides liquidity for investors."
-              }
-            ]
-          },
-          {
-            id: "c1-1-4",
-            type: "text",
-            title: "Additional Resources",
-            duration: "0 min",
-            content: "Additional resources for further learning",
-            resources: [
-              {
-                id: "r1-1-1",
-                title: "Stock Market Basics PDF Guide",
-                type: "pdf",
-                url: "/resources/stock-market-basics.pdf",
-                description: "A comprehensive guide to stock market basics"
+                explanation: "Gambling is not a component of financial literacy. Financial literacy focuses on responsible money management through budgeting, saving, investing, and managing debt."
               },
               {
-                id: "r1-1-2",
-                title: "SEC's Introduction to Markets",
-                type: "link",
-                url: "https://www.investor.gov/introduction-investing/basics/how-stock-markets-work",
-                description: "Official SEC guide to how markets work"
-              }
-            ]
-          }
-        ]
-      },
-      { 
-        id: "m1-2", 
-        title: "Market Participants", 
-        description: "Understand the different players in the market and their roles",
-        duration: "45 min", 
-        isCompleted: false,
-        order: 2,
-        content: [
-          {
-            id: "c1-2-1",
-            type: "video",
-            title: "Who Trades in the Market?",
-            duration: "15 min",
-            videoUrl: "https://example.com/video2.mp4",
-            content: "Learn about different types of market participants and their roles."
-          },
-          {
-            id: "c1-2-2",
-            type: "text",
-            title: "Types of Market Participants",
-            duration: "15 min",
-            content: `# Market Participants Guide
-
-## Individual Investors
-- Retail traders who invest for personal financial goals
-- Typically trade with personal capital
-- Usually have longer time horizons
-- Growing segment due to commission-free trading
-
-## Institutional Investors
-- Professional asset managers
-- Control large pools of capital
-- Include mutual funds, pension funds, and insurance companies
-- Often have strict investment mandates
-
-## Market Makers
-- Provide liquidity to markets
-   - Profit from bid-ask spreads
-- Help maintain orderly markets
-- Include specialized firms and bank trading desks`
-          },
-          {
-            id: "c1-2-3",
-            type: "quiz",
-            title: "Market Participants Quiz",
-            duration: "15 min",
-            content: "Test your understanding of market participants",
-            quiz: [
-              {
-                id: "q1-2-1",
-                question: "Which market participant typically provides liquidity by maintaining bid and ask prices?",
+                id: "q-b1-1-2",
+                question: "Why is financial literacy particularly important in Nigeria?",
                 options: [
-                  "Retail investors",
-                  "Market makers",
-                  "Mutual funds",
-                  "Regulators"
+                  "Because Nigeria has no financial challenges",
+                  "Due to high inflation and currency fluctuations",
+                  "Because banks manage all financial decisions for Nigerians",
+                  "Because financial literacy is only important for the wealthy"
                 ],
                 correctAnswer: 1,
-                explanation: "Market makers provide liquidity by maintaining bid and ask prices, ensuring that other market participants can buy and sell securities easily."
+                explanation: "Financial literacy is particularly important in Nigeria due to challenges like high inflation rates and currency fluctuations, which require specific knowledge to navigate effectively."
               }
             ]
-          }
-        ]
-      },
-      {
-        id: "m1-3",
-        title: "Understanding Financial Statements",
-        description: "Learn how to read and analyze company financial reports",
-        duration: "60 min",
-        isCompleted: false,
-        order: 3,
-        content: [
-          {
-            id: "c1-3-1",
-            type: "video",
-            title: "Introduction to Financial Statements",
-            duration: "20 min",
-            videoUrl: "https://example.com/video3.mp4",
-            content: "Learn the basics of financial statements and why they matter to investors."
-          },
-          {
-            id: "c1-3-2",
-            type: "text",
-            title: "Balance Sheet Fundamentals",
-            duration: "20 min",
-            content: `# Understanding the Balance Sheet
-
-A balance sheet is a financial statement that reports a company's assets, liabilities, and shareholders' equity at a specific point in time.
-
-## The Accounting Equation
-Assets = Liabilities + Shareholders' Equity
-
-This fundamental equation must always balance, hence the name "balance sheet."
-
-## Key Components
-
-### Assets
-- Current Assets: Cash, inventory, accounts receivable
-- Non-Current Assets: Property, equipment, intangible assets
-
-### Liabilities
-- Current Liabilities: Accounts payable, short-term debt
-- Non-Current Liabilities: Long-term debt, deferred taxes
-
-### Shareholders' Equity
-- Common stock
-- Retained earnings
-- Additional paid-in capital`
-          },
-          {
-            id: "c1-3-3",
-            type: "assignment",
-            title: "Financial Statement Analysis",
-            duration: "20 min",
-            content: "Practice analyzing a real company's financial statements",
-            assignment: {
-              description: "Download the attached financial statements for Company XYZ and answer the following questions:\n1. What is the company's current ratio?\n2. Has the company's debt increased or decreased over the past year?\n3. What percentage of assets are financed by debt?",
-              submission: "text"
-            }
           }
         ]
       }
     ],
     skills: [
-      "Stock market literacy", 
-      "Financial statement analysis", 
-      "Investment basics", 
-      "Risk assessment"
+      "Budgeting", 
+      "Saving", 
+      "Debt management", 
+      "Financial planning"
     ],
     prerequisites: [
       {
-        id: "pre-1-1",
+        id: "pre-b1-1",
         title: "No prior knowledge required",
         description: "This course is designed for complete beginners."
       }
     ],
     reviews: [
       {
-        id: "rev-1-1",
+        id: "rev-b1-1",
         userId: "user-1",
-        userName: "Michael Smith",
-        userAvatar: "/avatars/michael.jpg",
+        userName: "Chioma Eze",
+        userAvatar: "/avatars/chioma.jpg",
         rating: 5,
-        comment: "Excellent introduction to the stock market. Very well explained and easy to follow.",
+        comment: "This course completely changed how I manage my money as a Nigerian. The budget templates are so practical!",
         date: "February 10, 2024"
-      },
-      {
-        id: "rev-1-2",
-        userId: "user-2",
-        userName: "Jessica Williams",
-        userAvatar: "/avatars/jessica.jpg",
-        rating: 4,
-        comment: "Great content, but I wish there were more practical examples.",
-        date: "March 5, 2024"
       }
     ],
-    price: 59.99,
-    discountPrice: 39.99,
+    price: 9999,
+    discountPrice: 7999,
     isFeatured: true,
     averageRating: 4.7,
     totalStudents: 1243,
     certificationIncluded: true
   },
   {
-    id: "course-2",
-    title: "Candlestick Pattern Recognition",
-    subtitle: "Master the art of Japanese candlestick analysis for better market timing",
-    category: "Chart Analysis",
-    subcategory: "Technical Analysis",
-    description: "Learn to identify and trade powerful Japanese candlestick patterns for better market timing.",
+    id: "course-b2",
+    title: "Naija Stock Market for Starters",
+    subtitle: "A beginner-friendly guide to investing in the Nigerian Stock Exchange",
+    category: "Stock Market",
+    subcategory: "Beginner",
+    description: "Master the basics of the Nigerian Stock Exchange (NGX) with a practical, jargon-free approach designed for first-time investors.",
     longDescription: `
-Discover the ancient art of Japanese candlestick analysis adapted for modern markets. This course will transform the way you read price action and make trading decisions.
+This beginner-friendly course provides a comprehensive introduction to the Nigerian Stock Exchange for first-time investors. You'll learn how the NGX works, how to start investing, and the fundamentals of making smart investment decisions in the Nigerian market.
 
 ### What You'll Learn:
-- The history and philosophy behind candlestick charting
-- How to identify and interpret single, double and triple candlestick patterns
-- Real-world pattern recognition across different timeframes
-- High-probability trading strategies based on candlestick signals
-- Combining candlestick analysis with other technical indicators
+- Understand how the Nigerian Stock Exchange functions and its role in the economy
+- Learn the step-by-step process to open a brokerage account in Nigeria
+- Discover how to research and select Nigerian stocks with good potential
+- Master the basics of stock orders, timing, and market tracking
+- Build a starter portfolio suitable for the Nigerian economic environment
 
 ### Course Features:
-- 12 modules with over 5 hours of expert instruction
-- Interactive pattern recognition exercises
-- Market replay sessions to practice in real conditions
-- Downloadable pattern cheat sheets
-- Trading plan templates
+- 6 modules with over 3 hours of video content
+- Interactive demos of Nigerian trading platforms
+- Downloadable NGX stock analysis templates
+- Real examples using current Nigerian companies
+- Certificate of completion
 
-By the end of this course, you'll be able to confidently spot high-probability trading setups using candlestick patterns across any market.
+This course bridges the gap between complete novice and confident beginner investor, focusing specifically on the unique aspects of the Nigerian market.
     `,
-    tags: ["Candlestick Patterns", "Technical Analysis", "Chart Reading", "Trading Signals"],
-    estimatedHours: 5,
-    difficulty: "intermediate",
-    icon: "BarChart2",
-    coverImage: "/courses/candlestick-patterns.jpg",
+    tags: ["NGX", "Nigerian Stocks", "Beginner Investing", "Stock Market"],
+    estimatedHours: 3,
+    difficulty: "beginner",
+    icon: "TrendingUp",
+    coverImage: "/courses/nigerian-stock-market.jpg",
     instructor: instructors[1],
-    lastUpdated: "April 20, 2024",
-    createdAt: "December 15, 2023",
+    lastUpdated: "April 18, 2024",
+    createdAt: "February 5, 2024",
     language: "English",
     modules: [
       {
-        id: "m2-1",
-        title: "Candlestick Fundamentals",
-        description: "Understand the basics of candlestick charts and their components",
-        duration: "60 min",
+        id: "m-b2-1", 
+        title: "Introduction to the Nigerian Stock Exchange", 
+        description: "Learn the fundamental concepts of the Nigerian Stock Exchange and how it works",
+        duration: "45 min", 
         isCompleted: false,
         order: 1,
         content: [
           {
-            id: "c2-1-1",
+            id: "c-b2-1-1",
             type: "video",
-            title: "Introduction to Candlestick Charts",
-            duration: "20 min",
-            videoUrl: "https://example.com/candlesticks-intro.mp4",
-            content: "Learn the history and components of Japanese candlestick charts."
+            title: "Introduction to the Nigerian Stock Exchange (NGX)",
+            duration: "15 min",
+            videoUrl: "https://www.youtube.com/watch?v=example1",
+            content: "An introduction to the Nigerian Stock Exchange, its history, and its role in the economy."
           },
           {
-            id: "c2-1-2",
+            id: "c-b2-1-2",
             type: "text",
-            title: "Anatomy of a Candlestick",
-            duration: "20 min",
-            content: `# Anatomy of a Candlestick
+            title: "NGX Basics: What Every Nigerian Investor Should Know",
+            duration: "15 min",
+            content: `# NGX Basics: What Every Nigerian Investor Should Know
 
-A candlestick chart provides more information than a simple line chart by showing the open, high, low, and close (OHLC) prices for each time period.
+## What is the Nigerian Stock Exchange (NGX)?
+The Nigerian Exchange Group (NGX), formerly known as the Nigerian Stock Exchange, is the primary stock exchange in Nigeria. It provides a platform where shares, bonds, and other securities are bought and sold.
 
-## Basic Structure
+## Key Facts About the NGX:
+- Founded in 1960, initially as the Lagos Stock Exchange
+- Renamed Nigerian Stock Exchange in 1977
+- Became Nigerian Exchange Group (NGX) after demutualization in 2021
+- Located in Lagos, with branches in major cities across Nigeria
+- Lists over 160 companies across various sectors
 
-Each candlestick consists of:
-
-1. **The Body**: The rectangular part showing the opening and closing prices
-   - If close > open: Body is typically green or white (bullish)
-   - If close < open: Body is typically red or black (bearish)
-
-2. **The Shadows/Wicks**: The thin lines extending from the body
-   - Upper shadow: Shows the highest price reached during the period
-   - Lower shadow: Shows the lowest price reached during the period
-
-## What Candlesticks Tell Us
-
-Candlesticks reveal the struggle between buyers and sellers:
-- Long bodies indicate strong buying or selling pressure
-- Long shadows show price rejection at extremes
-- The relationship between open and close reveals who won the period (buyers or sellers)
-
-## Timeframes
-
-Candlesticks can represent any time period:
-- 1 minute
-- 5 minutes
-- 15 minutes
-- 1 hour
-- 4 hours
-- 1 day
-- 1 week
-- 1 month
-
-The psychology behind the patterns remains the same regardless of timeframe.`
+## Why Invest in the NGX?
+- Ownership in Nigerian companies
+- Potential for capital appreciation
+- Dividend income opportunities
+- Portfolio diversification
+- Participation in Nigeria's economic growth`
           },
           {
-            id: "c2-1-3",
+            id: "c-b2-1-3",
             type: "quiz",
-            title: "Candlestick Basics Quiz",
-            duration: "20 min",
-            content: "Test your understanding of candlestick basics",
+            title: "Nigerian Stock Exchange Basics Quiz",
+            duration: "15 min",
+            content: "Test your understanding of the Nigerian Stock Exchange basics",
             quiz: [
               {
-                id: "q2-1-1",
-                question: "What does a green (or white) candlestick typically represent?",
+                id: "q-b2-1-1",
+                question: "When was the Nigerian Stock Exchange founded?",
                 options: [
-                  "The close price was lower than the open price",
-                  "The close price was higher than the open price",
-                  "The volume was unusually high",
-                  "The price didn't change during the period"
+                  "1950",
+                  "1960",
+                  "1977",
+                  "2001"
                 ],
                 correctAnswer: 1,
-                explanation: "A green (or white) candlestick typically indicates that the closing price was higher than the opening price, signifying buying pressure or bullish movement during that time period."
+                explanation: "The Nigerian Stock Exchange was founded in 1960 as the Lagos Stock Exchange before being renamed in 1977."
               },
               {
-                id: "q2-1-2",
-                question: "What is represented by the thin lines extending from the body of a candlestick?",
+                id: "q-b2-1-2",
+                question: "What is the current name of Nigeria's main stock exchange?",
                 options: [
-                  "Trading volume",
-                  "Market sentiment",
-                  "Price highs and lows (shadows/wicks)",
-                  "Moving averages"
+                  "Lagos Stock Exchange",
+                  "Nigerian Stock Exchange (NSE)",
+                  "Nigerian Exchange Group (NGX)",
+                  "Nigerian Capital Market (NCM)"
                 ],
                 correctAnswer: 2,
-                explanation: "The thin lines extending from the candlestick body are called shadows or wicks. They represent the highest and lowest prices reached during the trading period."
+                explanation: "After demutualization in 2021, the Nigerian Stock Exchange became the Nigerian Exchange Group (NGX)."
               }
             ]
           }
@@ -566,845 +395,131 @@ The psychology behind the patterns remains the same regardless of timeframe.`
       }
     ],
     skills: [
-      "Candlestick pattern recognition",
-      "Technical analysis",
-      "Price action trading",
-      "Chart reading"
+      "Stock market basics", 
+      "Investment fundamentals", 
+      "Nigerian market analysis", 
+      "Portfolio creation"
     ],
     prerequisites: [
       {
-        id: "pre-2-1",
-        title: "Basic market knowledge",
-        description: "You should understand basic market concepts and terminology."
-      },
-      {
-        id: "pre-2-2",
-        title: "Chart basics",
-        description: "Familiarity with reading price charts is helpful but not required."
+        id: "pre-b2-1",
+        title: "No prior investment knowledge required",
+        description: "This course is designed for complete beginners to the stock market."
       }
     ],
-    reviews: [
-      {
-        id: "rev-2-1",
-        userId: "user-3",
-        userName: "Robert Johnson",
-        userAvatar: "/avatars/robert.jpg",
-        rating: 5,
-        comment: "This course has completely changed how I view charts. The pattern recognition techniques are invaluable.",
-        date: "January 25, 2024"
-      }
-    ],
-    price: 79.99,
-    discountPrice: 49.99,
+    reviews: [],
+    price: 12999,
+    discountPrice: 9999,
+    isFeatured: true,
     averageRating: 4.8,
     totalStudents: 876,
     certificationIncluded: true
   },
   {
-    id: "course-3",
-    title: "Sector Rotation Strategies",
-    subtitle: "Optimize portfolio performance through strategic sector allocation",
-    category: "Market Dynamics",
-    subcategory: "Portfolio Strategy",
-    description: "Optimize portfolio performance by understanding market cycles and sector movements in different economic phases.",
+    id: "course-b3",
+    title: "Forex for Freshers: What You Must Know Before You Trade",
+    subtitle: "Essential foundations for Nigerians interested in currency trading",
+    category: "Forex Trading",
+    subcategory: "Beginner",
+    description: "Learn the fundamentals of forex trading, currency pairs, market mechanics, and essential risk management before you start trading.",
     longDescription: `
-Master the art of sector rotation to enhance your portfolio returns and reduce risk. This comprehensive course teaches you how to identify economic cycles and position your investments in the right sectors at the right time.
+This introductory course covers everything Nigerian beginners need to know before starting forex trading. With a focus on fundamentals and risk management, you'll learn how the forex market works and how to approach it safely as a Nigerian trader.
 
 ### What You'll Learn:
-- Understand the stages of economic cycles and their impact on different market sectors
-- Identify key economic indicators that signal transitions between cycle phases
-- Analyze sector performance characteristics during each phase of the economic cycle
-- Develop strategies for rotating between sectors to maximize returns
-- Build a complete sector rotation investment plan with risk management guidelines
+- Understand forex markets and how they function globally and in Nigeria
+- Master the basics of currency pairs with focus on NGN-related trading
+- Learn to read forex charts and understand basic price movements
+- Discover the impact of Nigerian and global economic events on forex
+- Develop essential risk management skills to protect your capital
 
 ### Course Features:
-- 4 modules with over 4 hours of expert instruction
-- Economic cycle tracking tools and templates
-- Sector performance historical analysis
-- Interactive sector rotation exercises
-- Real-world portfolio construction guidelines
+- 7 modules with over 3.5 hours of video content
+- Interactive demos of forex trading platforms
+- Risk management calculator templates
+- Practice exercises with real market examples
+- Certificate of completion
 
-By mastering sector rotation strategies, you'll gain a significant edge in positioning your investments to benefit from economic cycles rather than being at their mercy.
+This course focuses on building a solid foundation before actual trading, helping Nigerians avoid the common pitfalls that cause new traders to lose money.
     `,
-    tags: ["Economic Cycles", "Sector Analysis", "Rotation Timing", "Portfolio Strategy"],
-    estimatedHours: 4,
-    difficulty: "intermediate",
-    icon: "TrendingUp",
-    coverImage: "/courses/sector-rotation.jpg",
-    instructor: instructors[3],
-    lastUpdated: "May 12, 2024",
-    createdAt: "February 5, 2024",
+    tags: ["Forex", "Currency Trading", "Risk Management", "Beginner"],
+    estimatedHours: 3.5,
+    difficulty: "beginner",
+    icon: "DollarSign",
+    coverImage: "/courses/forex-basics.jpg",
+    instructor: instructors[2],
+    lastUpdated: "May 1, 2024",
+    createdAt: "March 10, 2024",
     language: "English",
     modules: [
-      {
-        id: "m3-1",
-        title: "Economic Cycle Fundamentals",
-        description: "Learn the fundamental concepts of economic cycles and their impact on different market sectors",
+            { 
+        id: "m-b3-1", 
+        title: "Understanding the Forex Market", 
+        description: "Learn what forex trading is and how the global currency market works",
         duration: "45 min",
         isCompleted: false,
         order: 1,
         content: [
           {
-            id: "c3-1-1",
+            id: "c-b3-1-1",
             type: "video",
-            title: "Introduction to Economic Cycles",
-            duration: "12 min",
-            videoUrl: "https://example.com/economic-cycles-intro.mp4",
-            content: "An overview of economic cycles and why they matter for sector rotation strategies."
-          },
-          {
-            id: "c3-1-2",
-            type: "text",
-            title: "Understanding the Business Cycle",
+            title: "Introduction to Forex Trading for Nigerians",
             duration: "15 min",
-            content: `# Economic Cycle Fundamentals
-
-## What is an Economic Cycle?
-
-An economic cycle (also called a business cycle) refers to the natural fluctuation of the economy between periods of expansion and contraction. Understanding these cycles is crucial for effective sector rotation investing.
-
-## The Four Phases of the Economic Cycle
-
-### 1. Expansion (Recovery)
-- **Characteristics**: Accelerating economic growth, increasing corporate profits, rising consumer confidence
-- **Economic Indicators**: Increasing GDP, falling unemployment, rising retail sales
-- **Market Behavior**: Bull market conditions, risk assets perform well
-- **Leading Sectors**: Consumer discretionary, technology, industrials
-
-### 2. Peak
-- **Characteristics**: Maximum economic output, high inflation pressures, tight labor markets
-- **Economic Indicators**: High GDP growth, low unemployment, rising interest rates, flattening yield curve
-- **Market Behavior**: Late-stage bull market, increased volatility
-- **Leading Sectors**: Energy, materials, financials
-
-### 3. Contraction (Recession)
-- **Characteristics**: Declining economic activity, falling corporate profits, reduced consumer spending
-- **Economic Indicators**: Negative GDP growth, rising unemployment, declining manufacturing output
-- **Market Behavior**: Bear market conditions, flight to safety
-- **Leading Sectors**: Consumer staples, utilities, healthcare
-
-### 4. Trough
-- **Characteristics**: Economic activity bottoms, policy stimulus enacted, sentiment begins to improve
-- **Economic Indicators**: Stabilizing GDP, slowing job losses, easing credit conditions
-- **Market Behavior**: Early stage of new bull market, high volatility with upward bias
-- **Leading Sectors**: Financials, consumer discretionary (early-cycle)
-
-## Cycle Duration and Variability
-
-Economic cycles don't follow a strict timeline:
-- Average full cycle: 5-7 years
-- Expansion phases: Typically longer (3-5 years)
-- Contraction phases: Usually shorter (6-18 months)
-- Modern cycles show increasing intervention by central banks
-
-## Why Cycles Matter for Investors
-
-Understanding where we are in the economic cycle helps investors:
-1. Allocate capital to sectors most likely to outperform
-2. Reduce exposure to vulnerable sectors
-3. Adjust overall risk levels appropriately
-4. Set realistic return expectations`
+            videoUrl: "https://www.youtube.com/watch?v=example2",
+            content: "An introduction to forex trading basics and how Nigerians can participate in the global currency market."
           },
           {
-            id: "c3-1-3",
+            id: "c-b3-1-2",
+            type: "text",
+            title: "Forex Fundamentals for Nigerian Traders",
+            duration: "15 min",
+            content: `# Forex Fundamentals for Nigerian Traders
+
+## What is Forex Trading?
+Forex (Foreign Exchange) trading is the buying and selling of currencies on the global marketplace. For Nigerian traders, forex offers opportunities to profit from currency price movements, including those involving the Naira (NGN).
+
+## Key Forex Concepts for Nigerian Beginners:
+- **Currency Pairs**: Currencies are always traded in pairs (e.g., USD/NGN, EUR/USD)
+- **Pips**: The smallest price movement in a currency pair
+- **Leverage**: Borrowing money to control larger positions (regulated differently in Nigeria)
+- **Spreads**: The difference between buy and sell prices
+- **Lots**: Standardized trade sizes in forex
+
+## The Nigerian Forex Perspective:
+- Trading hours and how they align with Nigerian time zones
+- Impact of Nigerian economic news on forex pairs involving NGN
+- Regulatory considerations for Nigerian forex traders
+- Common challenges facing Nigerian forex traders and how to overcome them`
+          },
+          {
+            id: "c-b3-1-3",
             type: "quiz",
-            title: "Economic Cycle Quiz",
-            duration: "10 min",
-            content: "Test your understanding of economic cycles and their phases",
+            title: "Forex Fundamentals Quiz",
+            duration: "15 min",
+            content: "Test your understanding of forex trading basics",
             quiz: [
               {
-                id: "q3-1-1",
-                question: "Which economic cycle phase typically follows a recession?",
+                id: "q-b3-1-1",
+                question: "What does the term 'pip' refer to in forex trading?",
                 options: [
-                  "Peak",
-                  "Trough",
-                  "Recovery/Expansion",
-                  "Stagflation"
-                ],
-                correctAnswer: 2,
-                explanation: "After a recession (contraction), the economy reaches a trough and then begins the recovery/expansion phase. This is when economic growth turns positive again and begins to accelerate."
-              },
-              {
-                id: "q3-1-2",
-                question: "Which sectors typically outperform during the contraction phase of the economic cycle?",
-                options: [
-                  "Technology and Consumer Discretionary",
-                  "Energy and Materials",
-                  "Consumer Staples, Utilities, and Healthcare",
-                  "Financials and Real Estate"
-                ],
-                correctAnswer: 2,
-                explanation: "During contractions (recessions), defensive sectors like Consumer Staples, Utilities, and Healthcare typically outperform as they provide essential goods and services that remain in demand regardless of economic conditions."
-              },
-              {
-                id: "q3-1-3",
-                question: "Which economic indicator is often considered a reliable predictor of economic cycles?",
-                options: [
-                  "Stock market prices",
-                  "Unemployment rate",
-                  "Yield curve inversion",
-                  "Housing prices"
-                ],
-                correctAnswer: 2,
-                explanation: "A yield curve inversion (when short-term interest rates exceed long-term rates) has historically been a reliable predictor of recessions, often preceding them by 12-18 months."
-              }
-            ]
-          },
-          {
-            id: "c3-1-4",
-            type: "text",
-            title: "Key Economic Indicators",
-            duration: "15 min",
-            content: `# Key Economic Indicators for Cycle Analysis
-
-To effectively identify economic cycle phases, investors should monitor these critical economic indicators:
-
-## Leading Indicators (Predict Future Changes)
-
-### 1. Yield Curve
-- **What it measures**: The difference between long-term and short-term interest rates
-- **Cycle significance**: Inversion (short-term rates exceeding long-term rates) often precedes recessions
-- **Where to find it**: Federal Reserve Economic Data (FRED)
-
-### 2. Purchasing Managers' Index (PMI)
-- **What it measures**: Manufacturing and service sector activity
-- **Cycle significance**: Readings below 50 indicate contraction; above 50 indicate expansion
-- **Where to find it**: Institute for Supply Management (ISM)
-
-### 3. Building Permits and Housing Starts
-- **What it measures**: Future construction activity
-- **Cycle significance**: Declines often precede broader economic slowdowns
-- **Where to find it**: U.S. Census Bureau
-
-### 4. Stock Market Performance
-- **What it measures**: Collective expectations about future corporate profits
-- **Cycle significance**: Often turns down before recessions and up before recoveries
-- **Where to find it**: Major indices (S&P 500, Dow Jones, etc.)
-
-## Coincident Indicators (Show Current State)
-
-### 1. Gross Domestic Product (GDP)
-- **What it measures**: Total value of goods and services produced
-- **Cycle significance**: Negative growth for two consecutive quarters indicates recession
-- **Where to find it**: Bureau of Economic Analysis (BEA)
-
-### 2. Employment Data
-- **What it measures**: Job growth, unemployment rate
-- **Cycle significance**: Rising unemployment indicates contraction; falling indicates expansion
-- **Where to find it**: Bureau of Labor Statistics (BLS)
-
-### 3. Industrial Production
-- **What it measures**: Output of manufacturing, mining, and utilities
-- **Cycle significance**: Directly reflects economic activity
-- **Where to find it**: Federal Reserve
-
-## Lagging Indicators (Confirm Trends)
-
-### 1. Unemployment Rate
-- **What it measures**: Percentage of workforce without jobs
-- **Cycle significance**: Peaks after recessions end; falls after expansions are well established
-- **Where to find it**: Bureau of Labor Statistics (BLS)
-
-### 2. Consumer Price Index (CPI)
-- **What it measures**: Inflation at the consumer level
-- **Cycle significance**: Often rises late in expansion, falls during contraction
-- **Where to find it**: Bureau of Labor Statistics (BLS)
-
-### 3. Corporate Profits
-- **What it measures**: Business earnings
-- **Cycle significance**: Confirm economic conditions after they've occurred
-- **Where to find it**: Bureau of Economic Analysis (BEA)
-
-## Using Indicators Together
-
-No single indicator is perfect. For robust cycle analysis:
-1. Monitor a basket of indicators across categories
-2. Look for confirmation across multiple indicators
-3. Pay special attention when leading indicators change direction
-4. Consider the rate of change, not just absolute levels`
-          },
-          {
-            id: "c3-1-5",
-            type: "assignment",
-            title: "Economic Cycle Analysis",
-            duration: "15 min",
-            content: "Apply your knowledge by analyzing current economic indicators",
-            assignment: {
-              description: "Research and identify which phase of the economic cycle you believe we are currently in. Support your conclusion with at least three specific economic indicators and explain your reasoning. Include your expectations for which market sectors should perform well in the coming 6-12 months based on your cycle analysis.",
-              submission: "text"
-            },
-            resources: [
-              {
-                id: "r3-1-1",
-                title: "Economic Indicators Dashboard",
-                type: "link",
-                url: "https://fred.stlouisfed.org/",
-                description: "Federal Reserve Economic Data (FRED) - comprehensive source for economic indicators"
-              },
-              {
-                id: "r3-1-2",
-                title: "Economic Cycle Cheat Sheet",
-                type: "pdf",
-                url: "/resources/economic-cycle-cheatsheet.pdf",
-                description: "A printable reference guide to economic cycle phases and corresponding sector performance"
-              }
-            ]
-          }
-        ]
-      },
-      { 
-        id: "m3-2",
-        title: "Sector Performance Analysis",
-        description: "Learn how to analyze sector performance across different economic phases",
-        duration: "60 min",
-        isCompleted: false,
-        order: 2,
-        content: [
-          {
-            id: "c3-2-1",
-            type: "video",
-            title: "Sector Classification Systems",
-            duration: "12 min",
-            videoUrl: "https://example.com/sector-classification.mp4",
-            content: "An overview of sector classification systems like GICS and how they organize the market."
-          },
-          {
-            id: "c3-2-2",
-            type: "text",
-            title: "Sector Performance Across Cycle Phases",
-            duration: "20 min",
-            content: `# Sector Performance Analysis
-
-## Understanding Market Sectors
-
-The stock market is divided into sectors - groups of companies that operate in similar business areas. The most widely used classification system is the Global Industry Classification Standard (GICS), which organizes the market into 11 primary sectors:
-
-1. **Information Technology**
-2. **Healthcare**
-3. **Financials**
-4. **Consumer Discretionary**
-5. **Communication Services**
-6. **Industrials**
-7. **Consumer Staples**
-8. **Energy**
-9. **Utilities**
-10. **Real Estate**
-11. **Materials**
-
-## Sector Characteristics
-
-Each sector has unique characteristics that influence how it performs during different economic conditions:
-
-### Cyclical Sectors
-- **Highly sensitive to economic cycles**
-- **Examples**: Consumer Discretionary, Financials, Industrials, Materials
-- **Performance**: Outperform during expansions, underperform during contractions
-- **Drivers**: Consumer spending, business investment, credit growth
-
-### Defensive Sectors
-- **Less sensitive to economic cycles**
-- **Examples**: Consumer Staples, Healthcare, Utilities
-- **Performance**: Outperform during contractions, often underperform during strong expansions
-- **Drivers**: Essential products/services, steady demand regardless of economic conditions
-
-### Interest Rate Sensitive Sectors
-- **Heavily influenced by changes in interest rates**
-- **Examples**: Utilities, Real Estate, Financials
-- **Performance**: React strongly to Federal Reserve policy changes
-- **Drivers**: Borrowing costs, yield competition, financing structures
-
-### Growth Sectors
-- **Focused on revenue and earnings growth**
-- **Examples**: Technology, Communication Services
-- **Performance**: Can outperform in both late contraction and early expansion phases
-- **Drivers**: Innovation, market share gains, changing consumer behavior
-
-## Historical Sector Performance By Cycle Phase
-
-### Early Cycle (Recovery)
-- **Top Performers**: Consumer Discretionary, Financials, Industrials, Technology
-- **Characteristics**: 
-  - Economy emerges from recession
-  - Interest rates remain low
-  - Consumer confidence improves
-  - Business investment begins to recover
-- **Why These Sectors Lead**: Benefit from improved credit conditions, increased spending on previously delayed purchases, and renewed business investment
-
-### Mid Cycle (Expansion)
-- **Top Performers**: Technology, Industrials, Energy, Materials
-- **Characteristics**:
-  - Steady economic growth
-  - Rising corporate profits
-  - Increasing employment
-  - Moderate inflation
-- **Why These Sectors Lead**: Benefit from broad economic growth, increased capital expenditures, and rising commodity prices
-
-### Late Cycle (Peak)
-- **Top Performers**: Energy, Materials, Healthcare, Consumer Staples
-- **Characteristics**:
-  - Economic growth begins to slow
-  - Inflation accelerates
-  - Interest rates rise
-  - Wage pressures increase
-- **Why These Sectors Lead**: Benefit from inflation (commodities), while defensive sectors begin to attract investment as growth concerns emerge
-
-### Recession (Contraction)
-- **Top Performers**: Consumer Staples, Healthcare, Utilities
-- **Characteristics**:
-  - Negative economic growth
-  - Rising unemployment
-  - Declining corporate profits
-  - Monetary/fiscal stimulus often initiated
-- **Why These Sectors Lead**: Provide essential products/services with stable demand regardless of economic conditions
-
-## Sector Rotation Performance Data
-
-Historical data shows distinct performance patterns:
-
-| Sector | Early Cycle | Mid Cycle | Late Cycle | Recession | Full Cycle Avg |
-|--------|------------|-----------|-----------|-----------|---------------|
-| Technology | +32.8% | +18.5% | +5.2% | -21.6% | +8.7% |
-| Financials | +28.4% | +12.3% | -2.6% | -18.8% | +4.8% |
-| Consumer Disc. | +29.5% | +15.1% | +1.8% | -17.5% | +7.2% |
-| Industrials | +27.2% | +16.7% | +4.3% | -15.9% | +8.1% |
-| Materials | +22.5% | +17.4% | +8.6% | -19.3% | +7.3% |
-| Energy | +18.3% | +19.8% | +12.4% | -14.7% | +9.0% |
-| Healthcare | +11.6% | +14.3% | +9.7% | -7.4% | +7.1% |
-| Consumer Staples | +8.2% | +11.7% | +8.9% | -6.8% | +5.5% |
-| Utilities | +6.5% | +9.2% | +7.5% | -8.1% | +3.8% |
-| Real Estate | +14.8% | +10.6% | -3.2% | -16.3% | +1.5% |
-| Comm. Services | +19.7% | +12.8% | +4.1% | -12.5% | +6.0% |
-
-*Note: Figures represent average performance during each phase based on data from the last 5 economic cycles. Past performance does not guarantee future results.*`
-          },
-          {
-            id: "c3-2-3",
-            type: "video",
-            title: "Factor Analysis in Sector Performance",
-            duration: "15 min",
-            videoUrl: "https://example.com/factor-analysis.mp4",
-            content: "Understanding how different factors like growth, value, quality and momentum affect sector performance."
-          },
-          {
-            id: "c3-2-4",
-            type: "quiz",
-            title: "Sector Performance Quiz",
-            duration: "10 min",
-            content: "Test your understanding of sector performance across economic cycles",
-            quiz: [
-              {
-                id: "q3-2-1",
-                question: "Which sectors typically perform best during the early cycle (recovery) phase?",
-                options: [
-                  "Utilities and Consumer Staples",
-                  "Energy and Materials",
-                  "Financials and Consumer Discretionary",
-                  "Healthcare and Real Estate"
-                ],
-                correctAnswer: 2,
-                explanation: "Financials and Consumer Discretionary sectors typically lead in the early cycle phase as they benefit from improving credit conditions, low interest rates, and consumers beginning to increase their discretionary spending after a recession."
-              },
-              {
-                id: "q3-2-2",
-                question: "Why do defensive sectors like Consumer Staples often outperform during recessions?",
-                options: [
-                  "They have the highest growth rates during economic contractions",
-                  "They provide essential products with relatively stable demand regardless of economic conditions",
-                  "They benefit from government stimulus programs during recessions",
-                  "They have the lowest debt levels of all sectors"
+                  "A type of forex broker",
+                  "The smallest price movement in a currency pair",
+                  "A trading platform for Nigerian traders",
+                  "The minimum deposit required to start trading"
                 ],
                 correctAnswer: 1,
-                explanation: "Defensive sectors like Consumer Staples outperform during recessions because they provide essential products (food, beverages, household items) that consumers need regardless of economic conditions, resulting in more stable earnings during downturns."
+                explanation: "A pip is the smallest price movement in a currency pair. For most currency pairs, a pip is a movement of 0.0001 in the exchange rate."
               },
               {
-                id: "q3-2-3",
-                question: "Which sector is typically most sensitive to interest rate changes?",
+                id: "q-b3-1-2",
+                question: "Which of these is a valid currency pair involving the Nigerian Naira?",
                 options: [
-                  "Technology",
-                  "Utilities",
-                  "Energy",
-                  "Materials"
+                  "NGN/USD",
+                  "EUR/NGN",
+                  "NGN/NGN",
+                  "NGN/JPY/USD"
                 ],
-                correctAnswer: 1,
-                explanation: "Utilities is typically the most interest rate sensitive sector. As bond proxies with high dividend yields, utility stocks often decline when interest rates rise (as bonds become more competitive) and rise when interest rates fall."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        id: "m3-3",
-        title: "Identifying Rotation Signals",
-        description: "Master the techniques for identifying optimal sector rotation timing",
-        duration: "45 min", 
-        isCompleted: false,
-        order: 3,
-        content: [
-          {
-            id: "c3-3-1",
-            type: "video",
-            title: "Economic Indicators for Sector Rotation",
-            duration: "15 min",
-            videoUrl: "https://example.com/rotation-indicators.mp4",
-            content: "A comprehensive overview of the key economic indicators that signal sector rotation opportunities."
-          },
-          {
-            id: "c3-3-2",
-            type: "text",
-            title: "Technical Analysis for Sector Rotation",
-            duration: "20 min",
-            content: `# Identifying Sector Rotation Signals
-
-## Key Indicators for Sector Rotation Timing
-
-Successfully timing sector rotations requires monitoring a combination of economic, fundamental, and technical indicators. The following framework will help you identify potential rotation points:
-
-## 1. Economic Cycle Indicators
-
-### Leading Economic Indicators
-- **Yield Curve**: Watch for flattening/steepening trends
-  - **Steepening Curve**: Often signals early cycle → favor Financials, Consumer Discretionary
-  - **Flattening/Inverting Curve**: Often signals late cycle → begin rotating to defensive sectors
-
-### Interest Rate Environment
-- **Fed Policy Shifts**: Monitor Federal Reserve statements and dot plots
-  - **Beginning Rate Cuts**: Often bullish for Consumer Discretionary, Real Estate
-  - **Beginning Rate Hikes**: Often benefits Financials initially, then defensive sectors
-
-### Inflation Indicators
-- **CPI, PPI, PCE Data**: Track trends in inflation metrics
-  - **Rising Inflation**: Often benefits Energy, Materials, Real Estate
-  - **Falling Inflation**: Often benefits Technology, Consumer Discretionary
-
-### Manufacturing Data
-- **PMI Readings**: Purchase Managers Index trends
-  - **PMI Rising Above 50**: Bullish for Industrials, Materials
-  - **PMI Falling Below 50**: Rotate toward defensive sectors
-
-## 2. Relative Strength Analysis
-
-### Relative Performance Charts
-- **Sector/S&P 500 Ratio Charts**: Track each sector's performance relative to the broad market
-  - **Rising Line**: Sector outperforming the market
-  - **Falling Line**: Sector underperforming the market
-  - **Look for**: Reversal points after extended trends in either direction
-
-### Relative Strength Ranking
-- **RS Rating Method**: Rank sectors by their 3/6/12-month relative performance
-  - **Momentum Strategy**: Overweight top 3 sectors, underweight bottom 3
-  - **Mean Reversion Strategy**: Look for historically extreme readings as contrarian signals
-
-## 3. Fundamental Metrics
-
-### Earnings Revision Trends
-- **Analyst Estimate Changes**: Monitor sectors experiencing positive/negative revisions
-  - **Positive Revisions Accelerating**: Often precedes sector outperformance
-  - **Negative Revisions Accelerating**: Often precedes sector underperformance
-
-### Valuation Metrics By Sector
-- **P/E, P/B, P/S Ratios**: Compare current metrics to historical ranges
-  - **Low Relative Valuations + Improving Fundamentals**: Potential rotation opportunity
-  - **Extended Valuations + Deteriorating Fundamentals**: Potential exit signal
-
-## 4. Technical Analysis Signals
-
-### Moving Average Relationships
-- **50-day vs. 200-day MAs**: Monitor sector ETFs for golden/death crosses
-  - **Golden Cross (50 crosses above 200)**: Bullish signal for a sector
-  - **Death Cross (50 crosses below 200)**: Bearish signal for a sector
-
-### Volume Analysis
-- **Volume Trends**: Look for unusual volume during sector moves
-  - **High Volume Breakouts**: Often confirms sustainable sector rotation
-  - **Low Volume Moves**: May indicate false rotation signals
-
-### Breadth Indicators
-- **Advance/Decline Lines**: Monitor industry-specific breadth
-  - **Rising A/D Line**: Healthy participation within a sector
-  - **Falling A/D Line with Rising Prices**: Potential warning sign
-
-## 5. Sentiment and Positioning Data
-
-### Fund Flows
-- **Sector ETF Flows**: Track money moving into/out of sector funds
-  - **Substantial Inflows**: Potential crowded trade (contrarian signal)
-  - **Substantial Outflows**: Potential oversold condition (opportunity)
-
-### Institutional Positioning
-- **13F Filings**: Monitor how large institutions are adjusting sector allocations
-  - **Early Adopters**: Some institutions consistently lead profitable rotations
-
-## Putting It All Together: A Systematic Approach
-
-For optimal sector rotation timing:
-
-1. **Establish Economic Context**: Determine current cycle phase
-2. **Monitor Leading Indicators**: Watch for signals of phase transitions
-3. **Analyze Relative Strength**: Identify sectors gaining/losing momentum
-4. **Confirm with Fundamentals**: Verify that earnings and valuations support the rotation
-5. **Use Technical Triggers**: Execute rotation when technical signals confirm
-
-Remember that no single indicator is perfect. Using multiple signals across these categories provides the most reliable rotation framework.`
-          },
-          {
-            id: "c3-3-3",
-            type: "quiz",
-            title: "Rotation Signals Quiz",
-            duration: "10 min",
-            content: "Test your understanding of sector rotation timing signals",
-            quiz: [
-              {
-                id: "q3-3-1",
-                question: "Which economic indicator is often considered most useful for identifying transitions between economic cycle phases?",
-                options: [
-                  "Consumer Price Index (CPI)",
-                  "Unemployment rate",
-                  "Yield curve movements",
-                  "GDP growth rate"
-                ],
-                correctAnswer: 2,
-                explanation: "Yield curve movements (particularly inversions when short-term rates exceed long-term rates) have historically been reliable indicators of economic cycle transitions, often predicting recessions 12-18 months in advance, making them valuable for sector rotation timing."
-              },
-              {
-                id: "q3-3-2",
-                question: "What does a 'golden cross' technical signal indicate for a sector ETF?",
-                options: [
-                  "The sector is becoming overvalued",
-                  "A potentially bullish trend is developing",
-                  "The sector is likely to underperform",
-                  "Trading volume is decreasing"
-                ],
-                correctAnswer: 1,
-                explanation: "A 'golden cross' occurs when a shorter-term moving average (typically the 50-day) crosses above a longer-term moving average (typically the 200-day). This is generally considered a bullish technical signal that may indicate the beginning of a stronger uptrend for the sector."
-              },
-              {
-                id: "q3-3-3",
-                question: "What type of analysis involves comparing a sector's performance to the broader market?",
-                options: [
-                  "Fundamental analysis",
-                  "Sentiment analysis",
-                  "Volume analysis",
-                  "Relative strength analysis"
-                ],
-                correctAnswer: 3,
-                explanation: "Relative strength analysis involves comparing a sector's performance to a benchmark (typically the S&P 500). This helps identify sectors that are outperforming or underperforming the broader market, which is crucial for sector rotation strategies."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        id: "m3-4",
-        title: "Building a Sector Rotation Portfolio",
-        description: "Learn how to construct and manage a sector rotation-based investment portfolio",
-        duration: "90 min",
-        isCompleted: false,
-        order: 4,
-        content: [
-          {
-            id: "c3-4-1",
-            type: "video",
-            title: "Sector ETFs and Investment Vehicles",
-            duration: "15 min",
-            videoUrl: "https://example.com/sector-etfs.mp4",
-            content: "An overview of the various investment vehicles for implementing sector rotation strategies."
-          },
-          {
-            id: "c3-4-2",
-            type: "text",
-            title: "Portfolio Construction Principles",
-            duration: "25 min",
-            content: `# Building a Sector Rotation Portfolio
-
-## Investment Vehicles for Sector Rotation
-
-To implement sector rotation strategies, investors typically use these vehicles:
-
-### Sector ETFs
-- **SPDR Sector ETFs**: The most liquid sector funds (XLK, XLF, XLV, etc.)
-- **Vanguard Sector ETFs**: Lower expense ratios (VGT, VFH, VHT, etc.)
-- **iShares Sector ETFs**: Additional options with various exposures
-- **Advantages**: Liquid, transparent, tax-efficient, precise exposure
-- **Considerations**: Still contain multiple industries within each sector
-
-### Industry ETFs
-- **More targeted than sector ETFs**
-- **Examples**: Biotech (IBB, XBI), Regional Banks (KRE), Semiconductors (SMH, SOXX)
-- **Advantages**: More precise exposure to specific industries within sectors
-- **Considerations**: Higher volatility, less diversification
-
-### Sector Mutual Funds
-- **Actively managed sector funds**
-- **Advantages**: Professional management, may outperform in inefficient sectors
-- **Considerations**: Higher fees, less tax efficiency, end-of-day pricing
-
-### Individual Stocks
-- **Selecting leaders within favored sectors**
-- **Advantages**: No management fees, potential to outperform sector
-- **Considerations**: Requires deeper analysis, company-specific risk
-
-## Portfolio Construction Approaches
-
-### 1. Core-Satellite Approach
-- **Core (60-70%)**: Broad market ETFs or index funds for long-term exposure
-- **Satellite (30-40%)**: Sector rotation component for tactical adjustments
-- **Advantages**: Reduces tracking error risk while allowing tactical opportunities
-- **Implementation**:
-  - Maintain core positions consistently
-  - Rotate satellite sector positions based on cycle analysis
-  - Rebalance core-satellite ratio periodically
-
-### 2. Full Sector Rotation
-- **Entire portfolio allocated among sectors**
-- **Aggressive approach**: Potentially higher returns with higher risk
-- **Implementation Options**:
-  - Equal-weight baseline with overweight/underweight adjustments
-  - Full tactical allocation with significant concentration in favored sectors
-  - Zero exposure to least-favored sectors
-
-### 3. Factor-Based Sector Approach
-- **Combine factor and sector analysis**
-- **Example**: Overweight value factor + value-oriented sectors during recovery
-- **Implementation**:
-  - Identify which factors typically work in current cycle phase
-  - Select sectors with highest exposure to those factors
-  - Consider both sector and factor ETFs
-
-## Position Sizing and Risk Management
-
-### Position Sizing Methods
-- **Equal Weight**: Same allocation to each selected sector
-- **Conviction Weighting**: Higher allocation to strongest opportunities
-- **Volatility Adjustment**: Inverse volatility weighting (less to more volatile sectors)
-- **Recommended**: Start with equal weight until developing expertise
-
-### Risk Management Techniques
-- **Maximum Sector Allocation**: Typically 20-25% to any single sector
-- **Stop-Loss Strategy**: Exit positions that underperform by predetermined threshold
-- **Correlation Analysis**: Ensure diversification across selected sectors
-- **Hedge Positions**: Consider adding defensive positions during late-cycle phases
-
-## Implementation Steps
-
-### 1. Establish Baseline Allocations
-- Define neutral sector weights (often based on S&P 500 sector weights)
-- Determine maximum overweight/underweight deviations
-
-### 2. Determine Current Cycle Phase
-- Analyze economic indicators discussed in previous modules
-- Identify which phase has the highest probability
-
-### 3. Select Target Sectors
-- Overweight sectors likely to outperform in current/upcoming phase
-- Underweight sectors likely to underperform
-- Maintain market weight for sectors with unclear outlook
-
-### 4. Set Entry/Exit Triggers
-- Define specific conditions for initiating positions
-- Establish rules for exiting or reducing positions
-- Document these rules to avoid emotional decisions
-
-### 5. Regular Review Process
-- Establish consistent review schedule (monthly/quarterly)
-- Track performance of each sector allocation
-- Document reasoning behind each rotation decision
-
-## Practical Portfolio Examples
-
-### Conservative Sector Rotation
-- 70% Core (Total market ETF)
-- 30% Tactical (2-3 sector ETFs)
-- Rotation Frequency: Quarterly reviews, changes only when clear signals emerge
-- Risk Management: Maximum 15% to any sector
-
-### Moderate Sector Rotation
-- 50% Core (Total market ETF)
-- 50% Tactical (3-5 sector ETFs)
-- Rotation Frequency: Monthly reviews with partial rotations
-- Risk Management: Maximum 20% to any sector
-
-### Aggressive Sector Rotation
-- 100% Tactical (5-7 sector ETFs)
-- Rotation Frequency: Monthly or signal-based
-- Risk Management: Maximum 25% to any sector, strict stop-losses`
-          },
-          {
-            id: "c3-4-3",
-            type: "video",
-            title: "Risk Management in Sector Rotation",
-            duration: "15 min",
-            videoUrl: "https://example.com/rotation-risk.mp4",
-            content: "Learn effective risk management techniques for sector rotation strategies."
-          },
-          {
-            id: "c3-4-4",
-            type: "assignment",
-            title: "Create Your Sector Rotation Plan",
-            duration: "30 min",
-            content: "Develop your own sector rotation investment strategy",
-            assignment: {
-              description: "Design a complete sector rotation strategy tailored to your investment goals. Your plan should include:\n\n1. Your assessment of the current economic cycle phase with supporting evidence\n2. Identification of 3-5 sectors you would overweight and 2-3 sectors you would underweight\n3. Specific ETFs or investment vehicles you would use for each sector\n4. Position sizing for each component\n5. Entry and exit criteria\n6. Risk management rules\n7. Review and adjustment process\n\nInclude a 6-month outlook with specific triggers that would cause you to adjust your allocations.",
-              submission: "text"
-            },
-            resources: [
-              {
-                id: "r3-4-1",
-                title: "Sector ETF List",
-                type: "pdf",
-                url: "/resources/sector-etf-list.pdf",
-                description: "Comprehensive list of sector ETFs with expense ratios and historical performance"
-              },
-              {
-                id: "r3-4-2",
-                title: "Portfolio Construction Template",
-                type: "file",
-                url: "/resources/sector-rotation-template.xlsx",
-                description: "Excel template for building and tracking a sector rotation portfolio"
-              }
-            ]
-          },
-          {
-            id: "c3-4-5",
-            type: "quiz",
-            title: "Portfolio Construction Quiz",
-            duration: "10 min",
-            content: "Test your understanding of sector rotation portfolio construction",
-            quiz: [
-              {
-                id: "q3-4-1",
-                question: "What is the primary advantage of using sector ETFs for rotation strategies compared to individual stocks?",
-                options: [
-                  "Higher potential returns",
-                  "Lower volatility through diversification within the sector",
-                  "Guaranteed outperformance",
-                  "Access to private markets"
-                ],
-                correctAnswer: 1,
-                explanation: "Sector ETFs provide diversification across multiple companies within a sector, reducing individual stock risk while still allowing targeted exposure to the desired sector. This lowers volatility compared to picking individual stocks."
-              },
-              {
-                id: "q3-4-2",
-                question: "In a Core-Satellite approach to sector rotation, what typically comprises the 'Core' portion?",
-                options: [
-                  "Individual high-conviction stocks",
-                  "Options and derivatives",
-                  "Broad market ETFs or index funds",
-                  "Cash and short-term bonds"
-                ],
-                correctAnswer: 2,
-                explanation: "In a Core-Satellite approach, the 'Core' typically consists of broad market ETFs or index funds that provide diversified, long-term market exposure. This serves as the portfolio's foundation while the 'Satellite' portion contains the tactical sector allocations."
-              },
-              {
-                id: "q3-4-3",
-                question: "What is a recommended maximum allocation to any single sector in a moderate sector rotation strategy?",
-                options: [
-                  "5-10%",
-                  "15-20%",
-                  "30-40%",
-                  "50-60%"
-                ],
-                correctAnswer: 1,
-                explanation: "For a moderate sector rotation strategy, a maximum allocation of 15-20% to any single sector is typically recommended. This provides enough exposure to benefit from sector outperformance while limiting concentration risk."
+                correctAnswer: 0,
+                explanation: "NGN/USD is a valid currency pair that represents the exchange rate between the Nigerian Naira and the US Dollar."
               }
             ]
           }
@@ -1412,272 +527,1695 @@ To implement sector rotation strategies, investors typically use these vehicles:
       }
     ],
     skills: [
-      "Economic cycle analysis",
-      "Sector performance evaluation",
-      "Portfolio construction",
-      "Market timing"
+      "Forex fundamentals", 
+      "Currency pairs", 
+      "Market analysis", 
+      "Risk management"
     ],
     prerequisites: [
       {
-        id: "pre-3-1",
-        title: "Basic market knowledge",
-        description: "Understanding of stock market fundamentals and terminology"
-      },
-      {
-        id: "pre-3-2",
-        title: "Economic indicators",
-        description: "Familiarity with major economic indicators and their significance"
+        id: "pre-b3-1",
+        title: "No prior trading experience required",
+        description: "This course is designed for complete beginners to forex trading."
       }
     ],
-    reviews: [
-      {
-        id: "rev-3-1",
-        userId: "user-5",
-        userName: "David Chen",
-        userAvatar: "/avatars/david.jpg",
-        rating: 5,
-        comment: "This course transformed my investment approach. The sector rotation strategy has helped me outperform the market consistently.",
-        date: "April 2, 2024"
-      },
-      {
-        id: "rev-3-2",
-        userId: "user-6",
-        userName: "Amanda Wilson",
-        userAvatar: "/avatars/amanda.jpg",
-        rating: 4,
-        comment: "Excellent content on economic cycles and their impact on sectors. Would like more case studies, but overall very valuable.",
-        date: "March 15, 2024"
-      }
-    ],
-    price: 89.99,
-    discountPrice: 59.99,
+    reviews: [],
+    price: 14999,
+    discountPrice: 11999,
+    isFeatured: false,
     averageRating: 4.6,
-    totalStudents: 542,
+    totalStudents: 543,
     certificationIncluded: true
   },
+  
+  // 🟡 INTERMEDIATE LEVEL COURSES
   {
-    id: "course-4",
-    title: "Risk Management Essentials",
-    subtitle: "Master position sizing and risk control techniques",
-    category: "Trading Strategy",
-    subcategory: "Risk Management",
-    description: "Learn to protect your capital with proper position sizing, stop-loss strategies, and risk-reward optimization.",
+    id: "course-i1",
+    title: "How to Read Stock Charts & Market Trends (Made Simple)",
+    subtitle: "Master technical analysis techniques for Nigerian stocks",
+    category: "Technical Analysis",
+    subcategory: "Intermediate",
+    description: "Learn practical technical analysis techniques to read stock charts and identify profitable trends in the Nigerian market.",
     longDescription: `
-Risk management is the cornerstone of successful trading. This practical course teaches you how to preserve capital while maximizing returns through proven risk management techniques.
+This intermediate-level course teaches you how to apply technical analysis to Nigerian stocks in a practical, straightforward way. You'll learn to identify chart patterns, use indicators, and make more informed trading decisions based on price action.
 
 ### What You'll Learn:
-- Calculate optimal position sizes based on account size and risk tolerance
-- Implement effective stop-loss strategies for different market conditions
-- Balance risk and reward to create a sustainable edge
-- Develop a comprehensive risk management plan for your trading
-- Apply volatility-based adjustments to your position sizing
+- Master the art of reading candlestick charts for Nigerian stocks
+- Identify key support and resistance levels in the Nigerian market
+- Use trend lines and chart patterns to predict price movements
+- Apply technical indicators effectively to NGX-listed companies
+- Develop a technical trading strategy adapted for Nigerian market conditions
 
 ### Course Features:
-- 5 modules with over 3.5 hours of expert instruction
-- Position sizing calculators and templates
-- Stop-loss placement techniques
-- Risk management plan framework
-- Real-world trade examples with risk analysis
+- 8 modules with over 5 hours of detailed video instruction
+- Practice exercises using real Nigerian stock charts
+- Technical analysis templates and checklists
+- Case studies of successful technical trades in the NGX
+- Certificate of completion
 
-By mastering these essential risk management skills, you'll significantly improve your chances of long-term trading success and avoid the common pitfalls that lead to account blowups.
+This course bridges the gap between basic chart reading and advanced technical analysis, with all examples specifically using Nigerian stocks and market scenarios.
     `,
-    tags: ["Position Sizing", "Stop-Loss Techniques", "Risk-Reward Ratio", "Capital Preservation"],
-    estimatedHours: 3.5,
+    tags: ["Technical Analysis", "Chart Patterns", "Stock Trading", "NGX"],
+    estimatedHours: 5,
     difficulty: "intermediate",
-    icon: "Layers",
-    coverImage: "/courses/risk-management.jpg",
-    instructor: instructors[2],
-    lastUpdated: "April 8, 2024",
-    createdAt: "January 20, 2024",
+    icon: "BarChart2",
+    coverImage: "/courses/technical-charts.jpg",
+    instructor: instructors[1],
+    lastUpdated: "April 28, 2024",
+    createdAt: "January 15, 2024",
     language: "English",
     modules: [
       { 
-        id: "m4-1", 
-        title: "Understanding Trading Risk", 
-        description: "Learn about different types of risk in trading and how to assess them",
-        duration: "40 min", 
+        id: "m-i1-1", 
+        title: "Introduction to Technical Analysis", 
+        description: "Learn the fundamental concepts of technical analysis and why it works",
+        duration: "60 min",
         isCompleted: false,
         order: 1,
         content: [
           {
-            id: "c4-1-1",
+            id: "c-i1-1-1",
             type: "video",
-            title: "Introduction to Trading Risk",
-            duration: "10 min",
-            videoUrl: "https://example.com/risk-intro.mp4",
-            content: "An overview of the different types of risk traders face and why risk management is essential."
+            title: "Introduction to Technical Analysis for Nigerian Stocks",
+            duration: "20 min",
+            videoUrl: "https://www.youtube.com/watch?v=technical-analysis-intro",
+            content: "An introduction to technical analysis and its application to the Nigerian stock market."
           },
           {
-            id: "c4-1-2",
+            id: "c-i1-1-2",
             type: "text",
-            title: "Types of Trading Risk",
-            duration: "15 min",
-            content: `# Understanding Trading Risk
+            title: "Introduction to Technical Analysis for Nigerian Stocks",
+            duration: "20 min",
+            content: `# Introduction to Technical Analysis for Nigerian Stocks
 
-## What is Trading Risk?
+## What is Technical Analysis?
+Technical analysis is the study of historical price movements and patterns to forecast future price movements. Unlike fundamental analysis, which looks at a company's financial health, technical analysis focuses solely on price action and trading volume.
 
-Trading risk refers to the possibility of losing capital when trading financial markets. Effective risk management is the key differentiator between successful and unsuccessful traders.
+## Why Technical Analysis Works for Nigerian Stocks
+- Markets tend to move in trends (upward, downward, or sideways)
+- History often repeats itself in market patterns
+- Price action reflects all available market information
+- Nigerian market participants often react similarly to certain price patterns
 
-## Types of Trading Risk
+## Core Technical Analysis Concepts for Nigerian Traders:
+1. **Price Charts**: Visual representations of price movements over time
+2. **Support and Resistance**: Price levels where stocks tend to stop falling or rising
+3. **Trends**: The general direction of market movement
+4. **Volume**: The number of shares traded (indicates conviction behind price moves)
+5. **Chart Patterns**: Recognizable formations that suggest potential price movements
 
-### 1. Market Risk
-- **Definition**: The risk of losses due to movements in market prices
-- **Examples**: Price gaps, trending markets, volatility
-- **Management**: Position sizing, stop-losses, diversification
+## Types of Charts Used in Nigerian Stock Analysis:
+- **Line Charts**: Simple view of closing prices
+- **Bar Charts**: Show open, high, low, and close prices
+- **Candlestick Charts**: Japanese method showing price movement with colored bodies
+- **Point and Figure**: Focus on significant price movements without time consideration
 
-### 2. Leverage Risk
-- **Definition**: The amplification of gains and losses through borrowed capital
-- **Examples**: Margin trading, futures, options
-- **Management**: Appropriate leverage ratios, stress testing
-
-### 3. Liquidity Risk
-- **Definition**: The risk of not being able to exit positions at desired prices
-- **Examples**: Illiquid stocks, wide bid-ask spreads, market crashes
-- **Management**: Trading liquid markets, avoiding oversize positions
-
-### 4. Operational Risk
-- **Definition**: Losses due to failed processes, systems or external events
-- **Examples**: Platform outages, order entry errors, connectivity issues
-- **Management**: Redundant systems, checklists, practice
-
-### 5. Psychological Risk
-- **Definition**: Losses due to emotional decision-making
-- **Examples**: Revenge trading, overconfidence, fear
-- **Management**: Trading plan, rules-based approach, journaling
-
-## The Risk Management Hierarchy
-
-The most effective approach to risk management follows this hierarchy:
-
-1. **Risk Avoidance**: Avoid unnecessary risks altogether
-2. **Risk Reduction**: Reduce the impact of unavoidable risks
-3. **Risk Transfer**: Hedge or insure against certain risks
-4. **Risk Acceptance**: Accept small, calculated risks
-
-## Why Most Traders Fail
-
-Research shows that 80-90% of retail traders lose money. The primary reason is poor risk management:
-
-- Excessive position sizing
-- No stop-loss discipline
-- Inadequate capitalization
-- Emotional decision-making
-- Failure to understand risk/reward`
+## Applying Technical Analysis to Nigerian Stocks
+Technical analysis can be particularly effective for Nigerian stocks due to the market's emerging nature and sometimes lower liquidity, which can create clearer pattern formations.`
           },
           {
-            id: "c4-1-3",
+            id: "c-i1-1-3",
             type: "quiz",
-            title: "Trading Risk Quiz",
-            duration: "15 min",
-            content: "Test your understanding of trading risk concepts",
+            title: "Technical Analysis Basics Quiz",
+            duration: "20 min",
+            content: "Test your understanding of technical analysis fundamentals",
             quiz: [
               {
-                id: "q4-1-1",
-                question: "Which of the following is NOT a common type of trading risk?",
+                id: "q-i1-1-1",
+                question: "Which of these is NOT a key principle of technical analysis?",
                 options: [
-                  "Market risk",
-                  "Liquidity risk",
-                  "Performance risk",
-                  "Psychological risk"
+                  "Price discounts everything",
+                  "Prices move in trends",
+                  "Company fundamentals determine price",
+                  "History tends to repeat"
                 ],
                 correctAnswer: 2,
-                explanation: "Performance risk is not a standard category of trading risk. The main risk categories include market risk, liquidity risk, leverage risk, operational risk, and psychological risk."
+                explanation: "Technical analysis focuses on price action and chart patterns rather than company fundamentals. The belief that 'company fundamentals determine price' is actually a principle of fundamental analysis, not technical analysis."
               },
               {
-                id: "q4-1-2",
-                question: "What is the primary reason most retail traders fail?",
+                id: "q-i1-1-2",
+                question: "Why is technical analysis particularly useful in the Nigerian stock market?",
                 options: [
-                  "Lack of technical analysis skills",
-                  "Poor risk management",
-                  "Not having the right indicators",
-                  "Trading the wrong markets"
+                  "Because Nigerian stocks don't follow fundamentals at all",
+                  "Because it helps identify entry/exit points in markets with information asymmetry",
+                  "Because technical analysis only works in emerging markets",
+                  "Because Nigerian investors don't use technical analysis"
                 ],
                 correctAnswer: 1,
-                explanation: "Poor risk management is the primary reason most retail traders fail. Even traders with good analysis skills will eventually blow up their accounts without proper risk management."
+                explanation: "Technical analysis is particularly useful in markets like Nigeria's where information asymmetry exists and perfect information is not always available to all market participants. It helps traders identify better entry and exit points despite these challenges."
+              },
+              {
+                id: "q-i1-1-3",
+                question: "What adjustment might be necessary when applying technical analysis to Nigerian stocks?",
+                options: [
+                  "Ignoring all chart patterns",
+                  "Only using fundamental analysis instead",
+                  "Accounting for lower liquidity in some NGX stocks",
+                  "Assuming prices will always go up"
+                ],
+                correctAnswer: 2,
+                explanation: "When applying technical analysis to Nigerian stocks, traders often need to account for lower liquidity in some NGX stocks, which can affect the reliability of certain patterns and indicators."
               }
             ]
           }
         ]
       },
-      { 
-        id: "m4-2", 
-        title: "Position Sizing Strategies", 
-        description: "Learn different approaches to determine optimal position sizes",
-        duration: "50 min", 
+      {
+        id: "m-i1-2",
+        title: "Understanding Chart Types and Patterns",
+        description: "Learn to read different chart types and identify key patterns",
+        duration: "75 min",
         isCompleted: false,
         order: 2,
-        content: []
-      },
-      { 
-        id: "m4-3", 
-        title: "Effective Stop-Loss Placement", 
-        description: "Master techniques for placing stop-losses to protect capital",
-        duration: "45 min", 
-        isCompleted: false,
-        order: 3,
-        content: []
-      },
-      { 
-        id: "m4-4", 
-        title: "Risk-Reward Optimization", 
-        description: "Learn how to balance risk and potential reward for optimal returns",
-        duration: "45 min", 
-        isCompleted: false,
-        order: 4,
-        content: []
-      },
-      { 
-        id: "m4-5", 
-        title: "Creating a Risk Management Plan", 
-        description: "Develop a comprehensive risk management framework for your trading",
-        duration: "30 min", 
-        isCompleted: false,
-        order: 5,
-        content: []
+        content: [
+          {
+            id: "c-i1-2-1",
+            type: "video",
+            title: "Chart Types and Their Applications",
+            duration: "25 min",
+            videoUrl: "https://www.youtube.com/watch?v=chart-types-explained",
+            content: "Learn about line charts, bar charts, and candlestick charts and when to use each type."
+          },
+          {
+            id: "c-i1-2-2",
+            type: "text",
+            title: "Mastering Candlestick Patterns",
+            duration: "25 min",
+            content: `# Mastering Candlestick Patterns for Nigerian Stocks
+
+## Introduction to Candlestick Charts
+Candlestick charts originated in Japan in the 1700s and have become the most popular chart type for technical analysis. Each candlestick represents four key price points: open, close, high, and low.
+
+## Basic Candlestick Components:
+- **Body**: The rectangular area between opening and closing prices
+- **Wicks/Shadows**: The thin lines extending from the body
+- **Bullish Candle**: Typically green or white, close higher than open
+- **Bearish Candle**: Typically red or black, close lower than open
+
+## Essential Candlestick Patterns for Nigerian Markets:
+
+### Reversal Patterns:
+1. **Doji**: When open and close are virtually equal, indicating indecision
+2. **Hammer/Hanging Man**: Small body with long lower shadow, potential reversal
+3. **Engulfing Patterns**: When current candle completely engulfs previous candle
+4. **Morning Star/Evening Star**: Three-candle reversal patterns
+
+### Continuation Patterns:
+1. **Marubozu**: Candles with no or very small shadows
+2. **Spinning Tops**: Small bodies with upper and lower shadows
+3. **Rising/Falling Windows**: Gaps in Japanese candlestick terminology
+
+## Reading Candlestick Patterns in NGX Stocks:
+- How to spot valid patterns in less liquid Nigerian stocks
+- Confirmation techniques to verify pattern reliability
+- Volume considerations when trading based on candlestick patterns
+- Real examples from top NGX stocks like Dangote Cement and GTBank`
+          },
+          {
+            id: "c-i1-2-3",
+            type: "quiz",
+            title: "Chart Patterns Quiz",
+            duration: "25 min",
+            content: "Test your understanding of chart types and candlestick patterns",
+            quiz: [
+              {
+                id: "q-i1-2-1",
+                question: "What does a Doji candlestick pattern indicate?",
+                options: [
+                  "Strong bullish trend",
+                  "Strong bearish trend",
+                  "Market indecision or equilibrium between buyers and sellers",
+                  "Market is closed for the day"
+                ],
+                correctAnswer: 2,
+                explanation: "A Doji forms when the opening and closing prices are virtually equal, creating a candlestick with almost no body. This pattern indicates indecision in the market, with equilibrium between buying and selling pressure."
+              },
+              {
+                id: "q-i1-2-2",
+                question: "In candlestick charts, what is the 'body' of the candlestick?",
+                options: [
+                  "The entire candlestick including shadows",
+                  "The rectangular area between opening and closing prices",
+                  "Only the shadows/wicks",
+                  "The volume indicator below the candlestick"
+                ],
+                correctAnswer: 1,
+                explanation: "The body of a candlestick is the rectangular area between the opening and closing prices. The thin lines extending from the body are called shadows or wicks."
+              },
+              {
+                id: "q-i1-2-3",
+                question: "What is a bullish engulfing pattern?",
+                options: [
+                  "A small candlestick followed by a larger candlestick that completely engulfs the previous one",
+                  "A candlestick with no shadows",
+                  "A candlestick with a very long upper shadow",
+                  "Two identical candlesticks in a row"
+                ],
+                correctAnswer: 0,
+                explanation: "A bullish engulfing pattern occurs when a smaller bearish (down) candlestick is followed by a larger bullish (up) candlestick that completely engulfs or covers the previous candle. This pattern often signals a potential reversal from a downtrend to an uptrend."
+              }
+            ]
+          }
+        ]
       }
     ],
     skills: [
-      "Position sizing",
-      "Stop-loss strategy",
-      "Risk-reward analysis",
-      "Capital preservation"
+      "Chart reading", 
+      "Pattern recognition", 
+      "Technical indicators", 
+      "Trend analysis"
     ],
     prerequisites: [
       {
-        id: "pre-4-1",
-        title: "Basic trading knowledge",
-        description: "Understanding of market mechanics and order types"
-      },
-      {
-        id: "pre-4-2",
-        title: "Trading experience",
-        description: "Some exposure to live or simulated trading is helpful"
+        id: "pre-i1-1",
+        title: "Basic stock market knowledge",
+        description: "You should understand the basics of how the stock market works before taking this course."
       }
     ],
-    reviews: [
-      {
-        id: "rev-4-1",
-        userId: "user-7",
-        userName: "Thomas Lee",
-        userAvatar: "/avatars/thomas.jpg",
-        rating: 5,
-        comment: "This course completely changed my trading. The position sizing strategies alone were worth ten times what I paid.",
-        date: "March 10, 2024"
+    reviews: [],
+    price: 19999,
+    discountPrice: 15999,
+    isFeatured: true,
+    averageRating: 4.8,
+    totalStudents: 423,
+    certificationIncluded: true
+  },
+  {
+    id: "course-i2",
+    title: "Trading the News: Forex Strategies for Volatile Markets",
+    subtitle: "Learn to leverage economic events for profitable forex trades",
+    category: "Forex Trading",
+    subcategory: "Intermediate",
+    description: "Master strategies for trading forex based on economic news, central bank announcements, and market-moving events affecting the Naira.",
+    longDescription: `
+This specialized course teaches Nigerian forex traders how to capitalize on market volatility caused by economic news and events. You'll learn to interpret news releases, understand their impact on currency pairs, and develop strategies to trade these high-impact situations.
+
+### What You'll Learn:
+- Understand how economic news affects forex markets, particularly NGN pairs
+- Master the use of economic calendars to prepare for market-moving events
+- Develop specific entry and exit strategies for news-based trading
+- Manage risk effectively during high-volatility market conditions
+- Analyze Central Bank of Nigeria policies and their impact on currency values
+
+### Course Features:
+- 6 modules with over 4 hours of focused video content
+- Real case studies of major economic events and their market impact
+- News trading strategy templates and risk calculators
+- Live examples of trades based on Nigerian and international news
+- Certificate of completion
+
+This intermediate course is ideal for forex traders who understand the basics and want to develop more sophisticated strategies for volatile market conditions.
+    `,
+    tags: ["Forex News Trading", "Market Volatility", "Economic Events", "Trading Strategies"],
+    estimatedHours: 4,
+    difficulty: "intermediate",
+    icon: "TrendingUp",
+    coverImage: "/courses/forex-news-trading.jpg",
+    instructor: instructors[2],
+    lastUpdated: "May 10, 2024",
+    createdAt: "February 20, 2024",
+    language: "English",
+    modules: [
+      { 
+        id: "m-i2-1", 
+        title: "The Impact of News on Forex Markets", 
+        description: "Understand how and why news events create trading opportunities",
+        duration: "45 min", 
+        isCompleted: false,
+        order: 1,
+        content: [
+          {
+            id: "c-i2-1-1",
+            type: "video",
+            title: "How News Events Impact Forex Markets",
+            duration: "15 min",
+            videoUrl: "https://www.youtube.com/watch?v=forex-news-impact",
+            content: "Learn how economic news and events affect currency prices and create trading opportunities."
+          },
+          {
+            id: "c-i2-1-2",
+            type: "text",
+            title: "How News Impacts Currency Markets",
+            duration: "20 min",
+            content: `# How News Impacts Currency Markets
+
+## The News-Forex Connection
+News events and economic data releases are among the most powerful forces driving forex market movements. For Nigerian traders, understanding how both local and international news affects currency pairs is essential for successful trading.
+
+## Key Economic Indicators That Move the Forex Market:
+1. **Interest Rate Decisions**: Central bank decisions (CBN, Fed, ECB)
+2. **GDP Data**: Measure of economic output and growth
+3. **Inflation Reports**: Consumer Price Index (CPI) and inflation rates
+4. **Employment Data**: Job creation and unemployment rates
+5. **Trade Balance**: Import vs. export data
+6. **Oil Prices**: Particularly important for the Naira
+
+## Nigeria-Specific News Events That Impact Forex:
+- **CBN Policy Announcements**: Monetary policy changes, intervention efforts
+- **Crude Oil Production/Prices**: Nigeria's main export and foreign exchange earner
+- **Political Developments**: Elections, policy changes, governance issues
+- **Foreign Reserve Levels**: Indicate Nigeria's ability to defend the Naira
+- **Security Situations**: Can impact economic activity and foreign investment
+
+## How to Prepare for High-Impact News Events:
+1. **Economic Calendars**: Track upcoming news releases
+2. **Volatility Expectations**: Anticipate larger price movements
+3. **Position Sizing**: Adjust trading size based on news volatility
+4. **Risk Management**: Set appropriate stop losses for news events
+5. **Post-News Analysis**: Study market reactions for future reference`
+          },
+          {
+            id: "c-i2-1-3",
+            type: "quiz",
+            title: "News Impact on Forex Quiz",
+            duration: "15 min",
+            content: "Test your understanding of how news affects forex markets",
+            quiz: [
+              {
+                id: "q-i2-1-1",
+                question: "Which of the following is NOT a typical market-moving news event?",
+                options: [
+                  "Interest rate decisions by the Central Bank of Nigeria",
+                  "Quarterly GDP reports",
+                  "Celebrity endorsements of currencies",
+                  "Major oil supply disruptions"
+                ],
+                correctAnswer: 2,
+                explanation: "Celebrity endorsements of currencies are not typical market-moving news events. Forex markets are primarily influenced by economic data, central bank decisions, geopolitical events, and market sentiment rather than celebrity opinions."
+              },
+              {
+                id: "q-i2-1-2",
+                question: "What typically happens to currency spreads during major news releases?",
+                options: [
+                  "They remain exactly the same",
+                  "They narrow significantly",
+                  "They widen due to increased volatility",
+                  "They disappear completely"
+                ],
+                correctAnswer: 2,
+                explanation: "During major news releases, currency spreads typically widen due to increased volatility and uncertainty. Brokers increase the spread to protect themselves against rapid price movements."
+              },
+              {
+                id: "q-i2-1-3",
+                question: "Which statement best describes the Nigerian Naira's reaction to Central Bank of Nigeria policy announcements?",
+                options: [
+                  "CBN announcements have no effect on the Naira",
+                  "The Naira is highly sensitive to CBN interest rate decisions and policy statements",
+                  "Only international news affects the Naira",
+                  "The Naira only reacts to oil price changes"
+                ],
+                correctAnswer: 1,
+                explanation: "The Nigerian Naira is highly sensitive to Central Bank of Nigeria interest rate decisions and policy statements. As the national monetary authority, CBN's actions directly impact Naira valuation and forex policy."
+              }
+            ]
+          }
+        ]
       },
       {
-        id: "rev-4-2",
-        userId: "user-8",
-        userName: "Sarah Johnson",
-        userAvatar: "/avatars/sarah.jpg",
-        rating: 5,
-        comment: "Finally, a course that focuses on what really matters. My win rate didn't change, but my profitability increased dramatically.",
-        date: "February 22, 2024"
+        id: "m-i2-2", 
+        title: "Using Economic Calendars for Trading", 
+        description: "Learn how to effectively use economic calendars to prepare for trading opportunities",
+        duration: "60 min", 
+        isCompleted: false,
+        order: 2,
+        content: [
+          {
+            id: "c-i2-2-1",
+            type: "video",
+            title: "Mastering the Economic Calendar",
+            duration: "20 min",
+            videoUrl: "https://www.youtube.com/watch?v=economic-calendar-tutorial",
+            content: "Learn how to read and interpret economic calendars to prepare for trading events."
+          },
+          {
+            id: "c-i2-2-2",
+            type: "text",
+            title: "Economic Calendar Strategies for Nigerian Traders",
+            duration: "20 min",
+            content: `# Economic Calendar Strategies for Nigerian Traders
+
+## What is an Economic Calendar?
+An economic calendar is a schedule of economic events and indicators that are likely to impact financial markets, including forex. For Nigerian traders, understanding how to use these calendars is essential for planning trades around high-impact events.
+
+## Key Components of Economic Calendars:
+- **Date and Time**: When the event will occur (adjust for Nigerian time zone)
+- **Event/Indicator**: The specific economic release or announcement
+- **Importance/Impact**: Usually rated as low, medium, or high impact
+- **Previous Value**: Last period's result
+- **Forecast**: Market expectations
+- **Actual Result**: The released figure (populated after the event)
+
+## How to Use Economic Calendars Effectively:
+1. **Filter for High-Impact Events**: Focus on events rated as high-impact
+2. **Watch Currency-Specific News**: Pay special attention to events affecting currencies you trade
+3. **Note Time in Nigerian Time Zone**: Convert event times to your local time
+4. **Plan Around Major Releases**: Consider avoiding open positions during volatile news events
+5. **Watch for Deviation**: The difference between forecast and actual result often determines market reaction
+
+## Nigerian-Relevant Calendar Events:
+- Central Bank of Nigeria (CBN) interest rate decisions
+- Nigerian inflation data (CPI)
+- Nigerian GDP reports
+- Crude oil inventory and production data
+- Major trading partner announcements (US, EU, China)
+
+## Pre-Event Trading Strategies:
+- Identifying potential breakout levels before news
+- Setting up pending orders to catch volatility
+- Risk management techniques for news trading
+- When to stay out of the market entirely`
+          },
+          {
+            id: "c-i2-2-3",
+            type: "quiz",
+            title: "Economic Calendar Quiz",
+            duration: "20 min",
+            content: "Test your understanding of economic calendars and their use in forex trading",
+            quiz: [
+              {
+                id: "q-i2-2-1",
+                question: "What typically causes the biggest market movement when an economic indicator is released?",
+                options: [
+                  "The release time",
+                  "The country releasing the data",
+                  "The significant deviation from forecast values",
+                  "The color of the announcement on the calendar"
+                ],
+                correctAnswer: 2,
+                explanation: "The most significant market movement typically occurs when there is a large deviation between the actual released value and the forecast value. This surprise element often drives strong price reactions."
+              },
+              {
+                id: "q-i2-2-2",
+                question: "Why should Nigerian forex traders pay attention to US Federal Reserve announcements?",
+                options: [
+                  "They have no relevance to Nigerian traders",
+                  "They directly impact USD-based pairs, which affect global forex markets including NGN",
+                  "Only because they're colored red on economic calendars",
+                  "Only Nigerian announcements matter to Nigerian traders"
+                ],
+                correctAnswer: 1,
+                explanation: "Nigerian forex traders should pay attention to US Federal Reserve announcements because they directly impact USD-based pairs, which in turn affect global forex markets including the Naira. The USD is the world's reserve currency and has widespread influence."
+              },
+              {
+                id: "q-i2-2-3",
+                question: "What is a sensible approach to trading during major news releases?",
+                options: [
+                  "Always place large trades right before the news",
+                  "Ignore the news completely",
+                  "Consider reducing position sizes or staying out of the market during highly volatile releases",
+                  "Only trade minor currency pairs during news"
+                ],
+                correctAnswer: 2,
+                explanation: "A sensible approach to trading during major news releases is to consider reducing position sizes or staying out of the market entirely during highly volatile releases. This helps manage risk during unpredictable price movements."
+              }
+            ]
+          }
+        ]
       }
     ],
-    price: 69.99,
-    discountPrice: 49.99,
+    skills: [
+      "News analysis", 
+      "Volatility trading", 
+      "Economic calendar use", 
+      "Event-based strategies"
+    ],
+    prerequisites: [
+      {
+        id: "pre-i2-1",
+        title: "Basic forex knowledge required",
+        description: "You should understand forex basics including currency pairs, pips, and basic order types."
+      }
+    ],
+    reviews: [],
+    price: 24999,
+    discountPrice: 19999,
+    isFeatured: false,
+    averageRating: 4.7,
+    totalStudents: 312,
+    certificationIncluded: true
+  },
+  
+  // 🔴 ADVANCED LEVEL COURSES
+  {
+    id: "course-a1",
+    title: "Build Your Trading Plan: Risk, Psychology & Consistency",
+    subtitle: "Develop a professional trading approach for long-term success",
+    category: "Trading Psychology",
+    subcategory: "Advanced",
+    description: "Master the psychological aspects of trading with a focus on risk management, emotional discipline, and developing a consistent trading plan.",
+    longDescription: `
+This advanced course goes beyond technical skills to focus on the psychological and strategic elements that separate successful traders from the rest. You'll learn to build a comprehensive trading plan tailored to Nigerian markets, with robust risk management and mental discipline.
+
+### What You'll Learn:
+- Develop a complete, personalized trading plan for Nigerian markets
+- Master advanced risk management techniques to preserve capital
+- Understand and overcome the psychological biases affecting your trading
+- Build routines and habits that support consistent trading performance
+- Implement position sizing strategies based on market conditions
+
+### Course Features:
+- 8 modules with over 6 hours of in-depth content
+- Trading journal templates and risk management calculators
+- Psychological assessment tools to identify your trading weaknesses
+- Case studies of successful Nigerian traders and their approaches
+- Certificate of completion
+
+This course is designed for serious traders who want to elevate their performance by mastering the mental game and strategic planning aspects of trading.
+    `,
+    tags: ["Trading Psychology", "Risk Management", "Trading Plan", "Consistency"],
+    estimatedHours: 6,
+    difficulty: "advanced",
+    icon: "Layers",
+    coverImage: "/courses/trading-psychology.jpg",
+    instructor: instructors[3],
+    lastUpdated: "May 5, 2024",
+    createdAt: "January 25, 2024",
+    language: "English",
+    modules: [
+      { 
+        id: "m-a1-1", 
+        title: "The Foundations of a Trading Plan", 
+        description: "Learn why having a structured trading plan is essential for success",
+        duration: "60 min", 
+        isCompleted: false,
+        order: 1,
+        content: [
+          {
+            id: "c-a1-1-1",
+            type: "video",
+            title: "Why Every Trader Needs a Trading Plan",
+            duration: "20 min",
+            videoUrl: "https://www.youtube.com/watch?v=trading-plan-intro",
+            content: "Learn why a structured trading plan is critical for consistent success in the Nigerian markets."
+          },
+          {
+            id: "c-a1-1-2",
+            type: "text",
+            title: "Trading Psychology Fundamentals",
+            duration: "20 min",
+            content: `# Trading Psychology Fundamentals
+
+## Why Psychology Matters in Trading
+The greatest trading systems in the world are worthless if you can't follow them consistently. Your mindset and emotional control are often the difference between success and failure in the markets.
+
+## Common Psychological Challenges for Nigerian Traders:
+1. **Fear**: Hesitation to enter trades, cutting winners too early
+2. **Greed**: Overleveraging, holding losers too long
+3. **Revenge Trading**: Trying to recover losses with risky trades
+4. **Overconfidence**: Ignoring risk management after winning streaks
+5. **Analysis Paralysis**: Overthinking decisions, unable to pull the trigger
+6. **FOMO (Fear of Missing Out)**: Entering trades based on others' success stories
+
+## Nigeria-Specific Psychological Factors:
+- Pressure from economic hardship and desire for quick wealth
+- Cultural expectations and family responsibilities
+- Skepticism from past investment scams common in Nigeria
+- Limited access to quality information and analysis tools
+- Currency volatility creating additional stress
+
+## Building Mental Resilience as a Nigerian Trader:
+1. **Accept Market Realities**: Markets are probabilistic, not deterministic
+2. **Develop Emotional Awareness**: Recognize your emotional triggers
+3. **Implement Trading Rules**: Create and follow a trading plan religiously
+4. **Practice Patience**: Good trades come to those who wait
+5. **Separate Self-Worth from Results**: Your trading results don't define you
+6. **Build Support Systems**: Connect with other disciplined traders`
+          },
+          {
+            id: "c-a1-1-3",
+            type: "quiz",
+            title: "Trading Plan Fundamentals Quiz",
+            duration: "20 min",
+            content: "Test your understanding of trading plan fundamentals",
+            quiz: [
+              {
+                id: "q-a1-1-1",
+                question: "Why is having a trading plan particularly important for Nigerian traders?",
+                options: [
+                  "Because Nigerian traders don't need technical analysis",
+                  "Because trading plans are only useful in emerging markets",
+                  "Because of the volatility and unique challenges of local markets",
+                  "Because trading plans are required by Nigerian regulations"
+                ],
+                correctAnswer: 2,
+                explanation: "Having a clear trading plan is particularly important for Nigerian traders due to the volatility and unique challenges of local markets. A well-structured plan helps navigate these challenges with discipline and consistency."
+              },
+              {
+                id: "q-a1-1-2",
+                question: "What is a reasonable maximum risk per trade in the Nigerian market context?",
+                options: [
+                  "10-15% of account",
+                  "1-2% of account",
+                  "25% of account",
+                  "50% of account"
+                ],
+                correctAnswer: 1,
+                explanation: "A reasonable maximum risk per trade is 1-2% of your account value. This conservative approach helps preserve capital through inevitable losing streaks, especially important in volatile markets like Nigeria's."
+              },
+              {
+                id: "q-a1-1-3",
+                question: "Which of these is NOT a core component of an effective trading plan?",
+                options: [
+                  "Risk management rules",
+                  "Market analysis framework",
+                  "Guarantees of specific profit percentages",
+                  "Psychological framework"
+                ],
+                correctAnswer: 2,
+                explanation: "Guarantees of specific profit percentages are NOT a core component of an effective trading plan. Markets are inherently uncertain, and no legitimate trading plan can guarantee specific returns. Instead, plans focus on process, risk management, and consistent approach."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: "m-a1-2", 
+        title: "Advanced Risk Management Techniques", 
+        description: "Master sophisticated risk management strategies to protect your capital",
+        duration: "75 min", 
+        isCompleted: false,
+        order: 2,
+        content: [
+          {
+            id: "c-a1-2-1",
+            type: "video",
+            title: "Advanced Risk Management for Nigerian Traders",
+            duration: "25 min",
+            videoUrl: "https://www.youtube.com/watch?v=advanced-risk-management",
+            content: "Learn sophisticated risk management techniques specifically tailored for Nigerian market conditions."
+          },
+          {
+            id: "c-a1-2-2",
+            type: "text",
+            title: "Professional Risk Management Systems",
+            duration: "25 min",
+            content: `# Professional Risk Management Systems
+
+## Beyond Basic Risk Management
+While beginners focus on simple risk principles like fixed stop losses, professional traders employ sophisticated risk management systems that adapt to market conditions and account performance. These advanced techniques are particularly valuable in the Nigerian market environment.
+
+## Position Sizing Methodologies:
+
+### 1. Percent Risk Model
+- Calculate position size based on stop distance and percent risk
+- Formula: Position Size = (Account × Risk%) ÷ (Entry - Stop)
+- Nigerian application: Using tighter risk percentages (0.5-1%) during high volatility periods
+
+### 2. Volatility-Based Sizing
+- Adjust position size based on market volatility
+- Using Average True Range (ATR) to determine appropriate risk
+- Reducing exposure during abnormal volatility in Nigerian markets
+
+### 3. Kelly Criterion and Optimal f
+- Mathematical approaches to optimize position sizing
+- Accounting for win rate and risk:reward ratio
+- Modified Kelly for more conservative sizing
+
+## Portfolio-Level Risk Management:
+
+### 1. Correlation Management
+- Understanding sector correlations in the Nigerian market
+- Avoiding overexposure to correlated assets (e.g., banking stocks, oil-dependent sectors)
+- Creating genuinely diversified positions
+
+### 2. Exposure Limits
+- Maximum sector exposure percentages
+- Currency exposure considerations (Naira vs. USD)
+- Overall market exposure during uncertain periods
+
+### 3. Drawdown Management
+- Predetermined equity thresholds for reducing risk
+- Scaling position sizes after losses
+- Recovery strategies that don't involve increasing risk
+
+## Advanced Hedging Techniques:
+- Using NGX derivatives and options when available
+- Cross-asset hedging strategies
+- Macro hedges for Nigerian market-specific risks
+
+## Risk Management Technology:
+- Risk calculators and position sizing tools
+- Portfolio stress testing for Nigerian market scenarios
+- Automated risk monitoring systems
+
+## Creating Your Risk Management Framework:
+- Documenting your complete risk rules
+- Regular review and improvement process
+- Building risk management into daily routines`
+          },
+          {
+            id: "c-a1-2-3",
+            type: "quiz",
+            title: "Advanced Risk Management Quiz",
+            duration: "25 min",
+            content: "Test your understanding of advanced risk management concepts",
+            quiz: [
+              {
+                id: "q-a1-2-1",
+                question: "What is the Percent Risk Model formula for calculating position size?",
+                options: [
+                  "Position Size = (Entry - Stop) × (Account × Risk%)",
+                  "Position Size = (Account × Risk%) ÷ (Entry - Stop)",
+                  "Position Size = Account × Risk% × (Entry - Stop)",
+                  "Position Size = Stop Loss × Account Size"
+                ],
+                correctAnswer: 1,
+                explanation: "The Percent Risk Model formula is: Position Size = (Account × Risk%) ÷ (Entry - Stop). This ensures that if your stop loss is hit, you'll lose exactly the percentage of your account that you've predetermined as your acceptable risk."
+              },
+              {
+                id: "q-a1-2-2",
+                question: "Why is correlation management particularly important in the Nigerian market?",
+                options: [
+                  "Because Nigerian stocks are never correlated",
+                  "To avoid overexposure to related sectors like banking or oil-dependent companies",
+                  "Because correlation doesn't matter in emerging markets",
+                  "Because Nigerian regulations require it"
+                ],
+                correctAnswer: 1,
+                explanation: "Correlation management is particularly important in the Nigerian market to avoid overexposure to related sectors like banking or oil-dependent companies. Many Nigerian stocks and sectors move together due to common economic factors, so diversification requires careful correlation analysis."
+              },
+              {
+                id: "q-a1-2-3",
+                question: "What should a trader do with their position sizing after experiencing a series of losses?",
+                options: [
+                  "Increase position size to recover losses faster",
+                  "Maintain the same position size regardless of losses",
+                  "Reduce position size temporarily to preserve capital",
+                  "Stop trading completely for a month"
+                ],
+                correctAnswer: 2,
+                explanation: "After experiencing a series of losses, a trader should reduce position size temporarily to preserve capital. This drawdown management technique helps protect the remaining account balance during potential losing streaks or periods when a trader's strategy may be out of sync with the market."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    skills: [
+      "Trading psychology", 
+      "Risk management", 
+      "Strategic planning", 
+      "Emotional discipline"
+    ],
+    prerequisites: [
+      {
+        id: "pre-a1-1",
+        title: "Trading experience required",
+        description: "This course is designed for traders who already understand the basics of either stock or forex trading."
+      }
+    ],
+    reviews: [],
+    price: 34999,
+    discountPrice: 29999,
+    isFeatured: true,
     averageRating: 4.9,
-    totalStudents: 724,
+    totalStudents: 187,
+    certificationIncluded: true
+  },
+  {
+    id: "course-a2",
+    title: "Technical Analysis Masterclass (Naija-Focused)",
+    subtitle: "Advanced chart analysis techniques for Nigerian markets",
+    category: "Technical Analysis",
+    subcategory: "Advanced",
+    description: "Master advanced technical analysis methods including complex chart patterns, Fibonacci levels, Elliott Wave theory, and intermarket analysis for Nigerian stocks and forex.",
+    longDescription: `
+This comprehensive masterclass takes your technical analysis skills to professional levels with advanced concepts and techniques. Focused specifically on Nigerian market applications, you'll learn sophisticated methods to analyze price action and make high-probability trading decisions.
+
+### What You'll Learn:
+- Master advanced candlestick patterns and their reliability in Nigerian markets
+- Apply Fibonacci retracements and extensions to predict price targets
+- Understand Elliott Wave theory and how to count waves in Nigerian stocks
+- Use multiple timeframe analysis for more accurate trading decisions
+- Implement volume profile and market structure concepts in your analysis
+
+### Course Features:
+- 10 modules with over 8 hours of expert-level instruction
+- Advanced chart analysis exercises using Nigerian market data
+- Professional-grade technical analysis templates
+- Case studies of complex trades in Nigerian stocks and USD/NGN
+- Certificate of completion
+
+This course is designed for serious traders who want to develop professional-level technical analysis skills specifically adapted for Nigerian market conditions.
+    `,
+    tags: ["Advanced Charts", "Fibonacci", "Elliott Wave", "Market Structure"],
+    estimatedHours: 8,
+    difficulty: "advanced",
+    icon: "Activity",
+    coverImage: "/courses/advanced-technical.jpg",
+    instructor: instructors[1],
+    lastUpdated: "April 15, 2024",
+    createdAt: "December 10, 2023",
+    language: "English",
+    modules: [
+      { 
+        id: "m-a2-1", 
+        title: "Advanced Chart Patterns", 
+        description: "Master complex chart patterns and their applications in Nigerian markets",
+        duration: "75 min", 
+        isCompleted: false,
+        order: 1,
+        content: [
+          {
+            id: "c-a2-1-1",
+            type: "video",
+            title: "Advanced Chart Patterns for Nigerian Markets",
+            duration: "25 min",
+            videoUrl: "https://www.youtube.com/watch?v=advanced-chart-patterns",
+            content: "Learn complex chart patterns and how to identify them in Nigerian stock charts."
+          },
+          {
+            id: "c-a2-1-2",
+            type: "text",
+            title: "Advanced Candlestick Patterns for Nigerian Markets",
+            duration: "25 min",
+            content: `# Advanced Candlestick Patterns for Nigerian Markets
+
+## Beyond Basic Candlesticks
+While basic candlestick patterns provide valuable insights, advanced patterns can offer more precise entry and exit signals, especially in the sometimes volatile Nigerian market environment.
+
+## High-Reliability Reversal Patterns for Nigerian Stocks:
+1. **Three Black Crows**: A bearish reversal pattern showing three consecutive long red candles with lower closes
+2. **Three White Soldiers**: A bullish reversal pattern showing three consecutive long green candles with higher closes
+3. **Morning Star**: A bullish reversal pattern at the bottom of a downtrend (especially effective for Nigerian bank stocks)
+4. **Evening Star**: A bearish reversal pattern at the top of an uptrend
+5. **Abandoned Baby**: Rare but highly reliable reversal pattern with gaps on both sides
+
+## Continuation Patterns That Work Well in Nigerian Markets:
+1. **Rising Three Methods**: Bullish continuation pattern during uptrends
+2. **Falling Three Methods**: Bearish continuation pattern during downtrends
+3. **Tasuki Gaps**: Indicate temporary pullbacks before trend continuation
+4. **Separating Lines**: Show decisive continuation after temporary opposition
+
+## Nigerian Market Applications:
+- **Financial Sector Focus**: These patterns work particularly well with Nigerian bank stocks like GTBank, Zenith, and Access Bank
+- **Consumer Goods Timing**: Helpful for timing entries/exits in Nigerian consumer stocks like Nestle and Nigerian Breweries
+- **Oil & Gas Precision**: Useful for trading volatile oil-related stocks like Seplat and Oando
+
+## Confirmation Techniques:
+- Always confirm candlestick signals with supporting indicators
+- Look for volume confirmation with pattern completion
+- Consider market context and sector trends specific to Nigeria
+- Use multiple timeframe analysis for stronger signals`
+          },
+          {
+            id: "c-a2-1-3",
+            type: "quiz",
+            title: "Advanced Chart Patterns Quiz",
+            duration: "25 min",
+            content: "Test your understanding of advanced chart patterns",
+            quiz: [
+              {
+                id: "q-a2-1-1",
+                question: "What defines a Gartley harmonic pattern?",
+                options: [
+                  "A simple head and shoulders formation",
+                  "A pattern that uses specific Fibonacci retracement and extension levels",
+                  "Any chart pattern that forms over exactly 22 days",
+                  "A pattern only found in American markets"
+                ],
+                correctAnswer: 1,
+                explanation: "A Gartley harmonic pattern is defined by specific Fibonacci retracement and extension levels between its points. It follows precise mathematical relationships, with point D typically at a .786 retracement of the XA leg."
+              },
+              {
+                id: "q-a2-1-2",
+                question: "How should complex chart patterns be adapted for the Nigerian stock market?",
+                options: [
+                  "They can't be used in Nigerian markets",
+                  "They should be used exactly as in developed markets with no modifications",
+                  "They should be adjusted for lower liquidity and combined with volume analysis",
+                  "They only work on 5-minute charts in Nigerian markets"
+                ],
+                correctAnswer: 2,
+                explanation: "When applying complex chart patterns to the Nigerian stock market, they should be adjusted for lower liquidity and combined with volume analysis for confirmation. Nigerian market-specific filters may also help reduce false signals in the local market context."
+              },
+              {
+                id: "q-a2-1-3",
+                question: "What is pattern stacking in technical analysis?",
+                options: [
+                  "Drawing multiple patterns on top of each other randomly",
+                  "Using outdated chart patterns",
+                  "Identifying multiple patterns that converge to the same conclusion",
+                  "A pattern that forms only in bear markets"
+                ],
+                correctAnswer: 2,
+                explanation: "Pattern stacking refers to identifying multiple patterns that converge to the same conclusion, creating a stronger signal. This technique is used by professional technical analysts to find high-probability trading opportunities with confluent pattern signals."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: "m-a2-2", 
+        title: "Fibonacci Analysis and Wave Theory", 
+        description: "Master Fibonacci tools and Elliott Wave theory for Nigerian markets",
+        duration: "90 min", 
+        isCompleted: false,
+        order: 2,
+        content: [
+          {
+            id: "c-a2-2-1",
+            type: "video",
+            title: "Fibonacci and Elliott Wave Applications",
+            duration: "30 min",
+            videoUrl: "https://www.youtube.com/watch?v=fibonacci-elliott-wave",
+            content: "Learn how to apply Fibonacci tools and Elliott Wave theory to Nigerian stocks and forex pairs."
+          },
+          {
+            id: "c-a2-2-2",
+            type: "text",
+            title: "Advanced Fibonacci and Wave Analysis",
+            duration: "30 min",
+            content: `# Advanced Fibonacci and Wave Analysis for Nigerian Markets
+
+## Fibonacci Analysis Mastery
+Fibonacci analysis is based on the mathematical sequence discovered by Leonardo Fibonacci. In trading, these ratios (primarily 23.6%, 38.2%, 50%, 61.8%, and 78.6%) help identify potential support/resistance levels and price targets.
+
+## Advanced Fibonacci Applications:
+
+### 1. Multiple Timeframe Fibonacci Analysis
+- Identifying Fibonacci confluences across different timeframes
+- Major timeframe levels have stronger influence on Nigerian stocks
+- Creating Fibonacci confluence maps for key NGX stocks
+
+### 2. Fibonacci Extensions for Price Targets
+- Using 127.2%, 161.8%, 261.8% extensions for profit targets
+- Extension clusters as strong reversal zones
+- Nigerian case studies showing extension accuracy
+
+### 3. Fibonacci Time Analysis
+- Projecting potential reversal dates using Fibonacci time ratios
+- Correlating with important Nigerian economic events
+- Combining price and time Fibonacci for higher accuracy
+
+### 4. Fibonacci Retracement Channels
+- Drawing channels based on Fibonacci relationships
+- Trading within the channel structure
+- Applications to trending Nigerian blue-chip stocks
+
+## Elliott Wave Theory for Nigerian Markets:
+
+### 1. Elliott Wave Basics
+- The 5-3 wave pattern structure
+- Impulse and corrective waves
+- Adapting wave counting to Nigerian market conditions
+
+### 2. Wave Personality and Characteristics
+- Identifying wave patterns by their unique characteristics
+- Volume patterns associated with different waves
+- Psychological market phases in the Nigerian context
+
+### 3. Wave Counting Techniques
+- Rules vs. guidelines in wave counting
+- Common wave counting mistakes to avoid
+- Starting with larger timeframes for Nigerian stocks
+
+### 4. Nested Waves and Degrees
+- Understanding wave degrees from Grand Supercycle to Minuette
+- Practical wave counting at different degrees
+- Finding trading opportunities within the wave structure
+
+### 5. Combining Elliott Wave with Other Analysis
+- Wave counts with Fibonacci retracements
+- Using oscillators to confirm wave patterns
+- Integration with fundamental analysis for Nigerian stocks
+
+## Nigerian Market Applications:
+- Case studies of Elliott Wave patterns in major NGX indices
+- Wave analysis of USD/NGN forex pair
+- Sector-specific wave characteristics in the Nigerian market
+- Adjusting for Nigerian market anomalies and limitations`
+          },
+          {
+            id: "c-a2-2-3",
+            type: "quiz",
+            title: "Fibonacci and Elliott Wave Quiz",
+            duration: "30 min",
+            content: "Test your understanding of Fibonacci analysis and Elliott Wave theory",
+            quiz: [
+              {
+                id: "q-a2-2-1",
+                question: "Which of these is NOT a primary Fibonacci retracement level used in technical analysis?",
+                options: [
+                  "38.2%",
+                  "50%",
+                  "61.8%",
+                  "75%"
+                ],
+                correctAnswer: 3,
+                explanation: "75% is not a primary Fibonacci retracement level used in technical analysis. The main Fibonacci retracement levels are 23.6%, 38.2%, 50% (not actually a Fibonacci number but commonly used), 61.8%, and 78.6%."
+              },
+              {
+                id: "q-a2-2-2",
+                question: "What is the basic structure of an Elliott Wave pattern?",
+                options: [
+                  "3 waves up, 5 waves down",
+                  "5 waves in the direction of the main trend, 3 waves in the correction",
+                  "8 waves in total, regardless of direction",
+                  "2 impulse waves separated by 1 corrective wave"
+                ],
+                correctAnswer: 1,
+                explanation: "The basic structure of an Elliott Wave pattern consists of 5 waves in the direction of the main trend (numbered 1-5), followed by 3 corrective waves in the opposite direction (labeled A-B-C). This 5-3 pattern is the foundation of Elliott Wave theory."
+              },
+              {
+                id: "q-a2-2-3",
+                question: "How should Fibonacci analysis be adapted for Nigerian markets?",
+                options: [
+                  "It cannot be used in Nigerian markets at all",
+                  "Use only 50% retracement levels in Nigerian markets",
+                  "Identify Fibonacci confluences across timeframes and correlate with Nigerian economic events",
+                  "Use exactly the same approach as in American markets"
+                ],
+                correctAnswer: 2,
+                explanation: "For Nigerian markets, Fibonacci analysis should be adapted by identifying Fibonacci confluences across different timeframes and correlating them with important Nigerian economic events. This approach recognizes the unique characteristics of the Nigerian market while applying universal Fibonacci principles."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    skills: [
+      "Advanced patterns", 
+      "Fibonacci analysis", 
+      "Elliott Wave theory", 
+      "Volume analysis"
+    ],
+    prerequisites: [
+      {
+        id: "pre-a2-1",
+        title: "Technical analysis experience required",
+        description: "You should already be familiar with basic technical analysis concepts and chart patterns."
+      }
+    ],
+    reviews: [],
+    price: 39999,
+    discountPrice: 34999,
+    isFeatured: false,
+    averageRating: 4.8,
+    totalStudents: 142,
+    certificationIncluded: true
+  },
+  
+  // 💡 FINANCIAL SENSE / PERSONAL GROWTH COURSES
+  {
+    id: "course-f1",
+    title: "Get Your Bag: Side Hustles & Online Income in Nigeria",
+    subtitle: "Practical strategies to build multiple income streams",
+    category: "Financial Growth",
+    subcategory: "Personal Development",
+    description: "Discover practical, legitimate ways to create additional income streams in Nigeria through side hustles, online work, and passive income opportunities.",
+    longDescription: `
+This practical course shows Nigerians how to build multiple income streams beyond a traditional 9-5 job. You'll learn about realistic, legitimate side hustles and online opportunities that work in the Nigerian context, with step-by-step guidance to get started.
+
+### What You'll Learn:
+- Discover 15+ proven side hustle options that work for Nigerians
+- Learn how to monetize your existing skills in the digital economy
+- Build passive income streams through various investment vehicles
+- Understand how to balance your time between multiple income sources
+- Master the legal and tax considerations for multiple income streams
+
+### Course Features:
+- 7 modules with over 5 hours of practical video content
+- Side hustle evaluation framework and planning templates
+- Step-by-step guides for setting up online income streams
+- Real success stories from Nigerian side hustlers
+- Certificate of completion
+
+This course bridges the gap between financial education and practical income generation, focusing on opportunities that are accessible to Nigerians regardless of location.
+    `,
+    tags: ["Side Hustles", "Multiple Income", "Online Business", "Passive Income"],
+    estimatedHours: 5,
+    difficulty: "beginner",
+    icon: "Briefcase",
+    coverImage: "/courses/side-hustles.jpg",
+    instructor: instructors[0],
+    lastUpdated: "May 2, 2024",
+    createdAt: "February 1, 2024",
+    language: "English",
+    modules: [
+      { 
+        id: "m-f1-1", 
+        title: "The Multiple Income Mindset", 
+        description: "Why relying on one income source is risky in today's Nigerian economy",
+        duration: "45 min", 
+        isCompleted: false,
+        order: 1,
+        content: [
+          {
+            id: "c-f1-1-1",
+            type: "video",
+            title: "Why You Need Multiple Income Streams in Nigeria",
+            duration: "15 min",
+            videoUrl: "https://www.youtube.com/watch?v=multiple-income-nigeria",
+            content: "Learn why relying on a single income source is increasingly risky in the Nigerian economy."
+          },
+          {
+            id: "c-f1-1-2",
+            type: "text",
+            title: "Nigerian Side Hustle Landscape",
+            duration: "20 min",
+            content: `# Nigerian Side Hustle Landscape
+
+## The Rise of Side Hustles in Nigeria
+In today's Nigerian economy, having multiple income streams isn't just smart—it's becoming necessary. A side hustle can provide financial stability, help build wealth, and even develop into a full-time business.
+
+## Why Side Hustles Are Booming in Nigeria:
+1. **Economic Necessity**: Inflation and cost of living pressures
+2. **Technological Access**: Widespread smartphone and internet adoption
+3. **Gig Economy Growth**: Platforms connecting freelancers with clients
+4. **Reduced Barriers**: Lower startup costs for many digital businesses
+5. **Success Stories**: Visible examples of successful entrepreneurs
+
+## Most Viable Side Hustles for Nigerians in 2024:
+1. **Digital Skills Marketing**:
+   - Content writing
+   - Graphic design
+   - Web development
+   - Social media management
+   - Virtual assistance
+
+2. **E-commerce Opportunities**:
+   - Dropshipping Nigerian products
+   - Print-on-demand services
+   - Handmade crafts and cultural items
+   - Food production and delivery
+
+3. **Knowledge Monetization**:
+   - Online courses in your area of expertise
+   - E-books and digital products
+   - Consulting and coaching
+   - Tutoring (academic or skills-based)
+
+4. **Tech-Based Services**:
+   - App development
+   - Software-as-a-Service (SaaS)
+   - Tech support and troubleshooting
+   - Data analysis and research
+
+5. **Creative Industries**:
+   - Photography and videography
+   - Music production
+   - Animation and illustration
+   - Voiceover work
+
+## Evaluating Side Hustle Potential:
+- **Skill-Market Alignment**: Match your skills with market demand
+- **Time Commitment**: Realistic hours alongside primary job
+- **Startup Costs**: Initial investment required
+- **Scalability**: Potential for growth beyond solo operation
+- **Passion Factor**: Sustainability based on your interest`
+          },
+          {
+            id: "c-f1-1-3",
+            type: "quiz",
+            title: "Multiple Income Mindset Quiz",
+            duration: "15 min",
+            content: "Test your understanding of the multiple income mindset",
+            quiz: [
+              {
+                id: "q-f1-1-1",
+                question: "Why is having multiple income streams particularly important in Nigeria?",
+                options: [
+                  "Because Nigerian law requires citizens to have multiple jobs",
+                  "Because Nigerians don't need to save money",
+                  "Because of economic factors like high inflation, currency fluctuations, and job insecurity",
+                  "Because it's easier to get multiple jobs in Nigeria than in other countries"
+                ],
+                correctAnswer: 2,
+                explanation: "Having multiple income streams is particularly important in Nigeria due to economic factors including high inflation (often over 20%), currency fluctuations affecting the Naira's value, limited salary growth compared to rising costs, and general job insecurity in many sectors."
+              },
+              {
+                id: "q-f1-1-2",
+                question: "Which of these is NOT considered a type of income in the multiple income spectrum?",
+                options: [
+                  "Active income",
+                  "Semi-passive income",
+                  "Lottery income",
+                  "Portfolio income"
+                ],
+                correctAnswer: 2,
+                explanation: "Lottery income is not considered a legitimate category in the multiple income spectrum. The main types are active income (trading time for money), semi-passive income (requiring some ongoing effort), passive income (minimal time investment after setup), and portfolio income (from investments)."
+              },
+              {
+                id: "q-f1-1-3",
+                question: "What mindset shift is most important when developing multiple income streams?",
+                options: [
+                  "Believing that get-rich-quick schemes are the best approach",
+                  "Shifting from employee thinking to entrepreneurial thinking",
+                  "Assuming you need to quit your main job immediately",
+                  "Focusing only on passive income options"
+                ],
+                correctAnswer: 1,
+                explanation: "The most important mindset shift when developing multiple income streams is moving from employee thinking to entrepreneurial thinking. This involves viewing your skills as monetizable assets, recognizing opportunities in problems, becoming comfortable with calculated risks, and prioritizing long-term growth over immediate gains."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: "m-f1-2", 
+        title: "Digital Side Hustles for Nigerians", 
+        description: "Explore online income opportunities that work well in the Nigerian context",
+        duration: "60 min", 
+        isCompleted: false,
+        order: 2,
+        content: [
+          {
+            id: "c-f1-2-1",
+            type: "video",
+            title: "Top Digital Side Hustles for Nigerians",
+            duration: "20 min",
+            videoUrl: "https://www.youtube.com/watch?v=nigeria-digital-hustles",
+            content: "Discover the most accessible and profitable online income opportunities for Nigerians."
+          },
+          {
+            id: "c-f1-2-2",
+            type: "text",
+            title: "Digital Side Hustles That Work in Nigeria",
+            duration: "20 min",
+            content: `# Digital Side Hustles That Work in Nigeria
+
+## Online Income Opportunities for Nigerians
+The digital economy has opened up numerous opportunities for Nigerians to earn additional income online. These digital side hustles are particularly valuable because they often require minimal startup capital, can be done from anywhere with internet access, and have global earning potential.
+
+## Top Digital Side Hustles for Nigerians:
+
+### 1. Freelance Services
+- **Content Writing**: Blog posts, articles, website copy for businesses
+- **Virtual Assistance**: Administrative support for global clients
+- **Social Media Management**: Running accounts for businesses
+- **Graphic Design**: Creating logos, social media graphics, marketing materials
+- **Web Development**: Building websites for local and international clients
+- **Translation Services**: English-Yoruba, English-Igbo, English-Hausa translations
+- **Nigerian Platforms**: Fiverr, Upwork, Workchop, Selar
+
+### 2. Digital Product Creation
+- **E-books**: Self-publishing guides on Nigerian-specific topics
+- **Online Courses**: Teaching skills in your area of expertise
+- **Templates & Printables**: Creating resources others can purchase and use
+- **Stock Photos**: Capturing authentic Nigerian imagery for global usage
+- **Mobile Apps**: Developing solutions for local problems
+- **Nigerian Platforms**: Selar, Paystack Storefront, Flutterwave Store
+
+### 3. Content Creation & Monetization
+- **YouTube Channels**: Creating Nigerian-focused content
+- **Blogging**: Niche websites monetized with AdSense and affiliate marketing
+- **Podcasting**: Audio content with sponsorships
+- **Instagram/TikTok**: Building audiences and partnering with brands
+- **Nigerian Considerations**: Local content performs well, payment challenges
+
+### 4. Online Trading & Investments
+- **Stock Trading**: Nigerian Exchange Group (NGX) investing
+- **Forex Trading**: Currency trading (with proper education)
+- **Cryptocurrency**: Trading and staking digital assets
+- **Nigerian Platforms**: Bamboo, Trove, Risevest, Piggyvest, Buycoins
+
+### 5. E-commerce & Dropshipping
+- **Online Stores**: Selling physical products online
+- **Print-on-Demand**: Custom merchandise without inventory
+- **Dropshipping**: Selling products without handling inventory
+- **Nigerian Platforms**: Jumia, Konga, Instagram shops, WhatsApp Business
+
+## Getting Started Successfully:
+- **Skills Assessment**: Identify your existing marketable skills
+- **Market Research**: Understand demand for your service/product
+- **Platform Selection**: Choose the right platforms for your offering
+- **Initial Investment**: Understand startup costs (often minimal)
+- **Time Commitment**: Realistic planning of your available hours
+- **Payment Solutions**: Setting up reliable payment methods
+
+## Overcoming Nigerian-Specific Challenges:
+- **Internet Reliability**: Backup solutions for power and connectivity
+- **Payment Processing**: Navigating international payment options
+- **Trust Building**: Establishing credibility with global clients
+- **Exchange Rates**: Managing currency conversion considerations
+- **Standing Out**: Differentiating yourself in competitive markets`
+          },
+          {
+            id: "c-f1-2-3",
+            type: "quiz",
+            title: "Digital Side Hustles Quiz",
+            duration: "20 min",
+            content: "Test your understanding of digital side hustles for Nigerians",
+            quiz: [
+              {
+                id: "q-f1-2-1",
+                question: "Which of these platforms is specifically Nigerian-focused for selling digital products?",
+                options: [
+                  "Amazon",
+                  "Etsy",
+                  "Selar",
+                  "eBay"
+                ],
+                correctAnswer: 2,
+                explanation: "Selar is a Nigerian-focused platform specifically designed for selling digital products like ebooks, courses, and other digital content. It's optimized for Nigerian creators with local payment integration and understanding of the Nigerian market."
+              },
+              {
+                id: "q-f1-2-2",
+                question: "What is a key advantage of digital side hustles for Nigerians?",
+                options: [
+                  "They always pay in dollars",
+                  "They require minimal startup capital and can be done from anywhere with internet",
+                  "They have no competition",
+                  "The Nigerian government provides grants for all digital entrepreneurs"
+                ],
+                correctAnswer: 1,
+                explanation: "A key advantage of digital side hustles for Nigerians is that they typically require minimal startup capital and can be done from anywhere with internet access. This low barrier to entry makes them accessible to many Nigerians despite economic challenges."
+              },
+              {
+                id: "q-f1-2-3",
+                question: "Which Nigerian-specific challenge do digital entrepreneurs commonly face?",
+                options: [
+                  "Too much demand for their services",
+                  "Internet reliability and payment processing issues",
+                  "Government restrictions on all online businesses",
+                  "Inability to access international platforms"
+                ],
+                correctAnswer: 1,
+                explanation: "Nigerian digital entrepreneurs commonly face challenges related to internet reliability (including power outages) and payment processing issues. International payment platforms sometimes have restrictions or complications for Nigerian users, and reliable internet connectivity can be challenging in some areas."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    skills: [
+      "Income diversification", 
+      "Online business", 
+      "Passive income", 
+      "Time management"
+    ],
+    prerequisites: [
+      {
+        id: "pre-f1-1",
+        title: "No special prerequisites",
+        description: "This course is designed for anyone looking to increase their income."
+      }
+    ],
+    reviews: [],
+    price: 17999,
+    discountPrice: 14999,
+    isFeatured: true,
+    averageRating: 4.8,
+    totalStudents: 768,
+    certificationIncluded: true
+  },
+  {
+    id: "course-f2",
+    title: "How to Spot & Avoid Scammy Investments in Nigeria",
+    subtitle: "Protect yourself from financial fraud and investment scams",
+    category: "Financial Protection",
+    subcategory: "Risk Management",
+    description: "Learn to identify and avoid investment scams, Ponzi schemes, and fraudulent financial opportunities common in the Nigerian market.",
+    longDescription: `
+This essential course teaches Nigerians how to protect themselves from the growing number of investment scams and financial fraud schemes. You'll learn the warning signs of fraudulent opportunities and develop a framework for evaluating any investment before committing your money.
+
+### What You'll Learn:
+- Identify the common red flags of investment scams in Nigeria
+- Understand the mechanics of Ponzi schemes and why they always collapse
+- Learn how to verify the legitimacy of investment companies and opportunities
+- Develop a framework for evaluating any investment opportunity
+- Know what to do if you've already fallen victim to financial fraud
+
+### Course Features:
+- 6 modules with over 4 hours of practical content
+- Investment verification checklist and evaluation tools
+- Case studies of major Nigerian investment scams
+- Interviews with fraud prevention experts and scam survivors
+- Certificate of completion
+
+This course is essential for any Nigerian who wants to invest safely in an environment where fraudulent schemes have become increasingly sophisticated.
+    `,
+    tags: ["Scam Prevention", "Investment Safety", "Financial Protection", "Fraud Awareness"],
+    estimatedHours: 4,
+    difficulty: "beginner",
+    icon: "Shield",
+    coverImage: "/courses/scam-prevention.jpg",
+    instructor: instructors[3],
+    lastUpdated: "April 25, 2024",
+    createdAt: "March 1, 2024",
+    language: "English",
+    modules: [
+      { 
+        id: "m-f2-1", 
+        title: "The Landscape of Financial Fraud in Nigeria", 
+        description: "Understanding the scope and types of investment scams in Nigeria",
+        duration: "45 min", 
+        isCompleted: false,
+        order: 1,
+        content: [
+          {
+            id: "c-f2-1-1",
+            type: "video",
+            title: "The State of Financial Fraud in Nigeria",
+            duration: "15 min",
+            videoUrl: "https://www.youtube.com/watch?v=nigeria-financial-fraud",
+            content: "An overview of common investment scams and financial fraud schemes in Nigeria."
+          },
+          {
+            id: "c-f2-1-2",
+            type: "text",
+            title: "Common Investment Scams in Nigeria",
+            duration: "25 min",
+            content: `# Common Investment Scams in Nigeria
+
+## The Scam Landscape in Nigeria
+Investment scams have unfortunately become prevalent in Nigeria, costing investors billions of naira annually. Learning to identify these schemes is crucial for protecting your financial future.
+
+## Most Common Investment Scams in Nigeria:
+
+### 1. Ponzi and Pyramid Schemes
+- **How They Work**: Promise high returns paid from new investor funds rather than legitimate profits
+- **Red Flags**: Guaranteed returns, pressure to recruit others, mysterious investment strategies
+- **Famous Examples**: MMM, Loom, MBA Trading, Imagine Global
+- **Protection Tip**: Remember that sustainable investments cannot consistently pay 10%+ monthly returns
+
+### 2. Fake Forex Trading Platforms
+- **How They Work**: Claim to trade foreign exchange with "proprietary systems" guaranteeing profits
+- **Red Flags**: Unregistered platforms, offshore operations, too-good-to-be-true returns
+- **Protection Tip**: Only use forex brokers regulated by the SEC or with international regulation
+
+### 3. Cryptocurrency Scams
+- **How They Work**: False crypto investment opportunities, pump-and-dump schemes, fake exchanges
+- **Red Flags**: New/unknown coins, promises of guaranteed returns, heavy marketing without clear technology
+- **Protection Tip**: Research thoroughly, stick to established cryptocurrencies and exchanges
+
+### 4. Real Estate Investment Fraud
+- **How They Work**: Selling nonexistent properties or collecting multiple payments for the same property
+- **Red Flags**: No site visits allowed, pressure to pay quickly, lack of proper documentation
+- **Protection Tip**: Always verify land titles with government registries and physically inspect properties
+
+### 5. "Double Your Money" Schemes
+- **How They Work**: Promise to multiply your investment in a short time through secret methods
+- **Red Flags**: Vague explanations about investment methods, claims of inside connections
+- **Protection Tip**: Understand that legitimate wealth building takes time; quick doubling is almost always fraudulent
+
+## Warning Signs of Investment Scams:
+1. **Guaranteed Returns**: No legitimate investment can guarantee specific returns
+2. **Pressure Tactics**: Being rushed to invest before "opportunity closes"
+3. **Exclusive Opportunity**: Claims that you're specially selected or it's limited to a few people
+4. **Complicated or Secret**: Investment strategies that can't be clearly explained
+5. **Difficulty Withdrawing**: Problems, delays or fees when trying to access your money
+6. **Unregistered Investments**: Not registered with SEC or other appropriate regulators`
+          },
+          {
+            id: "c-f2-1-3",
+            type: "quiz",
+            title: "Financial Fraud Awareness Quiz",
+            duration: "15 min",
+            content: "Test your understanding of investment scams in Nigeria",
+            quiz: [
+              {
+                id: "q-f2-1-1",
+                question: "Why do Ponzi schemes always eventually collapse?",
+                options: [
+                  "Because the government always shuts them down quickly",
+                  "Because they're mathematically unsustainable when new recruitment slows",
+                  "Because they only target wealthy individuals",
+                  "Because banks refuse to work with them"
+                ],
+                correctAnswer: 1,
+                explanation: "Ponzi schemes always eventually collapse because they are mathematically unsustainable. They use new investor funds to pay returns to existing investors rather than generating legitimate profits. When recruitment of new investors inevitably slows down, there isn't enough money to pay promised returns, leading to collapse."
+              },
+              {
+                id: "q-f2-1-2",
+                question: "What is 'affinity fraud' in the Nigerian context?",
+                options: [
+                  "Scams that only target family members",
+                  "Fraud that uses romantic relationships",
+                  "Scams targeting specific communities using trusted insiders",
+                  "Scams that only occur in rural areas"
+                ],
+                correctAnswer: 2,
+                explanation: "Affinity fraud in the Nigerian context refers to scams that target specific communities (religious, ethnic, professional) using trusted insiders. These schemes often spread through church networks, alumni associations, or community groups, exploiting existing trust relationships to appear legitimate."
+              },
+              {
+                id: "q-f2-1-3",
+                question: "Which of these is NOT a common red flag for investment scams in Nigeria?",
+                options: [
+                  "Guaranteed unusually high returns (like 40%+ monthly)",
+                  "Pressure to recruit others or invest quickly",
+                  "Detailed documentation and transparent business operations",
+                  "Requests for direct transfers to personal accounts"
+                ],
+                correctAnswer: 2,
+                explanation: "Detailed documentation and transparent business operations are NOT red flags for investment scams - in fact, they're signs of legitimate investments. Common red flags include guaranteed unusually high returns, pressure tactics, unclear business models, and requests for direct transfers to personal accounts rather than corporate accounts."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: "m-f2-2", 
+        title: "Red Flags and Warning Signs", 
+        description: "Learn to identify the warning signs of fraudulent investment schemes",
+        duration: "60 min", 
+        isCompleted: false,
+        order: 2,
+        content: [
+          {
+            id: "c-f2-2-1",
+            type: "video",
+            title: "Investment Scam Red Flags",
+            duration: "20 min",
+            videoUrl: "https://www.youtube.com/watch?v=investment-scam-red-flags",
+            content: "Learn the key warning signs that an investment opportunity might be fraudulent."
+          },
+          {
+            id: "c-f2-2-2",
+            type: "text",
+            title: "The Major Red Flags of Financial Scams",
+            duration: "20 min",
+            content: `# The Major Red Flags of Financial Scams
+
+## Developing Your Scam Detection Skills
+Learning to spot the warning signs of investment scams is a critical financial skill for Nigerians. These red flags appear consistently across different types of financial fraud and can help you identify potential scams before losing your money.
+
+## Universal Red Flags for Investment Scams:
+
+### 1. Promises of Guaranteed High Returns
+- **The Promise**: Guaranteed returns of 10%+ monthly or 50%+ annually
+- **The Reality**: All investments involve risk; guaranteed high returns are impossible
+- **Examples**: "Guaranteed 15% monthly returns on forex trading"
+- **Legitimate Alternative**: Realistic returns vary by investment type (stocks: 10-15% annually)
+
+### 2. Pressure Tactics and Artificial Urgency
+- **The Tactics**: Limited time offers, "only 5 spots left," countdown timers
+- **The Psychology**: Creating FOMO (fear of missing out) to bypass rational thinking
+- **Examples**: "Offer closes tonight," "Price increases tomorrow"
+- **Protection Strategy**: Any legitimate investment will give you time to research
+
+### 3. Unclear or Complicated Business Models
+- **The Approach**: Vague explanations, excessive jargon, "proprietary systems"
+- **The Reality**: If you can't clearly understand how it makes money, it's likely a scam
+- **Examples**: "Our AI trading algorithm guarantees profits"
+- **Protection Strategy**: If they can't explain it simply, walk away
+
+### 4. Unregistered/Unregulated Investments
+- **The Issue**: Operating without proper licensing or regulatory oversight
+- **How to Check**: Verify with SEC Nigeria, CBN, or relevant regulatory bodies
+- **Examples**: Unregistered investment companies, unauthorized forex platforms
+- **Protection Strategy**: Only invest with properly registered entities
+
+### 5. Poor or Non-Existent Documentation
+- **The Red Flag**: No proper prospectus, contract, or terms and conditions
+- **The Excuse**: "We're a new company," "Our lawyers are finalizing the documents"
+- **What to Demand**: Proper investment documentation, audited financial statements
+- **Protection Strategy**: No documentation = no investment
+
+### 6. Unsolicited Investment Offers
+- **The Approach**: Cold calls, random WhatsApp messages, unsolicited emails
+- **The Psychology**: Creating artificial familiarity and trust
+- **Examples**: "I found you through a mutual friend," "I'm contacting selected individuals"
+- **Protection Strategy**: Be extremely cautious of any investment you didn't seek out
+
+### 7. Request for Direct Transfers to Personal Accounts
+- **The Red Flag**: Asking for payments to personal accounts rather than business accounts
+- **The Excuse**: "For faster processing," "Our company account is being updated"
+- **Protection Strategy**: Only transfer to properly verified corporate accounts
+
+### 8. Lack of Physical Address or False Credentials
+- **The Issue**: Virtual-only presence, fake office addresses, unverifiable credentials
+- **How to Check**: Physical verification, credential checking with claimed institutions
+- **Examples**: False claims of Harvard degrees, non-existent office locations
+- **Protection Strategy**: Verify all claimed credentials and physical locations
+
+## Psychological Manipulation Tactics:
+- **Social Proof**: Showing testimonials (often fake) from "successful" investors
+- **Authority Exploitation**: Claiming endorsements from respected figures or institutions
+- **Scarcity**: Creating false impression of limited availability
+- **Reciprocity**: Offering small gifts or "free training" to create obligation
+
+## When Multiple Red Flags Appear:
+Remember that most scams will display several of these warning signs simultaneously. The more red flags you spot, the more likely the "opportunity" is fraudulent.`
+          },
+          {
+            id: "c-f2-2-3",
+            type: "quiz",
+            title: "Red Flags Quiz",
+            duration: "20 min",
+            content: "Test your ability to identify investment scam warning signs",
+            quiz: [
+              {
+                id: "q-f2-2-1",
+                question: "Which return claim is MOST likely to indicate a scam?",
+                options: [
+                  "7-10% annual returns on a diversified stock portfolio",
+                  "2-3% annual interest on a fixed deposit",
+                  "Guaranteed 20% monthly returns on forex trading",
+                  "Variable 8-12% annual yield on corporate bonds"
+                ],
+                correctAnswer: 2,
+                explanation: "Guaranteed 20% monthly returns on forex trading is the most obvious scam signal. This would translate to over 790% annual returns, which is unrealistic and impossible to guarantee. Legitimate investments typically offer more modest returns with clear disclosure of risks."
+              },
+              {
+                id: "q-f2-2-2",
+                question: "What should you do if an investment company asks you to transfer funds to a personal account?",
+                options: [
+                  "Transfer a small amount first to test if it's legitimate",
+                  "Ask for a discount if you transfer immediately",
+                  "Transfer the money if they promise higher returns",
+                  "Consider it a major red flag and decline to invest"
+                ],
+                correctAnswer: 3,
+                explanation: "You should consider it a major red flag and decline to invest if an investment company asks you to transfer funds to a personal account. Legitimate investment companies use proper corporate accounts for client funds, with appropriate documentation and receipts."
+              },
+              {
+                id: "q-f2-2-3",
+                question: "Which statement about investment documentation is TRUE?",
+                options: [
+                  "Documentation isn't necessary for small investments",
+                  "Verbal agreements are sufficient if you trust the person",
+                  "Proper documentation is essential for any legitimate investment",
+                  "New companies don't need documentation when starting out"
+                ],
+                correctAnswer: 2,
+                explanation: "Proper documentation is essential for any legitimate investment, regardless of size or company age. Legitimate investments always provide clear documentation including terms and conditions, risk disclosures, and receipts for funds. The absence of proper documentation is a major red flag."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    skills: [
+      "Scam identification", 
+      "Due diligence", 
+      "Investment verification", 
+      "Risk assessment"
+    ],
+    prerequisites: [
+      {
+        id: "pre-f2-1",
+        title: "No special prerequisites",
+        description: "This course is designed for anyone who wants to protect their finances."
+      }
+    ],
+    reviews: [],
+    price: 14999,
+    discountPrice: 11999,
+    isFeatured: false,
+    averageRating: 4.9,
+    totalStudents: 892,
     certificationIncluded: true
   }
 ];

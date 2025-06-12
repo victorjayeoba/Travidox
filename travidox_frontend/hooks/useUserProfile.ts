@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/components/auth/auth-provider';
-import { getUserProfile, updateUserXP, UserProfile } from '@/lib/firebase-user';
+import { getUserProfile, updateUserXP, addCompletedQuiz, UserProfile } from '@/lib/firebase-user';
 
 // Event name for XP/balance updates
 export const XP_BALANCE_UPDATE_EVENT = 'xp_balance_update';
@@ -76,22 +76,47 @@ export const useUserProfile = () => {
     };
   }, [user]);
 
-  // Function to update XP and balance when a course is completed
-  const addXpAndUpdateBalance = async (amount: number, courseId: string) => {
+  // Function to update XP and balance when a quiz is completed
+  const addXpAndUpdateBalance = async (amount: number, quizId: string, score?: number, totalQuestions?: number, isRetake: boolean = false) => {
     if (!user || !profile) return;
     
     try {
-      // Add XP to user profile in Firestore - this also updates balance in our updated function
-      const levelUp = await updateUserXP(user.uid, amount);
+      // Find the quiz name from the quiz ID (in a real app, you'd fetch this from your database)
+      const quizName = quizId === 'investing-basics' 
+        ? 'Investing Basics' 
+        : quizId === 'stock-analysis'
+          ? 'Stock Analysis'
+          : quizId === 'portfolio-strategies'
+            ? 'Portfolio Strategies'
+            : 'Quiz';
+      
+      // For retakes, we still want to update the score and completion time, but not award XP
+      if (isRetake) {
+        // Just update the last completed quiz data without adding XP
+        await addCompletedQuiz(
+          user.uid, 
+          quizId, 
+          quizName,
+          score || 0,
+          totalQuestions || 3,
+          0 // No XP for retakes
+        );
+      } else {
+        // Add completed quiz to user profile with XP for first-time completion
+        await addCompletedQuiz(
+          user.uid, 
+          quizId, 
+          quizName,
+          score || 0,
+          totalQuestions || 3,
+          amount
+        );
+      }
       
       // Get updated profile
       const updatedProfile = await getUserProfile(user.uid);
       
       if (updatedProfile) {
-        // Verify the balance and XP are equal
-        if (updatedProfile.xp !== updatedProfile.balance) {
-          console.warn('XP and balance are out of sync after update');
-        }
         setProfile(updatedProfile);
       }
       
@@ -100,8 +125,8 @@ export const useUserProfile = () => {
       
       return updatedProfile;
     } catch (err) {
-      console.error('Error updating XP and balance:', err);
-      throw new Error('Failed to update XP and balance');
+      console.error('Error updating XP and completing quiz:', err);
+      throw new Error('Failed to update XP and complete quiz');
     }
   };
 

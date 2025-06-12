@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 import { 
   LayoutDashboard, BookOpen, Shield, Bot, PieChart, 
   DollarSign, School, ListChecks, Heart, Clock, Settings, ChevronRight,
-  X, LogOut
+  X, LogOut, Trophy, GraduationCap
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -143,6 +143,14 @@ export function Sidebar() {
           label="Learn & Earn" 
           href="/dashboard/learn" 
           active={pathname.startsWith('/dashboard/learn')}
+          onClick={closeMenuOnMobile}
+        />
+        
+        <SidebarItem 
+          icon={<Trophy size={18} />} 
+          label="Leaderboard" 
+          href="/dashboard/leaderboard" 
+          active={pathname.startsWith('/dashboard/leaderboard')}
           onClick={closeMenuOnMobile}
         />
         

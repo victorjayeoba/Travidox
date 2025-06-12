@@ -34,6 +34,7 @@ import { LearningInterface } from '@/components/learning/LearningInterface'
 import { ReviewDialog } from '@/components/learning/ReviewDialog'
 import { getCourseById } from '@/lib/course-data'
 import { toast } from 'sonner'
+import { MarkdownContent } from '@/components/ui/markdown'
 
 // Status badge colors
 const statusBadges: Record<string, string> = {
@@ -409,7 +410,7 @@ export default function CertificationPage() {
                       <CardTitle>About This Course</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: courseData.longDescription }} />
+                      <MarkdownContent content={courseData.longDescription} />
                     </CardContent>
                   </Card>
                   

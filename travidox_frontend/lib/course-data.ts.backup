@@ -1,0 +1,1215 @@
+/**
+ * Course Data Module
+ * 
+ * This module defines the data structure and content for all courses in the Travidox platform.
+ * It includes type definitions, mock course data, and helper functions for accessing courses.
+ */
+
+// Type Definitions
+export interface Instructor {
+  id: string;
+  name: string;
+  title: string;
+  avatar: string;
+  bio: string;
+}
+
+export interface QuizQuestion {
+  id: string;
+  question: string;
+  options: string[];
+  correctAnswer: number;
+  explanation: string;
+}
+
+export interface Resource {
+  id: string;
+  title: string;
+  type: 'pdf' | 'link' | 'code' | 'file';
+  url: string;
+  description: string;
+}
+
+export interface ModuleContent {
+  id: string;
+  type: 'video' | 'text' | 'quiz' | 'assignment';
+  title: string;
+  duration: string;
+  content: string;
+  videoUrl?: string;
+  quiz?: QuizQuestion[];
+  resources?: Resource[];
+  assignment?: {
+    description: string;
+    submission: 'text' | 'file' | 'link';
+    dueDate?: string;
+  };
+}
+
+export interface Module {
+  id: string;
+  title: string;
+  description: string;
+  duration: string;
+  isCompleted: boolean;
+  content: ModuleContent[];
+  order: number;
+}
+
+export interface Review {
+  id: string;
+  userId: string;
+  userName: string;
+  userAvatar?: string;
+  rating: number;
+  comment: string;
+  date: string;
+}
+
+export interface CoursePrerequisite {
+  id: string;
+  title: string;
+  description: string;
+}
+
+export interface Course {
+  id: string;
+  title: string;
+  subtitle: string;
+  category: string;
+  subcategory?: string;
+  description: string;
+  longDescription: string;
+  tags: string[];
+  estimatedHours: number;
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  icon: string;
+  coverImage: string;
+  instructor: Instructor;
+  instructors?: Instructor[];
+  lastUpdated: string;
+  createdAt: string;
+  language: string;
+  modules: Module[];
+  skills: string[];
+  prerequisites: CoursePrerequisite[];
+  reviews: Review[];
+  price: number;
+  discountPrice?: number;
+  isFeatured?: boolean;
+  averageRating?: number;
+  totalStudents?: number;
+  certificationIncluded: boolean;
+}
+
+// Sample instructors
+const instructors: Instructor[] = [
+  {
+    id: "inst-1",
+    name: "John Thompson",
+    title: "Nigerian Financial Literacy Expert",
+    avatar: "/instructors/john.jpg",
+    bio: "John Thompson is a certified financial educator with over 15 years of experience teaching Nigerians how to build wealth through strategic investments in local markets."
+  },
+  {
+    id: "inst-2",
+    name: "Sarah Chen",
+    title: "Nigerian Stock Market Specialist",
+    avatar: "/instructors/sarah.jpg",
+    bio: "Sarah is a certified technical analyst specializing in the Nigerian Stock Exchange with expertise in local market patterns and Nigerian economic indicators."
+  },
+  {
+    id: "inst-3",
+    name: "Michael Rodriguez",
+    title: "Forex Trading Professional",
+    avatar: "/instructors/michael.jpg",
+    bio: "Michael has worked with Nigerian traders for over a decade, specializing in forex risk management strategies tailored to the unique challenges of the Nigerian market."
+  },
+  {
+    id: "inst-4",
+    name: "Emma Wilson",
+    title: "Nigerian Investment Strategist",
+    avatar: "/instructors/emma.jpg",
+    bio: "Emma is an experienced Nigerian investment advisor who has helped thousands of local investors optimize their portfolios through strategic asset allocation."
+  }
+];
+
+/**
+ * Course Data Repository
+ * Contains all courses available on the platform
+ */
+export const coursesData: Course[] = [
+  // 🟢 BEGINNER LEVEL COURSES
+  {
+    id: "course-b1",
+    title: "Money Moves 101: Introduction to Financial Literacy",
+    subtitle: "Master the basics of money management for Nigerians",
+    category: "Financial Literacy",
+    subcategory: "Beginner",
+    description: "Learn the fundamentals of money management, savings, budgeting and debt management tailored for Nigerians.",
+    longDescription: `
+This comprehensive course is designed to build a solid foundation for anyone looking to improve their financial literacy in Nigeria. You'll learn the core concepts, terminology, and principles of effective money management.
+
+### What You'll Learn:
+- Understand the basics of personal finance and money management
+- Develop effective budgeting strategies for the Nigerian context
+- Learn smart ways to save money despite inflation challenges
+- Master debt management techniques that work in Nigeria
+- Build a strategic mindset for long-term financial success
+
+### Course Features:
+- 8 modules with over 4 hours of video content
+- Interactive budget templates and financial calculators
+- Downloadable resources adapted for the Nigerian economy
+- Real-world examples of successful Nigerian savers
+- Certificate of completion
+
+Whether you're just starting your financial journey or want to improve your money habits, this course provides the structured knowledge you need to take control of your finances in Nigeria.
+    `,
+    tags: ["Financial Literacy", "Budgeting", "Savings", "Debt Management"],
+    estimatedHours: 4,
+    difficulty: "beginner",
+    icon: "BookText",
+    coverImage: "/courses/financial-literacy.jpg",
+    instructor: instructors[0],
+    lastUpdated: "May 15, 2024",
+    createdAt: "January 10, 2024",
+    language: "English",
+    modules: [
+      { 
+        id: "m-b1-1", 
+        title: "Financial Literacy Fundamentals", 
+        description: "Learn the basic concepts of financial literacy and why they matter",
+        duration: "45 min", 
+        isCompleted: false,
+        order: 1,
+        content: [
+          {
+            id: "c-b1-1-1",
+            type: "video",
+            title: "Introduction to Financial Literacy in Nigeria",
+            duration: "15 min",
+            videoUrl: "https://www.youtube.com/watch?v=pZDRC07SABQ",
+            content: "An introduction to financial literacy and its importance in the Nigerian context."
+          },
+          {
+            id: "c-b1-1-2",
+            type: "text",
+            title: "Financial Literacy Basics for Nigerians",
+            duration: "15 min",
+            content: `# Financial Literacy Basics for Nigerians
+
+## What is Financial Literacy?
+Financial literacy refers to the knowledge and skills needed to make effective and informed money management decisions. In Nigeria, having strong financial literacy skills is crucial due to the unique economic challenges we face:
+
+1. **High Inflation Rates**: Understanding how to preserve purchasing power
+2. **Currency Fluctuations**: Managing the effects of Naira volatility
+3. **Diverse Investment Options**: Navigating between traditional savings, stocks, and alternative investments
+4. **Economic Uncertainty**: Building financial resilience in an unpredictable environment
+
+## Why Financial Literacy Matters in Nigeria
+
+- Helps you make better financial decisions despite economic challenges
+- Enables you to build wealth even in high-inflation environments
+- Provides tools to avoid common financial mistakes and scams
+- Creates a pathway to financial independence and security
+- Empowers you to teach good money habits to your family and community`
+          },
+          {
+            id: "c-b1-1-3",
+            type: "quiz",
+            title: "Financial Literacy Fundamentals Quiz",
+            duration: "15 min",
+            content: "Test your understanding of financial literacy basics",
+            quiz: [
+              {
+                id: "q-b1-1-1",
+                question: "Which of these is NOT a key component of financial literacy?",
+                options: [
+                  "Budgeting",
+                  "Saving",
+                  "Gambling",
+                  "Investing"
+                ],
+                correctAnswer: 2,
+                explanation: "Gambling is not a component of financial literacy. Financial literacy focuses on responsible money management through budgeting, saving, investing, and managing debt."
+              },
+              {
+                id: "q-b1-1-2",
+                question: "Why is financial literacy particularly important in Nigeria?",
+                options: [
+                  "Because Nigeria has no financial challenges",
+                  "Due to high inflation and currency fluctuations",
+                  "Because banks manage all financial decisions for Nigerians",
+                  "Because financial literacy is only important for the wealthy"
+                ],
+                correctAnswer: 1,
+                explanation: "Financial literacy is particularly important in Nigeria due to challenges like high inflation rates and currency fluctuations, which require specific knowledge to navigate effectively."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    skills: [
+      "Budgeting", 
+      "Saving", 
+      "Debt management", 
+      "Financial planning"
+    ],
+    prerequisites: [
+      {
+        id: "pre-b1-1",
+        title: "No prior knowledge required",
+        description: "This course is designed for complete beginners."
+      }
+    ],
+    reviews: [
+      {
+        id: "rev-b1-1",
+        userId: "user-1",
+        userName: "Chioma Eze",
+        userAvatar: "/avatars/chioma.jpg",
+        rating: 5,
+        comment: "This course completely changed how I manage my money as a Nigerian. The budget templates are so practical!",
+        date: "February 10, 2024"
+      }
+    ],
+    price: 9999,
+    discountPrice: 7999,
+    isFeatured: true,
+    averageRating: 4.7,
+    totalStudents: 1243,
+    certificationIncluded: true
+  },
+  {
+    id: "course-b2",
+    title: "Naija Stock Market for Starters",
+    subtitle: "A beginner-friendly guide to investing in the Nigerian Stock Exchange",
+    category: "Stock Market",
+    subcategory: "Beginner",
+    description: "Master the basics of the Nigerian Stock Exchange (NGX) with a practical, jargon-free approach designed for first-time investors.",
+    longDescription: `
+This beginner-friendly course provides a comprehensive introduction to the Nigerian Stock Exchange for first-time investors. You'll learn how the NGX works, how to start investing, and the fundamentals of making smart investment decisions in the Nigerian market.
+
+### What You'll Learn:
+- Understand how the Nigerian Stock Exchange functions and its role in the economy
+- Learn the step-by-step process to open a brokerage account in Nigeria
+- Discover how to research and select Nigerian stocks with good potential
+- Master the basics of stock orders, timing, and market tracking
+- Build a starter portfolio suitable for the Nigerian economic environment
+
+### Course Features:
+- 6 modules with over 3 hours of video content
+- Interactive demos of Nigerian trading platforms
+- Downloadable NGX stock analysis templates
+- Real examples using current Nigerian companies
+- Certificate of completion
+
+This course bridges the gap between complete novice and confident beginner investor, focusing specifically on the unique aspects of the Nigerian market.
+    `,
+    tags: ["NGX", "Nigerian Stocks", "Beginner Investing", "Stock Market"],
+    estimatedHours: 3,
+    difficulty: "beginner",
+    icon: "TrendingUp",
+    coverImage: "/courses/nigerian-stock-market.jpg",
+    instructor: instructors[1],
+    lastUpdated: "April 18, 2024",
+    createdAt: "February 5, 2024",
+    language: "English",
+    modules: [
+      {
+        id: "m-b2-1", 
+        title: "Introduction to the Nigerian Stock Exchange", 
+        description: "Learn the fundamental concepts of the Nigerian Stock Exchange and how it works",
+        duration: "45 min", 
+        isCompleted: false,
+        order: 1,
+        content: [
+          {
+            id: "c-b2-1-1",
+            type: "video",
+            title: "Understanding the Nigerian Stock Exchange (NGX)",
+            duration: "15 min",
+            videoUrl: "https://www.youtube.com/watch?v=MbMh6KJLpQ8",
+            content: "An introduction to the Nigerian Stock Exchange, its history, and how it functions in the Nigerian economy."
+          },
+          {
+            id: "c-b2-1-2",
+            type: "text",
+            title: "The Nigerian Stock Market Structure",
+            duration: "15 min",
+            content: `# The Nigerian Stock Exchange Structure
+
+## Overview of the NGX
+The Nigerian Exchange Group (NGX), formerly known as the Nigerian Stock Exchange, is the main stock exchange in Nigeria. It provides a platform for buying and selling shares of publicly traded Nigerian companies.
+
+## Key Market Participants
+1. **Investors** - Individual and institutional investors who buy and sell securities
+2. **Listed Companies** - Nigerian businesses that have issued shares to the public
+3. **Stockbrokers** - Licensed professionals who execute buy and sell orders
+4. **Regulators** - The Securities and Exchange Commission (SEC) and other oversight bodies
+
+## Market Segments
+The NGX is divided into different boards:
+- **Premium Board** - For companies meeting the highest standards of capitalization and governance
+- **Main Board** - For established companies with solid track records
+- **Growth Board** - For emerging businesses with high growth potential
+- **ASeM (Alternative Securities Market)** - For smaller companies
+
+## Trading Hours and Sessions
+The NGX operates Monday through Friday with specific trading hours:
+- Pre-open: 9:00 AM - 9:30 AM
+- Trading: 9:30 AM - 2:30 PM
+- Close: 2:30 PM`
+          },
+          {
+            id: "c-b2-1-3",
+            type: "quiz",
+            title: "NGX Basics Quiz",
+            duration: "15 min",
+            content: "Test your understanding of the Nigerian Stock Exchange basics",
+            quiz: [
+              {
+                id: "q-b2-1-1",
+                question: "What is the current name of Nigeria's main stock exchange?",
+                options: [
+                  "Lagos Stock Exchange",
+                  "Nigerian Exchange Group (NGX)",
+                  "Nigerian Stock Market (NSM)",
+                  "African Exchange Limited"
+                ],
+                correctAnswer: 1,
+                explanation: "The Nigerian Stock Exchange was renamed to Nigerian Exchange Group (NGX) following its demutualization in 2021."
+              },
+              {
+                id: "q-b2-1-2",
+                question: "Which government body regulates the Nigerian stock market?",
+                options: [
+                  "Central Bank of Nigeria (CBN)",
+                  "Nigerian Investment Promotion Commission (NIPC)",
+                  "Securities and Exchange Commission (SEC)",
+                  "Nigerian Deposit Insurance Corporation (NDIC)"
+                ],
+                correctAnswer: 2,
+                explanation: "The Securities and Exchange Commission (SEC) is the main regulatory body for the Nigerian capital market, including the NGX."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    skills: [
+      "Stock market basics", 
+      "Investment fundamentals", 
+      "Nigerian market analysis", 
+      "Portfolio creation"
+    ],
+    prerequisites: [
+      {
+        id: "pre-b2-1",
+        title: "No prior investment knowledge required",
+        description: "This course is designed for complete beginners to the stock market."
+      }
+    ],
+    reviews: [],
+    price: 12999,
+    discountPrice: 9999,
+    isFeatured: true,
+    averageRating: 4.8,
+    totalStudents: 876,
+    certificationIncluded: true
+  },
+  {
+    id: "course-b3",
+    title: "Forex for Freshers: What You Must Know Before You Trade",
+    subtitle: "Essential foundations for Nigerians interested in currency trading",
+    category: "Forex Trading",
+    subcategory: "Beginner",
+    description: "Learn the fundamentals of forex trading, currency pairs, market mechanics, and essential risk management before you start trading.",
+    longDescription: `
+This introductory course covers everything Nigerian beginners need to know before starting forex trading. With a focus on fundamentals and risk management, you'll learn how the forex market works and how to approach it safely as a Nigerian trader.
+
+### What You'll Learn:
+- Understand forex markets and how they function globally and in Nigeria
+- Master the basics of currency pairs with focus on NGN-related trading
+- Learn to read forex charts and understand basic price movements
+- Discover the impact of Nigerian and global economic events on forex
+- Develop essential risk management skills to protect your capital
+
+### Course Features:
+- 7 modules with over 3.5 hours of video content
+- Interactive demos of forex trading platforms
+- Risk management calculator templates
+- Practice exercises with real market examples
+- Certificate of completion
+
+This course focuses on building a solid foundation before actual trading, helping Nigerians avoid the common pitfalls that cause new traders to lose money.
+    `,
+    tags: ["Forex", "Currency Trading", "Risk Management", "Beginner"],
+    estimatedHours: 3.5,
+    difficulty: "beginner",
+    icon: "DollarSign",
+    coverImage: "/courses/forex-basics.jpg",
+    instructor: instructors[2],
+    lastUpdated: "May 1, 2024",
+    createdAt: "March 10, 2024",
+    language: "English",
+    modules: [
+      {
+        id: "m-b3-1", 
+        title: "Understanding the Forex Market", 
+        description: "Learn what forex trading is and how the global currency market works",
+        duration: "45 min",
+        isCompleted: false,
+        order: 1,
+        content: [
+          {
+            id: "c-b3-1-1",
+            type: "video",
+            title: "Introduction to Forex Trading for Nigerians",
+            duration: "15 min",
+            videoUrl: "https://www.youtube.com/watch?v=J69B5hGchUE",
+            content: "An introduction to forex trading fundamentals with specific focus on the Nigerian context."
+          },
+          {
+            id: "c-b3-1-2",
+            type: "text",
+            title: "Understanding Currency Pairs and Exchange Rates",
+            duration: "15 min",
+            content: `# Forex Basics for Nigerian Traders
+
+## What is Forex Trading?
+Forex (Foreign Exchange) trading is the buying and selling of currencies on the global marketplace. It's the largest and most liquid financial market in the world, with an average daily trading volume exceeding $6 trillion.
+
+## Key Currency Pairs for Nigerian Traders
+
+### Major Pairs
+- **EUR/USD** - Euro vs US Dollar
+- **GBP/USD** - British Pound vs US Dollar
+- **USD/JPY** - US Dollar vs Japanese Yen
+- **USD/CHF** - US Dollar vs Swiss Franc
+
+### Pairs Relevant to Nigerians
+- **USD/NGN** - US Dollar vs Nigerian Naira
+- **EUR/NGN** - Euro vs Nigerian Naira
+- **GBP/NGN** - British Pound vs Nigerian Naira
+
+## How Exchange Rates Work
+Exchange rates show the value of one currency relative to another. For example, if USD/NGN is 750, it means 1 US Dollar equals 750 Nigerian Naira.
+
+## The Structure of the Forex Market
+- **Spot Market** - Immediate exchange of currencies at current market rates
+- **Forward Market** - Contracts to buy/sell currencies at predetermined future rates
+- **Futures Market** - Standardized contracts traded on exchanges
+
+## Market Participants
+1. **Central Banks** - Including the Central Bank of Nigeria (CBN)
+2. **Commercial Banks** - Major players in interbank trading
+3. **Investment Firms** - Hedge funds and asset managers
+4. **Retail Traders** - Individual traders like you`
+          },
+          {
+            id: "c-b3-1-3",
+            type: "quiz",
+            title: "Forex Fundamentals Quiz",
+            duration: "15 min",
+            content: "Test your understanding of forex trading basics",
+            quiz: [
+              {
+                id: "q-b3-1-1",
+                question: "In the currency pair USD/NGN, which is the base currency?",
+                options: [
+                  "Nigerian Naira (NGN)",
+                  "US Dollar (USD)",
+                  "Both are base currencies",
+                  "Neither is a base currency"
+                ],
+                correctAnswer: 1,
+                explanation: "In any currency pair, the first currency (USD in USD/NGN) is the base currency. The exchange rate shows how much of the second currency (NGN) is needed to buy one unit of the base currency."
+              },
+              {
+                id: "q-b3-1-2",
+                question: "What is the main factor that influences the USD/NGN exchange rate?",
+                options: [
+                  "Weather conditions in Nigeria",
+                  "Nigeria's oil production and exports",
+                  "US tech stock performance",
+                  "European Central Bank decisions"
+                ],
+                correctAnswer: 1,
+                explanation: "As Nigeria is a major oil exporter, oil production and exports significantly impact the country's foreign exchange reserves and consequently the USD/NGN exchange rate."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    skills: [
+      "Forex fundamentals", 
+      "Currency pairs", 
+      "Market analysis", 
+      "Risk management"
+    ],
+    prerequisites: [
+      {
+        id: "pre-b3-1",
+        title: "No prior trading experience required",
+        description: "This course is designed for complete beginners to forex trading."
+      }
+    ],
+    reviews: [],
+    price: 14999,
+    discountPrice: 11999,
+    isFeatured: false,
+    averageRating: 4.6,
+    totalStudents: 543,
+    certificationIncluded: true
+  },
+  
+  // 🟡 INTERMEDIATE LEVEL COURSES
+  {
+    id: "course-i1",
+    title: "How to Read Stock Charts & Market Trends (Made Simple)",
+    subtitle: "Master technical analysis techniques for Nigerian stocks",
+    category: "Technical Analysis",
+    subcategory: "Intermediate",
+    description: "Learn practical technical analysis techniques to read stock charts and identify profitable trends in the Nigerian market.",
+    longDescription: `
+This intermediate-level course teaches you how to apply technical analysis to Nigerian stocks in a practical, straightforward way. You'll learn to identify chart patterns, use indicators, and make more informed trading decisions based on price action.
+
+### What You'll Learn:
+- Master the art of reading candlestick charts for Nigerian stocks
+- Identify key support and resistance levels in the Nigerian market
+- Use trend lines and chart patterns to predict price movements
+- Apply technical indicators effectively to NGX-listed companies
+- Develop a technical trading strategy adapted for Nigerian market conditions
+
+### Course Features:
+- 8 modules with over 5 hours of detailed video instruction
+- Practice exercises using real Nigerian stock charts
+- Technical analysis templates and checklists
+- Case studies of successful technical trades in the NGX
+- Certificate of completion
+
+This course bridges the gap between basic chart reading and advanced technical analysis, with all examples specifically using Nigerian stocks and market scenarios.
+    `,
+    tags: ["Technical Analysis", "Chart Patterns", "Stock Trading", "NGX"],
+    estimatedHours: 5,
+    difficulty: "intermediate",
+    icon: "BarChart2",
+    coverImage: "/courses/technical-charts.jpg",
+    instructor: instructors[1],
+    lastUpdated: "April 28, 2024",
+    createdAt: "January 15, 2024",
+    language: "English",
+    modules: [
+      { 
+        id: "m-i1-1", 
+        title: "Introduction to Technical Analysis", 
+        description: "Learn the fundamental concepts of technical analysis and why it works",
+        duration: "60 min",
+        isCompleted: false,
+        order: 1,
+        content: [
+          {
+            id: "c-i1-1-1",
+            type: "video",
+            title: "Introduction to Technical Analysis for Nigerian Stocks",
+            duration: "20 min",
+            videoUrl: "https://www.youtube.com/watch?v=FGN9gjcKAzw",
+            content: "An overview of technical analysis principles and how they apply specifically to the Nigerian Stock Exchange (NGX)."
+          },
+          {
+            id: "c-i1-1-2",
+            type: "text",
+            title: "Technical Analysis Fundamentals",
+            duration: "25 min",
+            content: `# Technical Analysis Fundamentals for Nigerian Markets
+
+## What is Technical Analysis?
+Technical analysis is the study of historical price action and volume data to forecast future price movements. Unlike fundamental analysis, which focuses on company financials and economic factors, technical analysis concentrates purely on market data.
+
+## Core Principles of Technical Analysis
+
+### 1. Price Discounts Everything
+In the Nigerian market, as elsewhere, the price of a security reflects all known information affecting that security. This includes economic factors, company performance, market sentiment, and political developments unique to Nigeria.
+
+### 2. Price Moves in Trends
+Nigerian stocks, like global markets, tend to move in trends rather than randomly. Once established, a trend is more likely to continue than reverse until significant forces cause a change in direction.
+
+### 3. History Tends to Repeat Itself
+Market psychology causes recognizable patterns to appear repeatedly in Nigerian stocks. Identifying these patterns can help predict future price movements.
+
+## Key Technical Analysis Tools for Nigerian Stocks
+
+### Chart Types
+- **Line Charts** - Simplest form showing closing prices
+- **Bar Charts** - Shows open, high, low, and close (OHLC)
+- **Candlestick Charts** - Popular in Nigeria for visualizing price action
+
+### Essential Indicators for NGX Stocks
+- **Moving Averages** - Smooth out price data to identify trends
+- **Relative Strength Index (RSI)** - Measures speed and change of price movements
+- **MACD (Moving Average Convergence Divergence)** - Shows relationship between two moving averages
+
+### Important Chart Patterns in Nigerian Markets
+- **Support and Resistance Levels** - Price barriers that are difficult to break through
+- **Head and Shoulders** - Reversal pattern frequently seen in NGX stocks
+- **Double Tops and Bottoms** - Another common reversal pattern in Nigerian markets`
+          },
+          {
+            id: "c-i1-1-3",
+            type: "quiz",
+            title: "Technical Analysis Basics Quiz",
+            duration: "15 min",
+            content: "Test your understanding of technical analysis fundamentals",
+            quiz: [
+              {
+                id: "q-i1-1-1",
+                question: "Which of the following is NOT a core principle of technical analysis?",
+                options: [
+                  "Price discounts everything",
+                  "Price moves in trends",
+                  "Company fundamentals determine short-term price movements",
+                  "History tends to repeat itself"
+                ],
+                correctAnswer: 2,
+                explanation: "Technical analysis believes that all known information (including fundamentals) is already reflected in the price. It does not rely on analyzing company fundamentals to determine short-term price movements."
+              },
+              {
+                id: "q-i1-1-2",
+                question: "Which chart type is most popular for technical analysis in Nigerian markets?",
+                options: [
+                  "Pie charts",
+                  "Line charts",
+                  "Candlestick charts",
+                  "Scatter plots"
+                ],
+                correctAnswer: 2,
+                explanation: "Candlestick charts are the most popular chart type for technical analysis in Nigeria and globally because they show open, high, low, and close prices in an easy-to-read format, plus they reveal market psychology."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    skills: [
+      "Chart reading", 
+      "Pattern recognition", 
+      "Technical indicators", 
+      "Trend analysis"
+    ],
+    prerequisites: [
+      {
+        id: "pre-i1-1",
+        title: "Basic stock market knowledge",
+        description: "You should understand the basics of how the stock market works before taking this course."
+      }
+    ],
+    reviews: [],
+    price: 19999,
+    discountPrice: 15999,
+    isFeatured: true,
+    averageRating: 4.8,
+    totalStudents: 423,
+    certificationIncluded: true
+  },
+  {
+    id: "course-i2",
+    title: "Trading the News: Forex Strategies for Volatile Markets",
+    subtitle: "Learn to leverage economic events for profitable forex trades",
+    category: "Forex Trading",
+    subcategory: "Intermediate",
+    description: "Master strategies for trading forex based on economic news, central bank announcements, and market-moving events affecting the Naira.",
+    longDescription: `
+This specialized course teaches Nigerian forex traders how to capitalize on market volatility caused by economic news and events. You'll learn to interpret news releases, understand their impact on currency pairs, and develop strategies to trade these high-impact situations.
+
+### What You'll Learn:
+- Understand how economic news affects forex markets, particularly NGN pairs
+- Master the use of economic calendars to prepare for market-moving events
+- Develop specific entry and exit strategies for news-based trading
+- Manage risk effectively during high-volatility market conditions
+- Analyze Central Bank of Nigeria policies and their impact on currency values
+
+### Course Features:
+- 6 modules with over 4 hours of focused video content
+- Real case studies of major economic events and their market impact
+- News trading strategy templates and risk calculators
+- Live examples of trades based on Nigerian and international news
+- Certificate of completion
+
+This intermediate course is ideal for forex traders who understand the basics and want to develop more sophisticated strategies for volatile market conditions.
+    `,
+    tags: ["Forex News Trading", "Market Volatility", "Economic Events", "Trading Strategies"],
+    estimatedHours: 4,
+    difficulty: "intermediate",
+    icon: "TrendingUp",
+    coverImage: "/courses/forex-news-trading.jpg",
+    instructor: instructors[2],
+    lastUpdated: "May 10, 2024",
+    createdAt: "February 20, 2024",
+    language: "English",
+    modules: [
+      { 
+        id: "m-i2-1", 
+        title: "The Impact of News on Forex Markets", 
+        description: "Understand how and why news events create trading opportunities",
+        duration: "45 min", 
+        isCompleted: false,
+        order: 1,
+        content: [
+          {
+            id: "c-i2-1-1",
+            type: "video",
+            title: "How Economic News Affects Currency Markets",
+            duration: "15 min",
+            videoUrl: "https://www.youtube.com/watch?v=Zc_D9WJCdK4",
+            content: "An introduction to news-based forex trading with special focus on Nigerian economic events."
+          },
+          {
+            id: "c-i2-1-2",
+            type: "text",
+            title: "News Events and Forex Volatility",
+            duration: "20 min",
+            content: `# News Events and Their Impact on Forex Markets
+
+## Why News Matters in Forex Trading
+
+Economic news and events create some of the largest price movements in the forex market, especially for the Nigerian Naira (NGN) and other emerging market currencies. When news is released that differs from market expectations, it can cause rapid, volatile price movements that present both high risk and high reward opportunities.
+
+## Key News Events Affecting the Nigerian Naira
+
+### Central Bank of Nigeria (CBN) Decisions
+- **Interest Rate Announcements**: Higher rates typically strengthen the Naira, while lower rates weaken it
+- **Monetary Policy Committee (MPC) Statements**: Policy guidance and economic outlooks
+- **Intervention Actions**: Direct market interventions to stabilize the Naira
+
+### Nigerian Economic Indicators
+- **Inflation Data**: Higher inflation typically weakens the Naira
+- **GDP Reports**: Strong growth can strengthen the currency
+- **Unemployment Figures**: Rising unemployment may weaken the Naira
+- **Oil Production/Prices**: As Nigeria's main export, oil significantly impacts the Naira
+
+### International Events Affecting the Naira
+- **US Federal Reserve Decisions**: Impact global capital flows affecting Nigeria
+- **Global Oil Market News**: Directly affects Nigeria's foreign exchange earnings
+- **Geopolitical Events**: Regional stability issues impact investment in Nigeria
+
+## How News Creates Trading Opportunities
+
+### Types of Market Reactions
+1. **Spike and Reversal**: Quick price jump followed by return to previous levels
+2. **Sustained Trend**: News creates a new directional movement
+3. **Breakout**: News pushes price through key support/resistance levels
+4. **Increased Volatility**: Wider price swings without clear direction
+
+### Volatility Patterns Around News
+- **Pre-News Quiet Period**: Often reduced trading activity before major announcements
+- **Initial Spike**: First reaction often overextended
+- **Secondary Movements**: More measured price action after initial reaction
+- **Aftershocks**: Related news items can cause additional volatility`
+          },
+          {
+            id: "c-i2-1-3",
+            type: "quiz",
+            title: "News Impact Quiz",
+            duration: "10 min",
+            content: "Test your understanding of how news affects forex markets",
+            quiz: [
+              {
+                id: "q-i2-1-1",
+                question: "Which of these typically has the LARGEST impact on the Nigerian Naira?",
+                options: [
+                  "Weather reports in Lagos",
+                  "Central Bank of Nigeria interest rate decisions",
+                  "Sports results",
+                  "Fashion trends"
+                ],
+                correctAnswer: 1,
+                explanation: "Central Bank of Nigeria interest rate decisions have a significant impact on the Naira as they directly affect capital flows, inflation expectations, and economic growth prospects."
+              },
+              {
+                id: "q-i2-1-2",
+                question: "What typically happens to USD/NGN when Nigeria's oil exports increase significantly?",
+                options: [
+                  "USD/NGN rate increases (Naira weakens)",
+                  "USD/NGN rate decreases (Naira strengthens)",
+                  "There is no consistent relationship",
+                  "Trading in USD/NGN is suspended"
+                ],
+                correctAnswer: 1,
+                explanation: "When Nigeria's oil exports increase, the country receives more foreign currency (primarily USD), increasing the supply of dollars relative to Naira. This typically strengthens the Naira, causing the USD/NGN rate to decrease."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    skills: [
+      "News analysis", 
+      "Volatility trading", 
+      "Economic calendar use", 
+      "Event-based strategies"
+    ],
+    prerequisites: [
+      {
+        id: "pre-i2-1",
+        title: "Basic forex knowledge required",
+        description: "You should understand forex basics including currency pairs, pips, and basic order types."
+      }
+    ],
+    reviews: [],
+    price: 24999,
+    discountPrice: 19999,
+    isFeatured: false,
+    averageRating: 4.7,
+    totalStudents: 312,
+    certificationIncluded: true
+  },
+  
+  // 🔴 ADVANCED LEVEL COURSES
+  {
+    id: "course-a1",
+    title: "Build Your Trading Plan: Risk, Psychology & Consistency",
+    subtitle: "Develop a professional trading approach for long-term success",
+    category: "Trading Psychology",
+    subcategory: "Advanced",
+    description: "Master the psychological aspects of trading with a focus on risk management, emotional discipline, and developing a consistent trading plan.",
+    longDescription: `
+This advanced course goes beyond technical skills to focus on the psychological and strategic elements that separate successful traders from the rest. You'll learn to build a comprehensive trading plan tailored to Nigerian markets, with robust risk management and mental discipline.
+
+### What You'll Learn:
+- Develop a complete, personalized trading plan for Nigerian markets
+- Master advanced risk management techniques to preserve capital
+- Understand and overcome the psychological biases affecting your trading
+- Build routines and habits that support consistent trading performance
+- Implement position sizing strategies based on market conditions
+
+### Course Features:
+- 8 modules with over 6 hours of in-depth content
+- Trading journal templates and risk management calculators
+- Psychological assessment tools to identify your trading weaknesses
+- Case studies of successful Nigerian traders and their approaches
+- Certificate of completion
+
+This course is designed for serious traders who want to elevate their performance by mastering the mental game and strategic planning aspects of trading.
+    `,
+    tags: ["Trading Psychology", "Risk Management", "Trading Plan", "Consistency"],
+    estimatedHours: 6,
+    difficulty: "advanced",
+    icon: "Layers",
+    coverImage: "/courses/trading-psychology.jpg",
+    instructor: instructors[3],
+    lastUpdated: "May 5, 2024",
+    createdAt: "January 25, 2024",
+    language: "English",
+    modules: [
+      { 
+        id: "m-a1-1", 
+        title: "The Foundations of a Trading Plan", 
+        description: "Learn why having a structured trading plan is essential for success",
+        duration: "60 min", 
+        isCompleted: false,
+        order: 1,
+        content: []
+      }
+    ],
+    skills: [
+      "Trading psychology", 
+      "Risk management", 
+      "Strategic planning", 
+      "Emotional discipline"
+    ],
+    prerequisites: [
+      {
+        id: "pre-a1-1",
+        title: "Trading experience required",
+        description: "This course is designed for traders who already understand the basics of either stock or forex trading."
+      }
+    ],
+    reviews: [],
+    price: 34999,
+    discountPrice: 29999,
+    isFeatured: true,
+    averageRating: 4.9,
+    totalStudents: 187,
+    certificationIncluded: true
+  },
+  {
+    id: "course-a2",
+    title: "Technical Analysis Masterclass (Naija-Focused)",
+    subtitle: "Advanced chart analysis techniques for Nigerian markets",
+    category: "Technical Analysis",
+    subcategory: "Advanced",
+    description: "Master advanced technical analysis methods including complex chart patterns, Fibonacci levels, Elliott Wave theory, and intermarket analysis for Nigerian stocks and forex.",
+    longDescription: `
+This comprehensive masterclass takes your technical analysis skills to professional levels with advanced concepts and techniques. Focused specifically on Nigerian market applications, you'll learn sophisticated methods to analyze price action and make high-probability trading decisions.
+
+### What You'll Learn:
+- Master advanced candlestick patterns and their reliability in Nigerian markets
+- Apply Fibonacci retracements and extensions to predict price targets
+- Understand Elliott Wave theory and how to count waves in Nigerian stocks
+- Use multiple timeframe analysis for more accurate trading decisions
+- Implement volume profile and market structure concepts in your analysis
+
+### Course Features:
+- 10 modules with over 8 hours of expert-level instruction
+- Advanced chart analysis exercises using Nigerian market data
+- Professional-grade technical analysis templates
+- Case studies of complex trades in Nigerian stocks and USD/NGN
+- Certificate of completion
+
+This course is designed for serious traders who want to develop professional-level technical analysis skills specifically adapted for Nigerian market conditions.
+    `,
+    tags: ["Advanced Charts", "Fibonacci", "Elliott Wave", "Market Structure"],
+    estimatedHours: 8,
+    difficulty: "advanced",
+    icon: "Activity",
+    coverImage: "/courses/advanced-technical.jpg",
+    instructor: instructors[1],
+    lastUpdated: "April 15, 2024",
+    createdAt: "December 10, 2023",
+    language: "English",
+    modules: [
+      { 
+        id: "m-a2-1", 
+        title: "Advanced Chart Patterns", 
+        description: "Master complex chart patterns and their applications in Nigerian markets",
+        duration: "75 min", 
+        isCompleted: false,
+        order: 1,
+        content: []
+      }
+    ],
+    skills: [
+      "Advanced patterns", 
+      "Fibonacci analysis", 
+      "Elliott Wave theory", 
+      "Volume analysis"
+    ],
+    prerequisites: [
+      {
+        id: "pre-a2-1",
+        title: "Technical analysis experience required",
+        description: "You should already be familiar with basic technical analysis concepts and chart patterns."
+      }
+    ],
+    reviews: [],
+    price: 39999,
+    discountPrice: 34999,
+    isFeatured: false,
+    averageRating: 4.8,
+    totalStudents: 142,
+    certificationIncluded: true
+  },
+  
+  // 💡 FINANCIAL SENSE / PERSONAL GROWTH COURSES
+  {
+    id: "course-f1",
+    title: "Get Your Bag: Side Hustles & Online Income in Nigeria",
+    subtitle: "Practical strategies to build multiple income streams",
+    category: "Financial Growth",
+    subcategory: "Personal Development",
+    description: "Discover practical, legitimate ways to create additional income streams in Nigeria through side hustles, online work, and passive income opportunities.",
+    longDescription: `
+This practical course shows Nigerians how to build multiple income streams beyond a traditional 9-5 job. You'll learn about realistic, legitimate side hustles and online opportunities that work in the Nigerian context, with step-by-step guidance to get started.
+
+### What You'll Learn:
+- Discover 15+ proven side hustle options that work for Nigerians
+- Learn how to monetize your existing skills in the digital economy
+- Build passive income streams through various investment vehicles
+- Understand how to balance your time between multiple income sources
+- Master the legal and tax considerations for multiple income streams
+
+### Course Features:
+- 7 modules with over 5 hours of practical video content
+- Side hustle evaluation framework and planning templates
+- Step-by-step guides for setting up online income streams
+- Real success stories from Nigerian side hustlers
+- Certificate of completion
+
+This course bridges the gap between financial education and practical income generation, focusing on opportunities that are accessible to Nigerians regardless of location.
+    `,
+    tags: ["Side Hustles", "Multiple Income", "Online Business", "Passive Income"],
+    estimatedHours: 5,
+    difficulty: "beginner",
+    icon: "Briefcase",
+    coverImage: "/courses/side-hustles.jpg",
+    instructor: instructors[0],
+    lastUpdated: "May 2, 2024",
+    createdAt: "February 1, 2024",
+    language: "English",
+    modules: [
+      { 
+        id: "m-f1-1", 
+        title: "The Multiple Income Mindset", 
+        description: "Why relying on one income source is risky in today's Nigerian economy",
+        duration: "45 min", 
+        isCompleted: false,
+        order: 1,
+        content: []
+      }
+    ],
+    skills: [
+      "Income diversification", 
+      "Online business", 
+      "Passive income", 
+      "Time management"
+    ],
+    prerequisites: [
+      {
+        id: "pre-f1-1",
+        title: "No special prerequisites",
+        description: "This course is designed for anyone looking to increase their income."
+      }
+    ],
+    reviews: [],
+    price: 17999,
+    discountPrice: 14999,
+    isFeatured: true,
+    averageRating: 4.8,
+    totalStudents: 768,
+    certificationIncluded: true
+  },
+  {
+    id: "course-f2",
+    title: "How to Spot & Avoid Scammy Investments in Nigeria",
+    subtitle: "Protect yourself from financial fraud and investment scams",
+    category: "Financial Protection",
+    subcategory: "Risk Management",
+    description: "Learn to identify and avoid investment scams, Ponzi schemes, and fraudulent financial opportunities common in the Nigerian market.",
+    longDescription: `
+This essential course teaches Nigerians how to protect themselves from the growing number of investment scams and financial fraud schemes. You'll learn the warning signs of fraudulent opportunities and develop a framework for evaluating any investment before committing your money.
+
+### What You'll Learn:
+- Identify the common red flags of investment scams in Nigeria
+- Understand the mechanics of Ponzi schemes and why they always collapse
+- Learn how to verify the legitimacy of investment companies and opportunities
+- Develop a framework for evaluating any investment opportunity
+- Know what to do if you've already fallen victim to financial fraud
+
+### Course Features:
+- 6 modules with over 4 hours of practical content
+- Investment verification checklist and evaluation tools
+- Case studies of major Nigerian investment scams
+- Interviews with fraud prevention experts and scam survivors
+- Certificate of completion
+
+This course is essential for any Nigerian who wants to invest safely in an environment where fraudulent schemes have become increasingly sophisticated.
+    `,
+    tags: ["Scam Prevention", "Investment Safety", "Financial Protection", "Fraud Awareness"],
+    estimatedHours: 4,
+    difficulty: "beginner",
+    icon: "Shield",
+    coverImage: "/courses/scam-prevention.jpg",
+    instructor: instructors[3],
+    lastUpdated: "April 25, 2024",
+    createdAt: "March 1, 2024",
+    language: "English",
+    modules: [
+      { 
+        id: "m-f2-1", 
+        title: "The Landscape of Financial Fraud in Nigeria", 
+        description: "Understanding the scope and types of investment scams in Nigeria",
+        duration: "45 min", 
+        isCompleted: false,
+        order: 1,
+        content: []
+      }
+    ],
+    skills: [
+      "Scam identification", 
+      "Due diligence", 
+      "Investment verification", 
+      "Risk assessment"
+    ],
+    prerequisites: [
+      {
+        id: "pre-f2-1",
+        title: "No special prerequisites",
+        description: "This course is designed for anyone who wants to protect their finances."
+      }
+    ],
+    reviews: [],
+    price: 14999,
+    discountPrice: 11999,
+    isFeatured: false,
+    averageRating: 4.9,
+    totalStudents: 892,
+    certificationIncluded: true
+  }
+];
+
+/**
+ * Helper Functions
+ */
+
+/**
+ * Gets a course by its ID
+ * @param id Course ID
+ * @returns Course object or undefined if not found
+ */
+export const getCourseById = (id: string): Course | undefined => {
+  return coursesData.find(course => course.id === id);
+};
+
+/**
+ * Gets all available courses
+ * @returns Array of Course objects
+ */
+export const getAllCourses = (): Course[] => {
+  return coursesData;
+};
+
+/**
+ * Gets all courses in a specific category
+ * @param category Category name
+ * @returns Array of Course objects in the specified category
+ */
+export const getCoursesByCategory = (category: string): Course[] => {
+  return coursesData.filter(course => course.category === category);
+};
+
+/**
+ * Gets featured courses
+ * @param limit Maximum number of courses to return
+ * @returns Array of featured Course objects
+ */
+export const getFeaturedCourses = (limit?: number): Course[] => {
+  const featured = coursesData.filter(course => course.isFeatured);
+  return limit ? featured.slice(0, limit) : featured;
+};
+
+/**
+ * Gets courses taught by a specific instructor
+ * @param instructorId Instructor ID
+ * @returns Array of Course objects taught by the instructor
+ */
+export const getCoursesByInstructor = (instructorId: string): Course[] => {
+  return coursesData.filter(course => 
+    course.instructor.id === instructorId || 
+    course.instructors?.some(inst => inst.id === instructorId)
+  );
+};
+
+/**
+ * Gets related courses based on category and tags
+ * @param courseId Current course ID
+ * @param limit Maximum number of related courses to return
+ * @returns Array of related Course objects
+ */
+export const getRelatedCourses = (courseId: string, limit: number = 3): Course[] => {
+  const currentCourse = getCourseById(courseId);
+  if (!currentCourse) return [];
+  
+  // Filter courses in the same category or with matching tags
+  const related = coursesData.filter(course => 
+    course.id !== courseId && (
+      course.category === currentCourse.category ||
+      course.tags.some(tag => currentCourse.tags.includes(tag))
+    )
+  );
+  
+  return related.slice(0, limit);
+};

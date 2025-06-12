@@ -22,6 +22,7 @@ import {
 } from '@/lib/firebase-courses';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { MarkdownContent } from '@/components/ui/markdown';
 
 interface LearningContent {
   id: string;
@@ -84,6 +85,7 @@ export function LearningInterface({
   const [currentContent, setCurrentContent] = useState<LearningContent | null>(null);
   const [contentIndex, setContentIndex] = useState(0);
   const [quizAnswer, setQuizAnswer] = useState<number | null>(null);
+  const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
@@ -360,11 +362,15 @@ export function LearningInterface({
   const handleQuizSubmit = async () => {
     if (quizAnswer === undefined || quizAnswer === null || !currentContent.quiz) return;
     
-    const isCorrect = quizAnswer === currentContent.quiz[0].correctAnswer;
+    const currentQuestion = currentContent.quiz[currentQuizIndex];
+    const isCorrect = quizAnswer === currentQuestion.correctAnswer;
     
     if (isCorrect) {
-      // Mark content as completed
-      if (user?.uid) {
+      toast.success('Correct answer! Well done!');
+      setShowQuizExplanation(true);
+      
+      // If this is the last question and it's correct, mark content as completed
+      if (currentQuizIndex === currentContent.quiz.length - 1 && user?.uid) {
         await completeContent(
           user.uid,
           course.id,
@@ -373,11 +379,30 @@ export function LearningInterface({
           totalContents
         );
       }
-      
-      toast.success('Correct answer! Well done!');
-      setShowQuizExplanation(true);
     } else {
       toast.error('Incorrect answer. Please try again.');
+      setShowQuizExplanation(true);
+    }
+  };
+  
+  const handleNextQuizQuestion = () => {
+    if (!currentContent.quiz) return;
+    
+    if (currentQuizIndex < currentContent.quiz.length - 1) {
+      setCurrentQuizIndex(currentQuizIndex + 1);
+      setQuizAnswer(null);
+      setShowQuizExplanation(false);
+    } else {
+      // All questions completed
+      toast.success('Quiz completed!');
+    }
+  };
+  
+  const handlePrevQuizQuestion = () => {
+    if (currentQuizIndex > 0) {
+      setCurrentQuizIndex(currentQuizIndex - 1);
+      setQuizAnswer(null);
+      setShowQuizExplanation(false);
     }
   };
 
@@ -516,19 +541,301 @@ export function LearningInterface({
     }
   };
 
+  // Render content based on type
+  const renderContent = () => {
+    if (!currentContent) return null;
+    
+    switch (currentContent.type) {
+      case 'video':
+        return (
+          <div className="px-4 py-8 flex justify-center">
+            <div className="max-w-3xl w-full">
+              <div className="relative">
+                <video
+                  ref={videoRef}
+                  src={currentContent.videoUrl}
+                  className="w-full rounded-md"
+                  controlsList="nodownload"
+                />
+                
+                {/* Custom video controls */}
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-white text-xs">{formatTime(currentTime)}</span>
+                      <div className="flex-1">
+                        <input
+                          type="range"
+                          min={0}
+                          max={duration || 100}
+                          value={currentTime}
+                          onChange={handleSeek}
+                          className="w-full"
+                        />
+                      </div>
+                      <span className="text-white text-xs">{formatTime(duration)}</span>
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Button variant="ghost" size="icon" className="text-white">
+                          <SkipBack className="h-4 w-4" />
+                        </Button>
+                        <Button variant="ghost" size="icon" className="text-white" onClick={handlePlayPause}>
+                          {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
+                        </Button>
+                        <Button variant="ghost" size="icon" className="text-white">
+                          <SkipForward className="h-4 w-4" />
+                        </Button>
+                        
+                        <div className="flex items-center gap-2">
+                          <Button variant="ghost" size="icon" className="text-white" onClick={handleMuteToggle}>
+                            {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                          </Button>
+                          <input
+                            type="range"
+                            min={0}
+                            max={1}
+                            step={0.1}
+                            value={volume}
+                            onChange={handleVolumeChange}
+                            className="w-16"
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-2">
+                        <div className="relative">
+                          <Button variant="ghost" size="icon" className="text-white">
+                            <Settings className="h-4 w-4" />
+                          </Button>
+                          {/* Playback rate dropdown would go here */}
+                        </div>
+                        <Button variant="ghost" size="icon" className="text-white" onClick={handleFullscreenToggle}>
+                          <Maximize className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      
+      case 'text':
+        return (
+          <div className="px-4 py-8 flex justify-center">
+            <div className="prose prose-green max-w-prose">
+              <MarkdownContent 
+                content={currentContent.content}
+              />
+            </div>
+          </div>
+        );
+      
+      case 'quiz':
+        if (!currentContent.quiz || currentContent.quiz.length === 0) {
+          return <div className="text-center p-8">No quiz questions available</div>;
+        }
+        
+        const currentQuestion = currentContent.quiz[currentQuizIndex];
+        
+        return (
+          <div className="px-4 py-8 flex justify-center">
+            <div className="max-w-prose w-full">
+              <div className="mb-6 flex justify-between items-center">
+                <div className="text-sm text-gray-500">
+                  Question {currentQuizIndex + 1} of {currentContent.quiz.length}
+                </div>
+                <Progress 
+                  value={((currentQuizIndex + 1) / currentContent.quiz.length) * 100} 
+                  className="w-48" 
+                />
+              </div>
+              
+              <div className="bg-white border rounded-lg p-6 shadow-sm">
+                <h3 className="text-lg font-semibold mb-6 text-gray-900">{currentQuestion.question}</h3>
+                
+                <RadioGroup 
+                  value={quizAnswer?.toString()} 
+                  onValueChange={(value) => setQuizAnswer(parseInt(value))}
+                  className="mb-6"
+                >
+                  <div className="space-y-4">
+                    {currentQuestion.options.map((option, index) => (
+                      <div 
+                        key={index} 
+                        className={`flex items-start p-3 rounded-md border ${
+                          showQuizExplanation && index === currentQuestion.correctAnswer
+                            ? 'border-green-500 bg-green-50'
+                            : showQuizExplanation && quizAnswer === index && quizAnswer !== currentQuestion.correctAnswer
+                            ? 'border-red-500 bg-red-50'
+                            : 'border-gray-200 hover:bg-gray-50'
+                        }`}
+                      >
+                        <RadioGroupItem 
+                          value={index.toString()} 
+                          id={`option-${index}`} 
+                          disabled={showQuizExplanation}
+                        />
+                        <Label htmlFor={`option-${index}`} className="ml-2 flex-1 cursor-pointer">
+                          {option}
+                        </Label>
+                        {showQuizExplanation && index === currentQuestion.correctAnswer && (
+                          <CheckCircle className="h-5 w-5 text-green-500" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </RadioGroup>
+                
+                {showQuizExplanation && currentQuestion.explanation && (
+                  <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-md">
+                    <h4 className="font-medium text-blue-800 mb-2">Explanation</h4>
+                    <p className="text-blue-700">{currentQuestion.explanation}</p>
+                  </div>
+                )}
+                
+                <div className="mt-6 flex justify-between">
+                  <Button
+                    variant="outline"
+                    onClick={handlePrevQuizQuestion}
+                    disabled={currentQuizIndex === 0}
+                  >
+                    <ChevronLeft className="h-4 w-4 mr-2" />
+                    Previous
+                  </Button>
+                  
+                  {!showQuizExplanation ? (
+                    <Button 
+                      onClick={handleQuizSubmit} 
+                      disabled={quizAnswer === null}
+                    >
+                      Submit Answer
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={currentQuizIndex < currentContent.quiz.length - 1 ? handleNextQuizQuestion : handleNextContent}
+                    >
+                      {currentQuizIndex < currentContent.quiz.length - 1 ? (
+                        <>
+                          Next Question
+                          <ChevronRight className="h-4 w-4 ml-2" />
+                        </>
+                      ) : (
+                        'Complete Quiz'
+                      )}
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      
+      case 'assignment':
+        return (
+          <div className="px-4 py-8 flex justify-center">
+            <div className="max-w-prose w-full">
+              <div className="bg-white border rounded-lg p-6 shadow-sm">
+                <h3 className="text-lg font-semibold mb-4 text-gray-900">Assignment</h3>
+                
+                {currentContent.assignment?.dueDate && (
+                  <div className="flex items-center text-sm text-gray-500 mb-4">
+                    <Clock className="h-4 w-4 mr-1" />
+                    <span>Due: {currentContent.assignment.dueDate}</span>
+                  </div>
+                )}
+                
+                <div className="prose prose-green max-w-none mb-6">
+                  <MarkdownContent 
+                    content={currentContent.assignment?.description || ''}
+                  />
+                </div>
+                
+                {currentContent.assignment?.submission === 'text' && (
+                  <div className="space-y-4">
+                    <Textarea 
+                      placeholder="Type your answer here..." 
+                      value={assignmentText}
+                      onChange={(e) => setAssignmentText(e.target.value)}
+                      className="min-h-[200px]"
+                    />
+                  </div>
+                )}
+                
+                {currentContent.assignment?.submission === 'file' && (
+                  <div className="space-y-4">
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                      <input
+                        type="file"
+                        id="file-upload"
+                        className="hidden"
+                        onChange={handleFileChange}
+                      />
+                      <label htmlFor="file-upload" className="cursor-pointer">
+                        <div className="flex flex-col items-center">
+                          <FileText className="h-10 w-10 text-gray-400 mb-2" />
+                          <p className="text-sm font-medium mb-1">
+                            {selectedFile ? selectedFile.name : 'Click to upload a file'}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {selectedFile ? `${(selectedFile.size / 1024 / 1024).toFixed(2)} MB` : 'PDF, DOC, DOCX, up to 10MB'}
+                          </p>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                )}
+                
+                {currentContent.assignment?.submission === 'link' && (
+                  <div className="space-y-4">
+                    <Input 
+                      placeholder="Paste your link here (e.g., https://example.com)" 
+                      value={assignmentText}
+                      onChange={(e) => setAssignmentText(e.target.value)}
+                    />
+                  </div>
+                )}
+                
+                <Button 
+                  onClick={handleAssignmentSubmit} 
+                  className="w-full mt-4" 
+                  disabled={isSubmitting || (!assignmentText && !selectedFile)}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full mr-2" />
+                      Submitting...
+                    </>
+                  ) : (
+                    'Submit Assignment'
+                  )}
+                </Button>
+              </div>
+            </div>
+          </div>
+        );
+      
+      default:
+        return <div>Unknown content type</div>;
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-white z-50 flex flex-col">
-        {/* Header */}
+      {/* Header */}
       <div className="border-b p-4 flex items-center justify-between bg-white">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" onClick={onClose}>
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <div>
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" size="icon" onClick={onClose}>
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <div>
             <h2 className="font-semibold">{course.title}</h2>
             <p className="text-sm text-gray-500">{module.title}</p>
           </div>
-            </div>
+        </div>
         <div className="flex items-center gap-4">
           <div className="hidden md:flex items-center gap-2">
             <Button 
@@ -553,328 +860,15 @@ export function LearningInterface({
             className="w-48 hidden md:block" 
           />
         </div>
-        </div>
+      </div>
 
       {/* Main content area */}
       <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
         {/* Main content */}
-        <div className="flex-1 overflow-auto flex flex-col" ref={containerRef}>
-          {/* Video player */}
-          {currentContent.type === 'video' && (
-            <div className="relative bg-black">
-              <video
-                ref={videoRef}
-                src={currentContent.videoUrl}
-                className="w-full h-auto max-h-[70vh]"
-                onClick={handlePlayPause}
-                onEnded={() => {
-                  if (user?.uid) {
-                    completeContent(
-                      user.uid,
-                      course.id,
-                      module.id,
-                      currentContent.id,
-                      totalContents
-                    );
-                  }
-                }}
-              />
-              
-              {/* Video controls */}
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 text-white">
-                <div className="flex items-center gap-2 mb-2">
-                  <input
-                    type="range"
-                    min={0}
-                    max={duration || 100}
-                    value={currentTime}
-                    onChange={handleSeek}
-                    className="w-full h-1 bg-gray-600 rounded-full appearance-none cursor-pointer"
-                  />
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="text-white hover:text-white/80 hover:bg-white/10"
-                      onClick={handlePlayPause}
-                    >
-                      {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
-                    </Button>
-                    
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="text-white hover:text-white/80 hover:bg-white/10"
-                      onClick={handleMuteToggle}
-                    >
-                      {isMuted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
-                    </Button>
-                    
-                    <input
-                      type="range"
-                      min={0}
-                      max={1}
-                      step={0.01}
-                      value={volume}
-                      onChange={handleVolumeChange}
-                      className="w-20 h-1 bg-gray-600 rounded-full appearance-none cursor-pointer"
-                    />
-                    
-                    <span className="text-sm">
-                      {formatTime(currentTime)} / {formatTime(duration)}
-                    </span>
-                  </div>
-                  
-                  <div className="flex items-center gap-2">
-                    <div className="relative group">
-                      <Button 
-                        variant="ghost" 
-                        size="sm"
-                        className="text-white hover:text-white/80 hover:bg-white/10"
-                      >
-                        {playbackRate}x
-                      </Button>
-                      
-                      <div className="absolute bottom-full right-0 mb-2 hidden group-hover:block bg-gray-800 rounded-md overflow-hidden">
-                        {[0.5, 0.75, 1, 1.25, 1.5, 1.75, 2].map((rate) => (
-                          <Button
-                            key={rate}
-                            variant="ghost"
-                            size="sm"
-                            className={`text-white hover:bg-gray-700 w-full justify-start ${
-                              playbackRate === rate ? 'bg-gray-700' : ''
-                            }`}
-                            onClick={() => handlePlaybackRateChange(rate)}
-                          >
-                            {rate}x
-                          </Button>
-                        ))}
-                      </div>
-                    </div>
-                    
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="text-white hover:text-white/80 hover:bg-white/10"
-                      onClick={handleFullscreenToggle}
-                    >
-                      <Maximize className="h-5 w-5" />
-                    </Button>
-                    
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="text-white hover:text-white/80 hover:bg-white/10"
-                      onClick={handleAddBookmark}
-                    >
-                      <Bookmark className="h-5 w-5" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Text content */}
-          {currentContent.type === 'text' && (
-            <div className="p-6 max-w-4xl mx-auto w-full">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold">{currentContent.title}</h2>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={handleAddBookmark}
-                >
-                  <Bookmark className="h-4 w-4 mr-2" />
-                  Bookmark
-                </Button>
-              </div>
-              <div 
-                className="prose max-w-none" 
-                dangerouslySetInnerHTML={{ __html: currentContent.content }}
-              />
-              
-              {/* Complete button for text content */}
-              <Button 
-                className="mt-8"
-                onClick={async () => {
-                  if (user?.uid) {
-                    await completeContent(
-                      user.uid,
-                      course.id,
-                      module.id,
-                      currentContent.id,
-                      totalContents
-                    );
-                    toast.success('Content marked as completed');
-                  }
-                }}
-              >
-                <CheckCircle className="h-4 w-4 mr-2" />
-                Mark as Completed
-              </Button>
-            </div>
-          )}
-
-          {/* Quiz content */}
-          {currentContent.type === 'quiz' && (
-            <div className="p-6 max-w-4xl mx-auto w-full">
-              <h2 className="text-xl font-bold mb-6">{currentContent.title}</h2>
-              
-              <div className="bg-gray-50 border rounded-lg p-6 mb-6">
-                <h3 className="text-lg font-medium mb-4">{currentContent.quiz?.[0].question}</h3>
-                
-              <RadioGroup
-                value={quizAnswer?.toString()}
-                onValueChange={(value) => setQuizAnswer(parseInt(value))}
-                className="space-y-4"
-              >
-                {currentContent.quiz?.[0].options.map((option, index) => (
-                    <div 
-                      key={index} 
-                      className={`flex items-center space-x-2 p-3 rounded-md border ${
-                        showQuizExplanation && index === currentContent.quiz?.[0].correctAnswer
-                          ? 'border-green-500 bg-green-50'
-                          : showQuizExplanation && quizAnswer === index && quizAnswer !== currentContent.quiz?.[0].correctAnswer
-                          ? 'border-red-500 bg-red-50'
-                          : 'border-gray-200 hover:bg-gray-100'
-                      }`}
-                    >
-                      <RadioGroupItem 
-                        value={index.toString()} 
-                        id={`option-${index}`} 
-                        disabled={showQuizExplanation}
-                      />
-                      <Label 
-                        htmlFor={`option-${index}`}
-                        className="flex-1 cursor-pointer"
-                      >
-                        {option}
-                      </Label>
-                      {showQuizExplanation && index === currentContent.quiz?.[0].correctAnswer && (
-                        <CheckCircle className="h-5 w-5 text-green-500" />
-                      )}
-                  </div>
-                ))}
-              </RadioGroup>
-                
-                {showQuizExplanation && currentContent.quiz?.[0].explanation && (
-                  <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-md">
-                    <h4 className="font-medium text-blue-800 mb-2">Explanation</h4>
-                    <p className="text-blue-700">{currentContent.quiz[0].explanation}</p>
-                  </div>
-                )}
-                
-                {!showQuizExplanation && (
-              <Button
-                className="mt-6"
-                onClick={handleQuizSubmit}
-                disabled={quizAnswer === null}
-              >
-                Submit Answer
-              </Button>
-                )}
-                
-                {showQuizExplanation && (
-                  <Button
-                    className="mt-6"
-                    onClick={contentIndex < module.content.length - 1 ? handleNextContent : handleModuleComplete}
-                  >
-                    {contentIndex < module.content.length - 1 ? 'Continue' : 'Complete Module'}
-                  </Button>
-                )}
-              </div>
-            </div>
-          )}
-          
-          {/* Assignment content */}
-          {currentContent.type === 'assignment' && currentContent.assignment && (
-            <div className="p-6 max-w-4xl mx-auto w-full">
-              <h2 className="text-xl font-bold mb-6">{currentContent.title}</h2>
-              
-              <div className="bg-gray-50 border rounded-lg p-6 mb-6">
-                <div 
-                  className="prose max-w-none mb-6" 
-                  dangerouslySetInnerHTML={{ __html: currentContent.assignment.description }}
-                />
-                
-                {currentContent.assignment.dueDate && (
-                  <div className="flex items-center text-amber-600 mb-6">
-                    <Clock className="h-4 w-4 mr-2" />
-                    <span>Due: {currentContent.assignment.dueDate}</span>
-                  </div>
-                )}
-                
-                <div className="space-y-4">
-                  {currentContent.assignment.submission === 'text' && (
-                    <div>
-                      <Label htmlFor="assignment-text">Your Answer</Label>
-                      <Textarea
-                        id="assignment-text"
-                        value={assignmentText}
-                        onChange={(e) => setAssignmentText(e.target.value)}
-                        placeholder="Type your assignment answer here..."
-                        className="mt-2 h-40"
-                      />
-                    </div>
-                  )}
-                  
-                  {currentContent.assignment.submission === 'file' && (
-                    <div>
-                      <Label htmlFor="assignment-file">Upload File</Label>
-                      <div className="mt-2 flex items-center gap-4">
-                        <Input
-                          id="assignment-file"
-                          type="file"
-                          onChange={handleFileChange}
-                          className="flex-1"
-                        />
-                        {selectedFile && (
-                          <span className="text-sm text-gray-500">
-                            {selectedFile.name} ({Math.round(selectedFile.size / 1024)} KB)
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                  
-                  {currentContent.assignment.submission === 'link' && (
-                    <div>
-                      <Label htmlFor="assignment-link">Submission URL</Label>
-                      <Input
-                        id="assignment-link"
-                        value={assignmentText}
-                        onChange={(e) => setAssignmentText(e.target.value)}
-                        placeholder="Paste your URL here (e.g., GitHub repo, CodePen, etc.)"
-                        className="mt-2"
-                      />
-                    </div>
-                  )}
-                  
-                  <Button
-                    className="w-full"
-                    onClick={handleAssignmentSubmit}
-                    disabled={isSubmitting || (!assignmentText && !selectedFile)}
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <RotateCcw className="h-4 w-4 mr-2 animate-spin" />
-                        Submitting...
-                      </>
-                    ) : (
-                      <>
-                        <ClipboardCheck className="h-4 w-4 mr-2" />
-                        Submit Assignment
-                      </>
-                    )}
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
+        <div className="flex-1 overflow-auto" ref={containerRef}>
+          <div className="min-h-full flex flex-col">
+            {renderContent()}
+          </div>
           
           {/* Resources section, only visible when resources are available */}
           {currentContent.resources && currentContent.resources.length > 0 && (

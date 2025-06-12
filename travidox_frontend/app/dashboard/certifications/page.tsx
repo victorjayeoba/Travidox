@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation'
 import { 
   BookOpen, Clock, CheckCircle, ChevronRight, 
   BarChart2, TrendingUp, DollarSign, BookText, 
-  Layers, ArrowUpRight, Award, BookMarked
+  Layers, ArrowUpRight, Award, BookMarked,
+  Shield, Activity, Briefcase
 } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -49,57 +50,58 @@ interface Course {
   estimatedHours: number;
   icon: string;
   modules: CourseModule[];
+  difficulty?: string;
 }
 
-// Mock courses data
+// Mock courses data with focus on Nigerian stocks and forex
 const mockCoursesData: Course[] = [
   {
     id: "course-1",
-    title: "Stock Market Terminology",
-    category: "Market Education",
-    description: "Master the essential vocabulary and concepts that every stock market investor needs to understand before trading.",
-    tags: ["Market Vocabulary", "Financial Terms", "Trading Jargon"],
-    estimatedHours: 3,
+    title: "Nigerian Stock Market Fundamentals",
+    category: "Nigerian Market Education",
+    description: "Master the essential concepts and fundamentals of the Nigerian Stock Exchange (NGX) and learn how to analyze Nigerian stocks effectively.",
+    tags: ["NGX", "Nigerian Stocks", "Market Analysis"],
+    estimatedHours: 4,
     icon: "BookText",
     modules: [
       { 
         id: "m1-1", 
-        title: "Basic Market Terminology", 
-        duration: "30 min", 
+        title: "Introduction to the Nigerian Stock Exchange", 
+        duration: "45 min", 
         isCompleted: false,
         content: [
           {
             id: "c1-1-1",
             type: "video",
-            title: "Introduction to Market Terms",
-            duration: "10 min",
-            content: "This video covers the most essential stock market terminology every beginner should know."
+            title: "Overview of the Nigerian Stock Exchange (NGX)",
+            duration: "15 min",
+            content: "https://www.youtube.com/watch?v=pZDRC07SABQ"
           },
           {
             id: "c1-1-2",
             type: "text",
-            title: "Key Market Definitions",
-            duration: "10 min",
-            content: "A comprehensive glossary of the most important stock market terms with detailed explanations."
+            title: "History and Evolution of the Nigerian Stock Market",
+            duration: "15 min",
+            content: "This lesson covers the founding of the Nigerian Stock Exchange in 1960, its transformation into NGX Group in 2021, and the key milestones in its development over the decades. You'll learn about the regulatory framework under the Securities and Exchange Commission (SEC) and how the market has evolved to become one of Africa's most important stock exchanges."
           },
           {
             id: "c1-1-3",
             type: "quiz",
-            title: "Market Terminology Quiz",
-            duration: "10 min",
-            content: "Test your understanding of basic market terminology.",
+            title: "NGX Basics Quiz",
+            duration: "15 min",
+            content: "Test your understanding of the Nigerian Stock Exchange.",
             quiz: [
               {
                 id: "q1-1-1",
-                question: "What is a 'Bull Market'?",
+                question: "When was the Nigerian Stock Exchange founded?",
                 options: [
-                  "When stock prices are falling",
-                  "When stock prices are rising",
-                  "When the market is volatile",
-                  "When trading is suspended"
+                  "1950",
+                  "1960",
+                  "1975",
+                  "1999"
                 ],
                 correctAnswer: 1,
-                explanation: "A Bull Market refers to a financial market in which prices are rising or expected to rise. It's typically characterized by optimism, investor confidence and expectations that strong results will continue."
+                explanation: "The Nigerian Stock Exchange was established in 1960, the same year Nigeria gained independence."
               }
             ]
           }
@@ -107,92 +109,63 @@ const mockCoursesData: Course[] = [
       },
       { 
         id: "m1-2", 
-        title: "Order Types Explained", 
-        duration: "45 min", 
+        title: "Key Nigerian Stock Market Indices", 
+        duration: "60 min", 
         isCompleted: false,
         content: [
           {
             id: "c1-2-1",
             type: "video",
-            title: "Common Order Types",
-            duration: "15 min",
-            content: "This video explains market orders, limit orders, stop orders, and other common order types."
+            title: "Understanding the NGX All-Share Index",
+            duration: "20 min",
+            content: "https://www.youtube.com/watch?v=MbMh6KJLpQ8"
           },
           {
             id: "c1-2-2",
             type: "text",
-            title: "Advanced Order Strategies",
-            duration: "15 min",
-            content: "Learn about advanced order types and when to use them for better trade execution."
+            title: "Sector Indices in the Nigerian Market",
+            duration: "20 min",
+            content: "This lesson explores the various sector indices on the Nigerian Stock Exchange, including the NGX Banking Index, NGX Insurance Index, NGX Consumer Goods Index, NGX Oil & Gas Index, and NGX Industrial Index. You'll learn how these indices are calculated, what they represent, and how investors use them to track specific sectors of the Nigerian economy."
           },
           {
             id: "c1-2-3",
             type: "quiz",
-            title: "Order Types Quiz",
-            duration: "15 min",
-            content: "Test your understanding of different order types and their uses."
+            title: "Nigerian Market Indices Quiz",
+            duration: "20 min",
+            content: "Test your understanding of Nigerian stock market indices and their importance."
           }
         ]
       },
       { 
         id: "m1-3", 
-        title: "Understanding Financial Statements", 
-        duration: "60 min", 
+        title: "Top Companies on the Nigerian Exchange", 
+        duration: "75 min", 
         isCompleted: false,
         content: [
           {
             id: "c1-3-1",
             type: "video",
-            title: "Financial Statement Basics",
-            duration: "20 min",
-            content: "This video covers the three main financial statements: income statement, balance sheet, and cash flow statement."
+            title: "Overview of Blue-Chip Nigerian Stocks",
+            duration: "25 min",
+            content: "https://www.youtube.com/watch?v=xW8KVL3vUks"
           },
           {
             id: "c1-3-2",
             type: "text",
-            title: "Key Financial Ratios",
-            duration: "20 min",
-            content: "Learn about important financial ratios used to evaluate companies."
+            title: "Analyzing Nigerian Financial Sector Stocks",
+            duration: "25 min",
+            content: "This lesson focuses on major Nigerian financial sector stocks including Guaranty Trust Holding Company (GTCO), Zenith Bank, Access Holdings, United Bank for Africa (UBA), and FBN Holdings. You'll learn about their business models, financial performance metrics, dividend history, and key factors that drive their stock prices in the Nigerian market."
           },
           {
             id: "c1-3-3",
             type: "assignment",
-            title: "Financial Analysis Exercise",
-            duration: "20 min",
-            content: "Analyze a sample company's financial statements.",
+            title: "Nigerian Stock Analysis Exercise",
+            duration: "25 min",
+            content: "Analyze a major Nigerian company's financial reports and stock performance.",
             assignment: {
-              description: "Review the provided financial statements and calculate key ratios to determine the company's financial health.",
+              description: "Select one of the top 10 companies on the NGX and conduct a fundamental analysis using their latest annual report and financial statements. Identify key financial ratios and assess the company's investment potential.",
               submission: "text"
             }
-          }
-        ]
-      },
-      { 
-        id: "m1-4", 
-        title: "Market Indicators Overview", 
-        duration: "45 min", 
-        isCompleted: false,
-        content: [
-          {
-            id: "c1-4-1",
-            type: "video",
-            title: "Common Market Indicators",
-            duration: "15 min",
-            content: "This video explains popular market indicators like RSI, MACD, and moving averages."
-          },
-          {
-            id: "c1-4-2",
-            type: "text",
-            title: "Using Indicators Effectively",
-            duration: "15 min",
-            content: "Learn strategies for using market indicators in your trading decisions."
-          },
-          {
-            id: "c1-4-3",
-            type: "quiz",
-            title: "Market Indicators Quiz",
-            duration: "15 min",
-            content: "Test your understanding of market indicators and their interpretations."
           }
         ]
       }
@@ -200,51 +173,51 @@ const mockCoursesData: Course[] = [
   },
   {
     id: "course-2",
-    title: "Candlestick Pattern Recognition",
-    category: "Chart Analysis",
-    description: "Learn to identify and trade powerful Japanese candlestick patterns for better market timing.",
-    tags: ["Reversal Patterns", "Continuation Patterns", "Multi-Candle Patterns"],
+    title: "Forex Trading for Nigerian Investors",
+    category: "Currency Trading",
+    description: "Learn the fundamentals of forex trading with a specific focus on the Naira and strategies for Nigerian traders.",
+    tags: ["Forex", "USD/NGN", "Currency Pairs"],
     estimatedHours: 5,
-    icon: "BarChart2",
+    icon: "TrendingUp",
     modules: [
       { 
         id: "m2-1", 
-        title: "Candlestick Basics", 
-        duration: "40 min", 
+        title: "Forex Basics for Nigerian Traders", 
+        duration: "60 min", 
         isCompleted: false,
         content: [
           {
             id: "c2-1-1",
             type: "video",
-            title: "Introduction to Candlestick Charts",
-            duration: "15 min",
-            content: "This video explains the history and basics of Japanese candlestick charts."
+            title: "Introduction to Forex Trading in Nigeria",
+            duration: "20 min",
+            content: "https://www.youtube.com/watch?v=J69B5hGchUE"
           },
           {
             id: "c2-1-2",
             type: "text",
-            title: "Candlestick Anatomy",
-            duration: "15 min",
-            content: "Learn how to read candlesticks and understand what they tell you about market psychology."
+            title: "Understanding Currency Pairs and the Naira",
+            duration: "20 min",
+            content: "This lesson covers the fundamentals of currency pairs in forex trading with special attention to Naira-based pairs such as USD/NGN and EUR/NGN. You'll learn about the factors that influence the Naira's value, how the Nigerian foreign exchange market operates, and the role of the Central Bank of Nigeria in managing the currency."
           },
           {
             id: "c2-1-3",
             type: "quiz",
-            title: "Candlestick Basics Quiz",
-            duration: "10 min",
-            content: "Test your understanding of candlestick chart basics.",
+            title: "Forex Fundamentals Quiz",
+            duration: "20 min",
+            content: "Test your understanding of forex basics and Naira currency pairs.",
             quiz: [
               {
                 id: "q2-1-1",
-                question: "What does a long upper shadow (wick) on a candlestick typically indicate?",
+                question: "Which of these institutions regulates the foreign exchange market in Nigeria?",
                 options: [
-                  "Strong buying pressure",
-                  "Strong selling pressure at higher prices",
-                  "Indecision in the market",
-                  "Low trading volume"
+                  "Nigerian Stock Exchange (NGX)",
+                  "Securities and Exchange Commission (SEC)",
+                  "Central Bank of Nigeria (CBN)",
+                  "Nigerian Investment Promotion Commission (NIPC)"
                 ],
-                correctAnswer: 1,
-                explanation: "A long upper shadow indicates that buyers pushed the price up during the period, but sellers later rejected the higher prices and pushed it back down, showing selling pressure at those higher levels."
+                correctAnswer: 2,
+                explanation: "The Central Bank of Nigeria (CBN) is responsible for regulating the foreign exchange market in Nigeria and implements policies that affect the Naira's value."
               }
             ]
           }
@@ -252,153 +225,63 @@ const mockCoursesData: Course[] = [
       },
       { 
         id: "m2-2", 
-        title: "Single Candlestick Patterns", 
-        duration: "60 min", 
+        title: "Technical Analysis for Forex Trading", 
+        duration: "90 min", 
         isCompleted: false,
         content: [
           {
             id: "c2-2-1",
             type: "video",
-            title: "Key Single Candlestick Patterns",
-            duration: "20 min",
-            content: "This video covers important single candlestick patterns like doji, hammer, and shooting star."
+            title: "Key Technical Indicators for Forex Trading",
+            duration: "30 min",
+            content: "https://www.youtube.com/watch?v=lYfZaFVzDuI"
           },
           {
             id: "c2-2-2",
             type: "text",
-            title: "Interpreting Single Patterns",
-            duration: "20 min",
-            content: "Learn how to properly interpret single candlestick patterns in different market contexts."
+            title: "Chart Patterns for Currency Trading",
+            duration: "30 min",
+            content: "This lesson explores essential chart patterns for forex traders, including head and shoulders, double tops and bottoms, triangles, flags, and pennants. You'll learn how to identify these patterns on currency charts, understand what they indicate about potential price movements, and how Nigerian traders can apply these insights to their trading strategies."
           },
           {
             id: "c2-2-3",
-            type: "assignment",
-            title: "Pattern Identification Exercise",
-            duration: "20 min",
-            content: "Practice identifying single candlestick patterns on actual charts.",
-            assignment: {
-              description: "Review the provided charts and identify all single candlestick patterns. Explain their potential implications for future price movement.",
-              submission: "text"
-            }
+            type: "quiz",
+            title: "Technical Analysis Quiz",
+            duration: "30 min",
+            content: "Test your understanding of technical analysis methods for forex trading."
           }
         ]
       },
       { 
         id: "m2-3", 
-        title: "Double Candlestick Patterns", 
-        duration: "60 min", 
+        title: "Risk Management for Nigerian Forex Traders", 
+        duration: "75 min", 
         isCompleted: false,
         content: [
           {
             id: "c2-3-1",
             type: "video",
-            title: "Common Double Candlestick Patterns",
-            duration: "20 min",
-            content: "This video explains engulfing patterns, harami patterns, and other two-candle formations."
+            title: "Managing Risk in Volatile Currency Markets",
+            duration: "25 min",
+            content: "https://www.youtube.com/watch?v=v6ciLT8YEzU"
           },
           {
             id: "c2-3-2",
             type: "text",
-            title: "Trading Double Patterns",
-            duration: "20 min",
-            content: "Learn effective strategies for trading based on double candlestick patterns."
+            title: "Position Sizing and Risk-to-Reward Ratios",
+            duration: "25 min",
+            content: "This lesson covers essential risk management techniques for forex traders, with special consideration for the high volatility often seen in emerging market currencies like the Naira. You'll learn about proper position sizing based on your account size, setting appropriate stop-loss and take-profit levels, calculating risk-to-reward ratios, and managing risk during major Nigerian and global economic events."
           },
           {
             id: "c2-3-3",
-            type: "quiz",
-            title: "Double Pattern Quiz",
-            duration: "20 min",
-            content: "Test your knowledge of double candlestick patterns and their implications.",
-            quiz: [
-              {
-                id: "q2-3-1",
-                question: "What is a bullish engulfing pattern?",
-                options: [
-                  "When a small bearish candle is followed by a larger bullish candle that completely engulfs it",
-                  "When a large bearish candle is followed by a smaller bullish candle",
-                  "When two consecutive bullish candles appear with increasing size",
-                  "When a doji appears after a long bullish candle"
-                ],
-                correctAnswer: 0,
-                explanation: "A bullish engulfing pattern occurs when a smaller bearish (red/black) candle is followed by a larger bullish (green/white) candle that completely 'engulfs' the previous candle. This suggests a potential reversal from downtrend to uptrend."
-              }
-            ]
-          }
-        ]
-      },
-      { 
-        id: "m2-4", 
-        title: "Triple Candlestick Patterns", 
-        duration: "60 min", 
-        isCompleted: false,
-        content: [
-          {
-            id: "c2-4-1",
-            type: "video",
-            title: "Major Three-Candle Patterns",
-            duration: "20 min",
-            content: "This video covers important three-candle patterns like morning/evening stars and three white soldiers."
-          },
-          {
-            id: "c2-4-2",
-            type: "text",
-            title: "Complex Pattern Analysis",
-            duration: "20 min",
-            content: "Learn advanced techniques for analyzing triple candlestick patterns."
-          },
-          {
-            id: "c2-4-3",
             type: "assignment",
-            title: "Triple Pattern Trading Plan",
-            duration: "20 min",
-            content: "Create trading plans for different triple candlestick patterns.",
+            title: "Risk Management Plan Development",
+            duration: "25 min",
+            content: "Develop a comprehensive risk management plan for forex trading.",
             assignment: {
-              description: "Develop detailed trading plans for morning star, evening star, and three white soldiers patterns, including entry, stop-loss, and take-profit levels.",
+              description: "Create a detailed risk management plan for trading the USD/NGN currency pair, including position sizing rules, maximum risk per trade, daily loss limits, and strategies for managing risk during high-impact Nigerian economic events.",
               submission: "text"
             }
-          }
-        ]
-      },
-      { 
-        id: "m2-5", 
-        title: "Pattern Trading Strategies", 
-        duration: "80 min", 
-        isCompleted: false,
-        content: [
-          {
-            id: "c2-5-1",
-            type: "video",
-            title: "Integrating Candlestick Patterns with Other Indicators",
-            duration: "30 min",
-            content: "This video explains how to combine candlestick pattern analysis with other technical indicators."
-          },
-          {
-            id: "c2-5-2",
-            type: "text",
-            title: "Complete Candlestick Trading System",
-            duration: "30 min",
-            content: "Learn how to build a complete trading system based on candlestick patterns."
-          },
-          {
-            id: "c2-5-3",
-            type: "quiz",
-            title: "Final Candlestick Strategy Quiz",
-            duration: "20 min",
-            content: "Test your comprehensive understanding of candlestick pattern trading strategies.",
-            quiz: [
-              {
-                id: "q2-5-1",
-                question: "Which of the following would best strengthen a candlestick reversal signal?",
-                options: [
-                  "The pattern appears in the middle of a trading range",
-                  "The pattern appears on low volume",
-                  "The pattern appears at a major support or resistance level",
-                  "The pattern appears during a holiday when markets are thinly traded"
-                ],
-                correctAnswer: 2,
-                explanation: "Candlestick reversal patterns are significantly more reliable when they appear at major support or resistance levels, as these price levels already represent areas where buying or selling pressure is likely to emerge."
-              }
-            ]
           }
         ]
       }
@@ -406,146 +289,99 @@ const mockCoursesData: Course[] = [
   },
   {
     id: "course-3",
-    title: "Sector Rotation Strategies",
-    category: "Market Dynamics",
-    description: "Optimize portfolio performance by understanding market cycles and sector movements in different economic phases.",
-    tags: ["Economic Cycles", "Sector Analysis", "Rotation Timing"],
-    estimatedHours: 4,
-    icon: "TrendingUp",
+    title: "Nigerian Stock Market Technical Analysis",
+    category: "Chart Analysis",
+    description: "Master technical analysis techniques specifically adapted for the Nigerian stock market and local trading conditions.",
+    tags: ["Technical Analysis", "Chart Patterns", "Trading Strategies"],
+    estimatedHours: 6,
+    icon: "BarChart2",
     modules: [
       { 
         id: "m3-1", 
-        title: "Economic Cycle Fundamentals", 
-        duration: "45 min", 
+        title: "Technical Analysis Fundamentals", 
+        duration: "60 min", 
         isCompleted: false,
         content: [
           {
             id: "c3-1-1",
             type: "video",
-            title: "Understanding Economic Cycles",
-            duration: "15 min",
-            content: "This video explains the four phases of the economic cycle: expansion, peak, contraction, and trough."
+            title: "Technical Analysis Principles for Nigerian Stocks",
+            duration: "20 min",
+            content: "https://www.youtube.com/watch?v=08R_TJhAOGo"
           },
           {
             id: "c3-1-2",
             type: "text",
-            title: "Economic Indicators and Their Impact",
-            duration: "15 min",
-            content: "Learn about leading, coincident, and lagging economic indicators and how they affect market sectors."
+            title: "Adapting Technical Analysis to Nigerian Market Conditions",
+            duration: "20 min",
+            content: "This lesson explores how to adapt standard technical analysis approaches to the unique characteristics of the Nigerian stock market. You'll learn about adjusting for lower liquidity, dealing with price gaps common in Nigerian stocks, accounting for market manipulation risks, and how to interpret technical signals in the context of the Nigerian regulatory environment and market structure."
           },
           {
             id: "c3-1-3",
             type: "quiz",
-            title: "Economic Cycle Quiz",
-            duration: "15 min",
-            content: "Test your understanding of economic cycles and their effect on markets.",
-            quiz: [
-              {
-                id: "q3-1-1",
-                question: "Which sector typically performs best during the early expansion phase?",
-                options: [
-                  "Utilities",
-                  "Consumer Staples",
-                  "Technology",
-                  "Energy"
-                ],
-                correctAnswer: 2,
-                explanation: "Technology stocks typically outperform during the early expansion phase as companies invest in new equipment and innovation."
-              }
-            ]
+            title: "Technical Analysis Basics Quiz",
+            duration: "20 min",
+            content: "Test your understanding of technical analysis principles as applied to Nigerian stocks."
           }
         ]
       },
       { 
         id: "m3-2", 
-        title: "Sector Performance Analysis", 
-        duration: "60 min", 
+        title: "Chart Patterns in Nigerian Stocks", 
+        duration: "90 min", 
         isCompleted: false,
         content: [
           {
             id: "c3-2-1",
             type: "video",
-            title: "Sector Performance Through Economic Cycles",
-            duration: "20 min",
-            content: "This video analyzes how different sectors perform during various economic phases."
+            title: "Identifying Chart Patterns on Nigerian Stock Charts",
+            duration: "30 min",
+            content: "https://www.youtube.com/watch?v=TmKT8daJJJw"
           },
           {
             id: "c3-2-2",
             type: "text",
-            title: "Historical Sector Performance Data",
-            duration: "20 min",
-            content: "Review historical data showing how sectors have performed in past economic cycles."
+            title: "Case Studies: Chart Patterns in Top Nigerian Stocks",
+            duration: "30 min",
+            content: "This lesson examines real-world chart pattern examples from major Nigerian stocks like Dangote Cement, MTN Nigeria, Nestle Nigeria, and Airtel Africa. You'll analyze historical chart patterns that formed in these stocks, understand how they played out, and learn to identify similar patterns in current market conditions. The lesson also covers pattern reliability statistics specific to the Nigerian market."
           },
           {
             id: "c3-2-3",
-            type: "assignment",
-            title: "Sector Analysis Exercise",
-            duration: "20 min",
-            content: "Complete an analysis of sector performance in the current economic environment.",
-            assignment: {
-              description: "Analyze the current performance of three major market sectors and explain their relationship to the current economic cycle phase.",
-              submission: "text"
-            }
+            type: "quiz",
+            title: "Chart Patterns Quiz",
+            duration: "30 min",
+            content: "Test your ability to identify and interpret chart patterns in Nigerian stocks."
           }
         ]
       },
       { 
         id: "m3-3", 
-        title: "Identifying Rotation Signals", 
-        duration: "45 min", 
+        title: "Technical Indicators for Nigerian Market Timing", 
+        duration: "75 min", 
         isCompleted: false,
         content: [
           {
             id: "c3-3-1",
             type: "video",
-            title: "Key Signals for Sector Rotation",
-            duration: "15 min",
-            content: "Learn to identify signals that indicate a potential sector rotation is imminent."
+            title: "Optimal Technical Indicators for Nigerian Stocks",
+            duration: "25 min",
+            content: "https://www.youtube.com/watch?v=NQHOM2i8BuA"
           },
           {
             id: "c3-3-2",
             type: "text",
-            title: "Technical Indicators for Rotation",
-            duration: "15 min",
-            content: "Explore technical indicators that can help predict sector rotations."
+            title: "Creating a Technical Analysis System for Nigerian Trading",
+            duration: "25 min",
+            content: "This lesson guides you through developing a complete technical analysis system tailored to Nigerian market conditions. You'll learn which indicators work best for Nigerian stocks, how to combine multiple indicators for confirmation, creating a systematic approach to technical analysis, and establishing objective entry and exit criteria based on technical signals in the Nigerian market context."
           },
           {
             id: "c3-3-3",
-            type: "quiz",
-            title: "Rotation Signals Quiz",
-            duration: "15 min",
-            content: "Test your knowledge of sector rotation signals."
-          }
-        ]
-      },
-      { 
-        id: "m3-4", 
-        title: "Building a Sector Rotation Portfolio", 
-        duration: "90 min", 
-        isCompleted: false,
-        content: [
-          {
-            id: "c3-4-1",
-            type: "video",
-            title: "Portfolio Construction Principles",
-            duration: "30 min",
-            content: "Learn how to build a portfolio that can adapt to sector rotations."
-          },
-          {
-            id: "c3-4-2",
-            type: "text",
-            title: "ETFs for Sector Rotation Strategies",
-            duration: "30 min",
-            content: "Explore the most effective ETFs for implementing sector rotation strategies."
-          },
-          {
-            id: "c3-4-3",
             type: "assignment",
-            title: "Create Your Rotation Strategy",
-            duration: "30 min",
-            content: "Design a complete sector rotation strategy for the current market environment.",
+            title: "Nigerian Stock Technical Analysis Project",
+            duration: "25 min",
+            content: "Conduct a complete technical analysis of a Nigerian stock.",
             assignment: {
-              description: "Create a detailed sector rotation strategy including entry/exit signals and position sizing.",
+              description: "Select a liquid stock from the NGX-30 index and perform a comprehensive technical analysis. Identify key support/resistance levels, relevant chart patterns, and apply at least three technical indicators. Based on your analysis, create a trading plan with specific entry points, stop-loss levels, and profit targets.",
               submission: "text"
             }
           }
@@ -555,205 +391,203 @@ const mockCoursesData: Course[] = [
   },
   {
     id: "course-4",
-    title: "Risk Management Essentials",
+    title: "Risk Management Essentials for Nigerian Investors",
     category: "Trading Strategy",
-    description: "Learn to protect your capital with proper position sizing, stop-loss strategies, and risk-reward optimization.",
-    tags: ["Position Sizing", "Stop-Loss Techniques", "Risk-Reward Ratio"],
-    estimatedHours: 3.5,
+    description: "Learn to protect your capital with proper position sizing, stop-loss strategies, and risk management techniques adapted for Nigerian market conditions.",
+    tags: ["Position Sizing", "Stop-Loss Strategies", "Risk-Reward Ratio"],
+    estimatedHours: 4,
     icon: "Layers",
     modules: [
       { 
         id: "m4-1", 
-        title: "Understanding Trading Risk", 
-        duration: "40 min", 
+        title: "Risk Management Fundamentals", 
+        duration: "60 min", 
         isCompleted: false,
         content: [
           {
             id: "c4-1-1",
             type: "video",
-            title: "Types of Trading Risk",
-            duration: "15 min",
-            content: "This video covers the different types of risk traders face in the markets."
+            title: "Introduction to Risk Management for Nigerian Investors",
+            duration: "20 min",
+            content: "https://www.youtube.com/watch?v=uBBge9v9eXQ"
           },
           {
             id: "c4-1-2",
             type: "text",
-            title: "Risk Assessment Framework",
-            duration: "15 min",
-            content: "Learn a comprehensive framework for assessing trading risks before entering positions."
+            title: "Nigeria-Specific Investment Risks",
+            duration: "20 min",
+            content: "This lesson explores the unique risk factors in the Nigerian investment landscape, including currency risk and the impact of Naira fluctuations, political and regulatory risks specific to Nigeria, liquidity risk in the Nigerian market, and infrastructure and operational risks. You'll learn practical approaches to assessing and mitigating these Nigeria-specific investment challenges."
           },
           {
             id: "c4-1-3",
             type: "quiz",
-            title: "Risk Fundamentals Quiz",
-            duration: "10 min",
-            content: "Test your understanding of trading risk concepts.",
-            quiz: [
-              {
-                id: "q4-1-1",
-                question: "What is the recommended maximum risk per trade for most retail traders?",
-                options: [
-                  "1-2% of trading capital",
-                  "5-10% of trading capital",
-                  "25% of trading capital",
-                  "50% of trading capital"
-                ],
-                correctAnswer: 0,
-                explanation: "Most professional traders recommend risking no more than 1-2% of your trading capital on any single trade to ensure longevity."
-              }
-            ]
+            title: "Risk Management Basics Quiz",
+            duration: "20 min",
+            content: "Test your understanding of risk management principles for Nigerian investing."
           }
         ]
       },
       { 
         id: "m4-2", 
-        title: "Position Sizing Strategies", 
-        duration: "50 min", 
+        title: "Position Sizing for Nigerian Stocks", 
+        duration: "60 min", 
         isCompleted: false,
         content: [
           {
             id: "c4-2-1",
             type: "video",
-            title: "Position Sizing Formulas",
+            title: "Optimal Position Sizing Methods",
             duration: "20 min",
-            content: "Learn various methods to calculate appropriate position sizes based on risk tolerance."
+            content: "https://www.youtube.com/watch?v=vLGPVGSDYlc"
           },
           {
             id: "c4-2-2",
             type: "text",
-            title: "Advanced Position Sizing Techniques",
-            duration: "15 min",
-            content: "Explore advanced techniques for optimizing position sizes across a portfolio."
+            title: "Position Sizing Formulas and Calculations",
+            duration: "20 min",
+            content: "This lesson provides practical formulas and calculations for determining appropriate position sizes when trading Nigerian stocks and other assets. You'll learn about fixed percentage risk models, volatility-based position sizing using Average True Range (ATR), adjusting position size based on correlation with other holdings, and maintaining proper diversification across Nigerian market sectors."
           },
           {
             id: "c4-2-3",
-            type: "assignment",
-            title: "Position Sizing Calculator",
-            duration: "15 min",
-            content: "Create a position sizing calculator for your trading strategy.",
-            assignment: {
-              description: "Build a simple position sizing calculator based on your risk parameters and typical stop-loss distances.",
-              submission: "text"
-            }
+            type: "quiz",
+            title: "Position Sizing Quiz",
+            duration: "20 min",
+            content: "Test your ability to calculate appropriate position sizes for different scenarios."
           }
         ]
       },
       { 
         id: "m4-3", 
-        title: "Effective Stop-Loss Placement", 
-        duration: "45 min", 
+        title: "Stop-Loss Strategies for Nigerian Market Volatility", 
+        duration: "60 min", 
         isCompleted: false,
         content: [
           {
             id: "c4-3-1",
             type: "video",
-            title: "Stop-Loss Placement Techniques",
+            title: "Effective Stop-Loss Placement in Volatile Markets",
             duration: "20 min",
-            content: "Learn different methods for placing effective stop-loss orders."
+            content: "https://www.youtube.com/watch?v=lk-SLJcvkXA"
           },
           {
             id: "c4-3-2",
             type: "text",
-            title: "Volatility-Based Stops",
-            duration: "15 min",
-            content: "Explore how to use volatility measurements to set more effective stop-loss levels."
+            title: "Advanced Stop-Loss Techniques",
+            duration: "20 min",
+            content: "This lesson covers sophisticated stop-loss strategies adapted for the volatility characteristics of Nigerian financial markets. You'll learn about volatility-based stops using ATR for Nigerian stocks, time-based stops for limiting exposure during uncertain periods, trailing stops to protect profits in trending Nigerian stocks, and psychological aspects of maintaining stop-loss discipline in the Nigerian trading environment."
           },
           {
             id: "c4-3-3",
-            type: "quiz",
-            title: "Stop-Loss Quiz",
-            duration: "10 min",
-            content: "Test your knowledge of stop-loss strategies.",
-            quiz: [
-              {
-                id: "q4-3-1",
-                question: "Which of the following is typically the WORST place to set a stop-loss?",
-                options: [
-                  "Below a support level",
-                  "Based on a fixed percentage",
-                  "At a round number (like $50.00)",
-                  "Using Average True Range (ATR)"
-                ],
-                correctAnswer: 2,
-                explanation: "Round numbers are typically where many traders place their stops, making them vulnerable to 'stop hunting' by larger players in the market."
-              }
-            ]
-          }
-        ]
-      },
-      { 
-        id: "m4-4", 
-        title: "Risk-Reward Optimization", 
-        duration: "45 min", 
-        isCompleted: false,
-        content: [
-          {
-            id: "c4-4-1",
-            type: "video",
-            title: "Understanding Risk-Reward Ratios",
-            duration: "15 min",
-            content: "Learn how to calculate and apply risk-reward ratios to improve profitability."
-          },
-          {
-            id: "c4-4-2",
-            type: "text",
-            title: "Optimizing Risk-Reward for Different Markets",
-            duration: "15 min",
-            content: "Explore how risk-reward considerations change across different market types."
-          },
-          {
-            id: "c4-4-3",
             type: "assignment",
-            title: "Risk-Reward Analysis",
-            duration: "15 min",
-            content: "Analyze the risk-reward profiles of several potential trades.",
+            title: "Risk Management Plan Development",
+            duration: "20 min",
+            content: "Create a comprehensive risk management plan for Nigerian investing.",
             assignment: {
-              description: "Identify three potential trades and analyze their risk-reward profiles. Explain which one you would take and why.",
+              description: "Develop a detailed risk management plan for a portfolio of Nigerian stocks. Include position sizing rules, stop-loss strategies, maximum risk per trade and per sector, drawdown limits, and a plan for regular risk assessment reviews.",
               submission: "text"
             }
+              }
+            ]
           }
         ]
       },
       { 
-        id: "m4-5", 
-        title: "Creating a Risk Management Plan", 
-        duration: "30 min", 
+    id: "course-5",
+    title: "Fundamental Analysis of Nigerian Stocks",
+    category: "Investment Analysis",
+    description: "Learn to evaluate Nigerian companies using financial statements, valuation metrics, and economic indicators specific to the Nigerian market.",
+    tags: ["Financial Analysis", "Valuation Methods", "Nigerian Equities"],
+    estimatedHours: 5,
+    icon: "BookText",
+    modules: [
+      { 
+        id: "m5-1", 
+        title: "Nigerian Financial Statement Analysis", 
+        duration: "75 min", 
         isCompleted: false,
         content: [
           {
-            id: "c4-5-1",
+            id: "c5-1-1",
             type: "video",
-            title: "Comprehensive Risk Management",
-            duration: "15 min",
-            content: "Learn how to create a complete risk management plan for your trading."
+            title: "Reading Nigerian Company Financial Reports",
+            duration: "25 min",
+            content: "https://www.youtube.com/watch?v=zlrMz0tFVGo"
           },
           {
-            id: "c4-5-2",
+            id: "c5-1-2",
             type: "text",
-            title: "Implementing Your Risk Plan",
-            duration: "10 min",
-            content: "Practical steps for implementing your risk management plan consistently."
+            title: "Key Financial Ratios for Nigerian Stocks",
+            duration: "25 min",
+            content: "This lesson examines the most important financial ratios for analyzing Nigerian stocks, with appropriate benchmarks for the local market. You'll learn about profitability ratios (ROE, ROA, Net Margin) in the Nigerian context, liquidity and solvency metrics with Nigerian industry standards, efficiency ratios and what they reveal about management quality, and dividend metrics including yield and payout ratios for Nigerian companies."
           },
           {
-            id: "c4-5-3",
+            id: "c5-1-3",
             type: "quiz",
-            title: "Final Risk Management Quiz",
-            duration: "5 min",
-            content: "Test your overall understanding of risk management principles.",
-            quiz: [
-              {
-                id: "q4-5-1",
-                question: "What is the most important aspect of a trading risk management plan?",
-                options: [
-                  "Having sophisticated technical indicators",
-                  "Using complex position sizing formulas",
-                  "Consistency in application",
-                  "Frequent adjustments based on emotions"
-                ],
-                correctAnswer: 2,
-                explanation: "The most important aspect of any risk management plan is consistent application. Even a simple plan followed consistently will outperform a sophisticated plan that's applied inconsistently."
-              }
-            ]
+            title: "Financial Analysis Quiz",
+            duration: "25 min",
+            content: "Test your ability to analyze Nigerian company financial statements."
+          }
+        ]
+      },
+      { 
+        id: "m5-2", 
+        title: "Valuation Methods for Nigerian Equities", 
+        duration: "90 min", 
+        isCompleted: false,
+        content: [
+          {
+            id: "c5-2-1",
+            type: "video",
+            title: "Stock Valuation Techniques for Nigerian Companies",
+            duration: "30 min",
+            content: "https://www.youtube.com/watch?v=PAtJIhWZ0oc"
+          },
+          {
+            id: "c5-2-2",
+            type: "text",
+            title: "Appropriate Valuation Multiples for Nigerian Sectors",
+            duration: "30 min",
+            content: "This lesson provides sector-specific guidance on selecting appropriate valuation multiples for Nigerian companies. You'll learn about typical P/E, P/B, and EV/EBITDA ranges for banking and financial services in Nigeria, valuation standards for Nigerian consumer goods and retail companies, metrics for industrial, oil & gas, and telecommunications sectors, and adjusting valuation expectations for Nigerian market risk premiums."
+          },
+          {
+            id: "c5-2-3",
+            type: "quiz",
+            title: "Valuation Methods Quiz",
+            duration: "30 min",
+            content: "Test your understanding of valuation techniques for Nigerian stocks."
+          }
+        ]
+      },
+      { 
+        id: "m5-3", 
+        title: "Economic Indicators and Nigerian Stocks", 
+        duration: "75 min", 
+        isCompleted: false,
+        content: [
+          {
+            id: "c5-3-1",
+            type: "video",
+            title: "Key Economic Indicators Affecting Nigerian Equities",
+            duration: "25 min",
+            content: "https://www.youtube.com/watch?v=p3D4M8RUP-4"
+          },
+          {
+            id: "c5-3-2",
+            type: "text",
+            title: "Sector Sensitivity to Economic Factors",
+            duration: "25 min",
+            content: "This lesson analyzes how different sectors of the Nigerian stock market respond to various economic indicators. You'll examine banking sector sensitivity to interest rates and monetary policy, consumer goods correlation with inflation and consumer spending data, oil & gas stock relationships with crude prices and exchange rates, and how infrastructure and industrial stocks react to government spending and policy changes."
+          },
+          {
+            id: "c5-3-3",
+            type: "assignment",
+            title: "Nigerian Stock Fundamental Analysis Project",
+            duration: "25 min",
+            content: "Conduct a comprehensive fundamental analysis of a Nigerian company.",
+            assignment: {
+              description: "Select a company from the NGX-30 index and perform a complete fundamental analysis. Analyze three years of financial statements, calculate key ratios, determine an appropriate valuation using multiple methods, and assess how major Nigerian economic indicators affect the company's outlook.",
+              submission: "text"
+            }
           }
         ]
       }
@@ -762,18 +596,29 @@ const mockCoursesData: Course[] = [
 ];
 
 // Icon component mapper
-const IconComponent = ({ name }: { name: string }) => {
+const IconComponent = ({ name, className = "" }: { name: string, className?: string }) => {
+  // Use the provided className or default to neutral color
+  const baseClassName = className || "h-5 w-5 text-gray-500";
+  
   switch (name) {
     case "BookText":
-      return <BookText className="h-10 w-10 text-blue-500" />;
+      return <BookText className={baseClassName} />;
     case "BarChart2":
-      return <BarChart2 className="h-10 w-10 text-purple-500" />;
+      return <BarChart2 className={baseClassName} />;
     case "TrendingUp":
-      return <TrendingUp className="h-10 w-10 text-red-500" />;
+      return <TrendingUp className={baseClassName} />;
     case "Layers":
-      return <Layers className="h-10 w-10 text-green-500" />;
+      return <Layers className={baseClassName} />;
+    case "DollarSign":
+      return <DollarSign className={baseClassName} />;
+    case "Shield":
+      return <Shield className={baseClassName} />;
+    case "Activity":
+      return <Activity className={baseClassName} />;
+    case "Briefcase":
+      return <Briefcase className={baseClassName} />;
     default:
-      return <BookMarked className="h-10 w-10 text-gray-500" />;
+      return <BookMarked className={baseClassName} />;
   }
 };
 
@@ -944,8 +789,8 @@ export default function CertificationsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Stock Market Courses</h1>
-        <p className="text-gray-500">Enhance your trading and investing knowledge with our expert-led courses</p>
+        <h1 className="text-3xl font-bold text-gray-900">Nigerian Financial Education</h1>
+        <p className="text-gray-500">Master Nigerian stock market trading, forex, and financial literacy with our specialized courses</p>
       </div>
       
       {/* Course Stats */}
@@ -956,7 +801,7 @@ export default function CertificationsPage() {
           </CardHeader>
           <CardContent className="pt-0 flex items-center justify-between">
             <span className="text-3xl font-bold">{totalCourses}</span>
-            <BookOpen className="h-8 w-8 text-gray-400" />
+            <BookOpen className="h-8 w-8 text-green-600" />
           </CardContent>
         </Card>
         
@@ -966,7 +811,7 @@ export default function CertificationsPage() {
           </CardHeader>
           <CardContent className="pt-0 flex items-center justify-between">
             <span className="text-3xl font-bold">{completedCourses}</span>
-            <CheckCircle className="h-8 w-8 text-emerald-500" />
+            <CheckCircle className="h-8 w-8 text-green-600" />
           </CardContent>
         </Card>
         
@@ -976,7 +821,7 @@ export default function CertificationsPage() {
           </CardHeader>
           <CardContent className="pt-0 flex items-center justify-between">
             <span className="text-3xl font-bold">{inProgressCourses}</span>
-            <Clock className="h-8 w-8 text-amber-500" />
+            <Clock className="h-8 w-8 text-green-600" />
           </CardContent>
         </Card>
         
@@ -986,7 +831,7 @@ export default function CertificationsPage() {
           </CardHeader>
           <CardContent className="pt-0 flex items-center justify-between">
             <span className="text-3xl font-bold">{notStartedCourses}</span>
-            <BookMarked className="h-8 w-8 text-blue-400" />
+            <BookMarked className="h-8 w-8 text-green-600" />
           </CardContent>
         </Card>
       </div>
@@ -1055,93 +900,120 @@ export default function CertificationsPage() {
         {filteredCourses.map((course) => {
           const { status, progress, lastModule } = getCourseStatus(course.id);
           
+          // Determine difficulty level based on course properties or default to beginner
+          const difficulty = course.difficulty || (
+            course.category?.includes('Advanced') ? 'advanced' : 
+            course.category?.includes('Intermediate') ? 'intermediate' : 
+            'beginner'
+          );
+          
+          // Determine difficulty label
+          const difficultyLabel = {
+            beginner: 'Beginner',
+            intermediate: 'Intermediate',
+            advanced: 'Advanced'
+          }[difficulty];
+          
+          const statusColors = {
+            completed: "bg-emerald-50 text-emerald-700 border-emerald-200",
+            "in-progress": "bg-green-50 text-green-700 border-green-200",
+            "not-started": "bg-gray-50 text-gray-600 border-gray-200"
+          };
+          
           return (
-            <Card key={course.id} className="overflow-hidden">
-              <CardHeader className="pb-2 flex flex-row items-start space-y-0 space-x-4">
-                <div className="bg-gray-50 p-2 rounded-md">
-                  <IconComponent name={course.icon} />
+            <Card 
+              key={course.id} 
+              className="overflow-hidden border hover:shadow-md transition-all duration-300 flex flex-col h-full"
+              onClick={() => handleCourseAction(course.id)}
+            >
+              <div className="h-2 w-full bg-green-500"></div>
+              
+              <div className="p-5 flex flex-col h-full">
+                <div className="flex items-start gap-3 mb-3">
+                  <div className="rounded-full p-2.5 bg-green-50">
+                    <IconComponent 
+                      name={course.icon} 
+                      className="h-5 w-5 text-green-600"
+                    />
                 </div>
+                  
                 <div className="flex-1">
-                  <CardTitle className="text-lg font-semibold">{course.title}</CardTitle>
-                  <CardDescription className="text-sm">{course.category}</CardDescription>
+                    <div className="flex justify-between items-center">
+                      <h3 className="font-semibold text-gray-900 mb-0.5 line-clamp-2">
+                        {course.title}
+                      </h3>
+                      <Badge className="bg-green-50 text-green-700 border-green-200 text-xs px-2 py-0.5 ml-2">
+                        {difficultyLabel}
+                      </Badge>
+                </div>
+                    <p className="text-xs text-gray-500 mb-1">{course.category}</p>
+                    
+                    <div className="flex items-center text-xs text-gray-500 mt-1">
+                      <Clock className="h-3.5 w-3.5 mr-1" />
+                      <span>{course.estimatedHours} hours</span>
+                      
+                      <Badge 
+                        className={`ml-auto text-xs px-1.5 py-0 ${
+                          status === "completed" ? statusColors["completed"] : 
+                          status === "in-progress" ? statusColors["in-progress"] : 
+                          statusColors["not-started"]
+                        }`}
+                      >
+                        {status === "completed" ? "Completed" : 
+                         status === "in-progress" ? `${progress}% Complete` : 
+                         "Not Started"}
+                      </Badge>
+                    </div>
+                  </div>
                 </div>
                 
-                {/* Status Badge */}
-                {status === "completed" && (
-                  <Badge className="bg-green-100 text-green-800 hover:bg-green-100 ml-auto">Completed</Badge>
-                )}
-                {status === "in-progress" && (
-                  <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-100 ml-auto">In Progress</Badge>
-                )}
-              </CardHeader>
-              
-              <CardContent className="space-y-3">
-                <p className="text-sm text-gray-600 line-clamp-2">{course.description}</p>
+                <div className="mb-3">
+                  <p className="text-sm text-gray-600 line-clamp-2 min-h-[40px]">{course.description}</p>
+                </div>
                 
                 {/* Course Progress */}
                 {status === "in-progress" && (
-                  <div className="space-y-1">
-                    <div className="flex justify-between text-xs text-muted-foreground">
-                      <span>Progress</span>
-                      <span>{progress}%</span>
-                    </div>
-                    <Progress value={progress} className="h-2" />
-                    <p className="text-xs text-muted-foreground mt-1">
-                      <span className="font-medium">Current module:</span> {lastModule?.title}
+                  <div className="space-y-1 mb-3">
+                    <Progress value={progress} className="h-1.5 bg-gray-100">
+                      <div className="bg-green-600 h-full w-[var(--value%)]" />
+                    </Progress>
+                    <p className="text-xs text-gray-500 mt-1 line-clamp-1">
+                      <span className="font-medium">Current:</span> {lastModule?.title}
                     </p>
                   </div>
                 )}
                 
                 {/* Tags */}
-                <div className="flex flex-wrap gap-2">
-                  {course.tags.slice(0, 3).map((tag) => (
-                    <Badge key={tag} variant="outline" className="text-xs">
+                <div className="flex flex-wrap gap-1.5 mb-4">
+                  {course.tags?.slice(0, 3).map((tag) => (
+                    <Badge key={tag} variant="outline" className="text-xs px-2 py-0">
                       {tag}
                     </Badge>
                   ))}
-                  {course.tags.length > 3 && (
-                    <Badge variant="outline" className="text-xs">
-                      +{course.tags.length - 3}
-                    </Badge>
-                  )}
-                </div>
-              </CardContent>
-              
-              <CardFooter className="flex justify-between items-center border-t bg-gray-50 py-2">
-                <div className="flex items-center text-sm text-gray-500">
-                  <Clock className="h-4 w-4 mr-1" />
-                  {course.estimatedHours} hours
                 </div>
                 
+                <div className="mt-auto">
                 <Button 
                   variant={status === "completed" ? "outline" : "default"}
+                    className={`w-full gap-1 ${
+                      status === "completed" ? "border-green-200 text-green-700 hover:bg-green-50" : 
+                      "bg-green-600 hover:bg-green-700"
+                    }`}
                   size="sm"
-                  className={`gap-1 ${status === "completed" ? "text-green-600" : ""}`}
-                  onClick={() => handleCourseAction(course.id)}
                   disabled={loading}
                 >
                   {loading ? (
                     <div className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full mr-1" />
                   ) : status === "not-started" ? (
-                    <>Enroll Now<ArrowUpRight className="h-4 w-4" /></>
+                      <>Start Learning<ArrowUpRight className="h-4 w-4" /></>
                   ) : status === "in-progress" ? (
-                    <>Continue Module {(() => {
-                      // Find the next module to continue
-                      const nextModuleId = lastModule?.id;
-                      if (nextModuleId) {
-                        const courseData = coursesData.find(c => c.id === course.id);
-                        if (courseData) {
-                          const moduleIndex = courseData.modules.findIndex(m => m.id === nextModuleId) + 1;
-                          return moduleIndex || "";
-                        }
-                      }
-                      return "";
-                    })()}<ChevronRight className="h-4 w-4" /></>
+                      <>Continue Learning<ChevronRight className="h-4 w-4" /></>
                   ) : (
                     <>View Certificate<Award className="h-4 w-4" /></>
                   )}
                 </Button>
-              </CardFooter>
+                </div>
+              </div>
             </Card>
           );
         })}
