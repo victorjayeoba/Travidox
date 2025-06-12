@@ -38,7 +38,7 @@ export function Logo({
   textClassName
 }: LogoProps) {
   const logoElement = (
-    <div className={cn("flex items-center space-x-2", className)}>
+    <div className={cn("flex items-center space-x-3 sm:space-x-2", className)}>
       <div className="relative">
         <Image
           src="/logo.png"

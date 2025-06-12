@@ -98,7 +98,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             variant="ghost"
             size="icon"
             className={cn(
-              "fixed top-4 left-4 z-[60] shadow-lg bg-white/80 backdrop-blur-md border border-white/20 hover:bg-white/95 transition-all duration-200",
+              "fixed top-4 right-4 z-[60] shadow-lg bg-white/80 backdrop-blur-md border border-white/20 hover:bg-white/95 transition-all duration-200",
               sidebarOpen ? "text-gray-700" : "text-gray-700"
             )}
             onClick={() => setSidebarOpen(!sidebarOpen)}

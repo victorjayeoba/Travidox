@@ -80,15 +80,15 @@ export function CertificationCard({
         {/* Course Info */}
         <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
           <div className="flex items-center">
-            <Clock size={14} className="mr-1" />
-            <span>{estimatedHours} hours</span>
+          <Clock size={14} className="mr-1" />
+          <span>{estimatedHours} hours</span>
           </div>
           
           {students > 0 && (
             <div className="flex items-center">
               <Users size={14} className="mr-1" />
               <span>{students.toLocaleString()} students</span>
-            </div>
+              </div>
           )}
         </div>
         
@@ -108,21 +108,21 @@ export function CertificationCard({
         {/* Button at the bottom */}
         <div className="mt-auto pt-2">
           <Link href={`/dashboard/certifications/${slug}`} className="w-full block">
-            <Button 
-              variant={isCompleted ? "outline" : "default"} 
+          <Button 
+            variant={isCompleted ? "outline" : "default"} 
               className={cn(
                 "w-full gap-1 group",
                 isCompleted ? "border-green-200 text-green-700 hover:bg-green-50" : 
                 "bg-green-600 hover:bg-green-700"
               )}
               size="sm"
-            >
-              <span>
+          >
+            <span>
                 {isCompleted ? 'View Certificate' : progress > 0 ? 'Continue Learning' : 'Start Learning'}
-              </span>
-              <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-            </Button>
-          </Link>
+            </span>
+            <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+          </Button>
+        </Link>
         </div>
       </CardContent>
     </Card>
