@@ -201,7 +201,7 @@ export default function DashboardPage() {
       window.removeEventListener(PORTFOLIO_UPDATE_EVENT, handlePortfolioUpdate)
     }
   }, [])
-
+  
   useEffect(() => {
     // Redirect to login if not authenticated
     if (!authLoading && !user) {
@@ -280,13 +280,13 @@ export default function DashboardPage() {
 
   // Quick actions data
   const quickActions = [
-          {
-        icon: TrendingUp,
-        title: "Trade Stocks",
-        description: "Buy and sell Nigerian stocks",
-        onClick: () => router.push('/dashboard/markets'),
-        color: "bg-gradient-to-r from-green-500 to-emerald-600"
-      },
+    {
+      icon: TrendingUp,
+      title: "Trade Stocks",
+      description: "Buy and sell Nigerian stocks",
+      onClick: () => router.push('/dashboard/markets'),
+      color: "bg-gradient-to-r from-green-500 to-emerald-600"
+    },
     {
       icon: BookOpen,
       title: "Learn & Earn",
@@ -327,8 +327,8 @@ export default function DashboardPage() {
             <div className="mb-4 lg:mb-0">
               <div className="flex items-center gap-3 mb-2">
                 <h1 className="text-2xl lg:text-4xl font-bold">
-                  Welcome back, {user?.displayName?.split(' ')[0] || 'Trader'}! 👋
-                </h1>
+                Welcome back, {user?.displayName?.split(' ')[0] || 'Trader'}! 👋
+              </h1>
                 {showRefreshIndicator && (
                   <div className="bg-white/20 rounded-full p-2">
                     <RefreshCw className="h-5 w-5 animate-spin" />

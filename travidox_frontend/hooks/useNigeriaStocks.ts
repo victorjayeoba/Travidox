@@ -95,7 +95,7 @@ export const useNigeriaStocks = (autoRefresh: boolean = false) => {
       }
 
       let newStocks: NigeriaStock[] = [];
-      
+
       // Handle different response formats
       if (Array.isArray(result)) {
         // Direct array response

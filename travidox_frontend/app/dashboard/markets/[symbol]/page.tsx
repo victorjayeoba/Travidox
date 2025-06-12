@@ -349,10 +349,10 @@ export default function StockDetailPage() {
               </div>
             ) : (
               <>
-                <div className="text-xl sm:text-2xl font-bold text-gray-900">{ownedQuantity}</div>
-                <div className="text-xs sm:text-sm text-gray-500 truncate">
-                  Value: ₦{(ownedQuantity * currentStock.price).toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                </div>
+            <div className="text-xl sm:text-2xl font-bold text-gray-900">{ownedQuantity}</div>
+            <div className="text-xs sm:text-sm text-gray-500 truncate">
+              Value: ₦{(ownedQuantity * currentStock.price).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+            </div>
               </>
             )}
           </CardContent>

@@ -120,7 +120,7 @@ export const usePortfolio = () => {
         symbol: stock.Symbol || stock.symbol || '',
         price: stock.Last || stock.price || 0
       })).filter(stock => stock.symbol && stock.price > 0);
-      
+
       // Update prices in Firestore
       await updatePortfolioPrices(user.uid, normalizedData);
       
