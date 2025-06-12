@@ -157,7 +157,6 @@ export function Sidebar() {
           onClick={closeMenuOnMobile}
         />
         
-        
         <SidebarItem 
           icon={<DollarSign size={18} />} 
           label="Stocks" 
