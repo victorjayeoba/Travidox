@@ -551,76 +551,76 @@ export function LearningInterface({
           <div className="px-4 py-8 flex justify-center">
             <div className="max-w-3xl w-full">
               <div className="relative">
-                <video
-                  ref={videoRef}
-                  src={currentContent.videoUrl}
+              <video
+                ref={videoRef}
+                src={currentContent.videoUrl}
                   className="w-full rounded-md"
                   controlsList="nodownload"
-                />
-                
+              />
+              
                 {/* Custom video controls */}
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center gap-2">
                       <span className="text-white text-xs">{formatTime(currentTime)}</span>
                       <div className="flex-1">
-                        <input
-                          type="range"
-                          min={0}
-                          max={duration || 100}
-                          value={currentTime}
-                          onChange={handleSeek}
+                  <input
+                    type="range"
+                    min={0}
+                    max={duration || 100}
+                    value={currentTime}
+                    onChange={handleSeek}
                           className="w-full"
-                        />
+                  />
                       </div>
                       <span className="text-white text-xs">{formatTime(duration)}</span>
-                    </div>
-                    
-                    <div className="flex items-center justify-between">
+                </div>
+                
+                <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Button variant="ghost" size="icon" className="text-white">
                           <SkipBack className="h-4 w-4" />
                         </Button>
                         <Button variant="ghost" size="icon" className="text-white" onClick={handlePlayPause}>
-                          {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
-                        </Button>
+                      {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
+                    </Button>
                         <Button variant="ghost" size="icon" className="text-white">
                           <SkipForward className="h-4 w-4" />
-                        </Button>
-                        
+                    </Button>
+                    
                         <div className="flex items-center gap-2">
                           <Button variant="ghost" size="icon" className="text-white" onClick={handleMuteToggle}>
                             {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
                           </Button>
-                          <input
-                            type="range"
-                            min={0}
-                            max={1}
+                    <input
+                      type="range"
+                      min={0}
+                      max={1}
                             step={0.1}
-                            value={volume}
-                            onChange={handleVolumeChange}
+                      value={volume}
+                      onChange={handleVolumeChange}
                             className="w-16"
-                          />
+                    />
                         </div>
-                      </div>
-                      
-                      <div className="flex items-center gap-2">
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
                         <div className="relative">
                           <Button variant="ghost" size="icon" className="text-white">
                             <Settings className="h-4 w-4" />
-                          </Button>
+                      </Button>
                           {/* Playback rate dropdown would go here */}
                         </div>
                         <Button variant="ghost" size="icon" className="text-white" onClick={handleFullscreenToggle}>
                           <Maximize className="h-4 w-4" />
-                        </Button>
+                          </Button>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+              </div>
         );
       
       case 'text':
@@ -643,7 +643,7 @@ export function LearningInterface({
         
         return (
           <div className="px-4 py-8 flex justify-center">
-            <div className="max-w-prose w-full">
+            <div className="max-w-prose w-full" key={currentQuizIndex}>
               <div className="mb-6 flex justify-between items-center">
                 <div className="text-sm text-gray-500">
                   Question {currentQuizIndex + 1} of {currentContent.quiz.length}
@@ -657,38 +657,38 @@ export function LearningInterface({
               <div className="bg-white border rounded-lg p-6 shadow-sm">
                 <h3 className="text-lg font-semibold mb-6 text-gray-900">{currentQuestion.question}</h3>
                 
-                <RadioGroup 
-                  value={quizAnswer?.toString()} 
-                  onValueChange={(value) => setQuizAnswer(parseInt(value))}
+              <RadioGroup
+                value={quizAnswer?.toString()}
+                onValueChange={(value) => setQuizAnswer(parseInt(value))}
                   className="mb-6"
-                >
+              >
                   <div className="space-y-4">
                     {currentQuestion.options.map((option, index) => (
-                      <div 
-                        key={index} 
+                    <div 
+                      key={index} 
                         className={`flex items-start p-3 rounded-md border ${
                           showQuizExplanation && index === currentQuestion.correctAnswer
-                            ? 'border-green-500 bg-green-50'
+                          ? 'border-green-500 bg-green-50'
                             : showQuizExplanation && quizAnswer === index && quizAnswer !== currentQuestion.correctAnswer
-                            ? 'border-red-500 bg-red-50'
+                          ? 'border-red-500 bg-red-50'
                             : 'border-gray-200 hover:bg-gray-50'
-                        }`}
-                      >
-                        <RadioGroupItem 
-                          value={index.toString()} 
-                          id={`option-${index}`} 
-                          disabled={showQuizExplanation}
-                        />
+                      }`}
+                    >
+                      <RadioGroupItem 
+                        value={index.toString()} 
+                        id={`option-${index}`} 
+                        disabled={showQuizExplanation}
+                      />
                         <Label htmlFor={`option-${index}`} className="ml-2 flex-1 cursor-pointer">
-                          {option}
-                        </Label>
+                        {option}
+                      </Label>
                         {showQuizExplanation && index === currentQuestion.correctAnswer && (
-                          <CheckCircle className="h-5 w-5 text-green-500" />
-                        )}
-                      </div>
-                    ))}
+                        <CheckCircle className="h-5 w-5 text-green-500" />
+                      )}
                   </div>
-                </RadioGroup>
+                ))}
+                  </div>
+              </RadioGroup>
                 
                 {showQuizExplanation && currentQuestion.explanation && (
                   <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-md">
@@ -698,7 +698,7 @@ export function LearningInterface({
                 )}
                 
                 <div className="mt-6 flex justify-between">
-                  <Button
+              <Button
                     variant="outline"
                     onClick={handlePrevQuizQuestion}
                     disabled={currentQuizIndex === 0}
@@ -709,15 +709,15 @@ export function LearningInterface({
                   
                   {!showQuizExplanation ? (
                     <Button 
-                      onClick={handleQuizSubmit} 
-                      disabled={quizAnswer === null}
-                    >
-                      Submit Answer
-                    </Button>
+                onClick={handleQuizSubmit}
+                disabled={quizAnswer === null}
+              >
+                Submit Answer
+              </Button>
                   ) : (
-                    <Button
+                  <Button
                       onClick={currentQuizIndex < currentContent.quiz.length - 1 ? handleNextQuizQuestion : handleNextContent}
-                    >
+                  >
                       {currentQuizIndex < currentContent.quiz.length - 1 ? (
                         <>
                           Next Question
@@ -726,10 +726,10 @@ export function LearningInterface({
                       ) : (
                         'Complete Quiz'
                       )}
-                    </Button>
-                  )}
-                </div>
+                  </Button>
+                )}
               </div>
+            </div>
             </div>
           </div>
         );
@@ -755,24 +755,24 @@ export function LearningInterface({
                 </div>
                 
                 {currentContent.assignment?.submission === 'text' && (
-                  <div className="space-y-4">
-                    <Textarea 
+                <div className="space-y-4">
+                      <Textarea
                       placeholder="Type your answer here..." 
-                      value={assignmentText}
-                      onChange={(e) => setAssignmentText(e.target.value)}
+                        value={assignmentText}
+                        onChange={(e) => setAssignmentText(e.target.value)}
                       className="min-h-[200px]"
-                    />
-                  </div>
-                )}
-                
+                      />
+                    </div>
+                  )}
+                  
                 {currentContent.assignment?.submission === 'file' && (
                   <div className="space-y-4">
                     <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
                       <input
-                        type="file"
+                          type="file"
                         id="file-upload"
                         className="hidden"
-                        onChange={handleFileChange}
+                          onChange={handleFileChange}
                       />
                       <label htmlFor="file-upload" className="cursor-pointer">
                         <div className="flex flex-col items-center">
@@ -785,37 +785,37 @@ export function LearningInterface({
                           </p>
                         </div>
                       </label>
+                      </div>
                     </div>
-                  </div>
-                )}
-                
+                  )}
+                  
                 {currentContent.assignment?.submission === 'link' && (
                   <div className="space-y-4">
-                    <Input 
+                      <Input
                       placeholder="Paste your link here (e.g., https://example.com)" 
-                      value={assignmentText}
-                      onChange={(e) => setAssignmentText(e.target.value)}
-                    />
-                  </div>
-                )}
-                
-                <Button 
-                  onClick={handleAssignmentSubmit} 
-                  className="w-full mt-4" 
-                  disabled={isSubmitting || (!assignmentText && !selectedFile)}
-                >
-                  {isSubmitting ? (
-                    <>
-                      <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full mr-2" />
-                      Submitting...
-                    </>
-                  ) : (
-                    'Submit Assignment'
+                        value={assignmentText}
+                        onChange={(e) => setAssignmentText(e.target.value)}
+                      />
+                    </div>
                   )}
-                </Button>
+                  
+                  <Button
+                    onClick={handleAssignmentSubmit}
+                  className="w-full mt-4" 
+                    disabled={isSubmitting || (!assignmentText && !selectedFile)}
+                  >
+                    {isSubmitting ? (
+                      <>
+                      <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full mr-2" />
+                        Submitting...
+                      </>
+                    ) : (
+                    'Submit Assignment'
+                    )}
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
         );
       
       default:

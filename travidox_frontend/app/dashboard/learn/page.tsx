@@ -94,12 +94,12 @@ export default function LearnPage() {
   };
   
   const handleNextQuestion = () => {
+    setIsAnswered(false);
+    setSelectedAnswer(null);
     if (!activeQuiz) return;
-    
+
     if (currentQuestionIndex < activeQuiz.questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setSelectedAnswer(null);
-      setIsAnswered(false);
     } else {
       setQuizCompleted(true);
     }
@@ -151,6 +151,12 @@ export default function LearnPage() {
   const totalQuizzes = allQuizzes.length;
   const completedCount = completedQuizzes.length;
   const completionPercentage = totalQuizzes > 0 ? (completedCount / totalQuizzes) * 100 : 0;
+
+  // Add this after all useState declarations
+  useEffect(() => {
+    setSelectedAnswer(null);
+    setIsAnswered(false);
+  }, [currentQuestionIndex]);
 
   return (
     <div className="space-y-6">
@@ -244,7 +250,7 @@ export default function LearnPage() {
                               <Badge variant="outline" className="bg-lime-50 text-lime-700 whitespace-nowrap max-w-[90px]">
                                 <Star className="h-3.5 w-3.5 mr-1 flex-shrink-0" />
                                 <span className="truncate">{quiz.xpReward} XP</span>
-                              </Badge>
+                    </Badge>
                   )}
                 </div>
                           <CardDescription className="min-h-[40px]">{quiz.description}</CardDescription>
@@ -440,7 +446,7 @@ export default function LearnPage() {
           </Card>
         </motion.div>
       ) : (
-        <Card className="max-w-2xl mx-auto">
+        <Card className="max-w-2xl mx-auto" key={currentQuestionIndex}>
           <CardHeader>
             <div className="flex justify-between items-center">
               <div>
@@ -460,7 +466,7 @@ export default function LearnPage() {
           <CardContent className="space-y-6">
             <div className="text-lg font-medium">{currentQuestion?.question}</div>
             
-            <RadioGroup value={selectedAnswer?.toString()} disabled={isAnswered}>
+            <RadioGroup value={selectedAnswer !== null ? selectedAnswer.toString() : undefined} disabled={isAnswered} onValueChange={(value) => !isAnswered && setSelectedAnswer(parseInt(value))}>
               {currentQuestion?.options.map((option, index) => (
                 <div 
                   key={index} 
@@ -475,7 +481,6 @@ export default function LearnPage() {
                   <RadioGroupItem 
                     value={index.toString()} 
                     id={`option-${index}`} 
-                    onClick={() => !isAnswered && setSelectedAnswer(index)}
                   />
                   <Label htmlFor={`option-${index}`} className="flex-grow cursor-pointer">
                     {option}
@@ -555,7 +560,7 @@ export default function LearnPage() {
               </Button>
             )}
           </CardFooter>
-            </Card>
+        </Card>
       )}
     </div>
   );
