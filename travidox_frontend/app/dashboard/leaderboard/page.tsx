@@ -224,7 +224,7 @@ export default function LeaderboardPage() {
             <div>
               <div className="flex justify-between mb-1 text-sm">
                 <span>Progress to Level {(profile?.level || 1) + 1}</span>
-                <span className="font-medium">{(profile?.xp || 0) % 100}/100 XP</span>
+                <span className="font-medium">{((profile?.xp || 0) % 100).toFixed(2)}/100 XP</span>
               </div>
               <Progress value={((profile?.xp || 0) % 100)} className="h-2" />
             </div>
