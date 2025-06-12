@@ -13,7 +13,7 @@ export function InvestFractionsSection() {
             Transcorp Hotels, or Zenith Bank without paying full share prices. Start building your dream portfolio today.
           </p>
           <Button variant="secondary" size="lg" className="bg-white text-green-600 hover:bg-gray-100">
-            <a href="/products/invest-fractions">Learn more</a>
+            <a href="/login">Learn more</a>
           </Button>
         </div>
 

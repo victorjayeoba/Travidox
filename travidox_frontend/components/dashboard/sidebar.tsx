@@ -104,14 +104,24 @@ export function Sidebar() {
 
   return (
     <aside className="w-64 border-r border-gray-200 h-screen flex flex-col bg-white overflow-y-auto">
-      {/* Logo - only visible on desktop */}
-      <div className="px-4 py-4 lg:block hidden">
+      {/* Logo - visible on desktop with badge */}
+      <div className="px-4 py-4 lg:flex hidden items-center justify-between">
         <Logo href="/" size="md" />
+        <div className="ml-2">
+          <div className="text-xs font-semibold px-2 py-1 bg-green-100 text-green-800 rounded-full">
+            Pro
+          </div>
+        </div>
       </div>
       
       {/* Mobile header */}
       <div className="lg:hidden flex items-center justify-between px-4 py-3 border-b">
         <Logo href="/" size="md" />
+        <div className="ml-2">
+          <div className="text-xs font-semibold px-2 py-1 bg-green-100 text-green-800 rounded-full">
+            Pro
+          </div>
+        </div>
       </div>
 
       {/* User info - visible on mobile */}
@@ -140,20 +150,13 @@ export function Sidebar() {
       {/* Navigation */}
       <nav className="flex-1 px-3 py-4 space-y-1">
         <SidebarItem 
-          icon={<PieChart size={18} />} 
-          label="My Portfolio" 
+          icon={<LayoutDashboard size={18} />} 
+          label="Dashboard" 
           href="/dashboard" 
           active={pathname === '/dashboard'}
           onClick={closeMenuOnMobile}
         />
         
-        <SidebarItem 
-          icon={<LayoutDashboard size={18} />} 
-          label="Dashboard" 
-          href="/dashboard/overview" 
-          active={pathname === '/dashboard/overview'}
-          onClick={closeMenuOnMobile}
-        />
         
         <SidebarItem 
           icon={<DollarSign size={18} />} 

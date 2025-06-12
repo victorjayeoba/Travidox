@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
-import { User, Mail, LogOut, ArrowLeft, Star, Award, BookOpen, Certificate, Sparkles } from 'lucide-react'
+import { User, Mail, LogOut, ArrowLeft, Star, Award, BookOpen, FileText, Sparkles } from 'lucide-react'
 import { Progress } from '@/components/ui/progress'
 
 export default function ProfilePage() {
@@ -132,7 +132,7 @@ export default function ProfilePage() {
                   <div className="flex-1">
                     <div className="flex justify-between">
                       <p className="text-sm font-medium text-gray-500">Experience Points</p>
-                      <p className="text-sm font-medium text-blue-600">{(userProfile.xp).toFixed(2)} XP</p>
+                      <p className="text-sm font-medium text-blue-600">{(userProfile.xp || 0).toFixed(2)} XP</p>
                     </div>
                     <Progress value={calculateXpProgress()} className="h-2 mt-1" />
                     <p className="text-xs text-gray-500 mt-1">
@@ -172,7 +172,7 @@ export default function ProfilePage() {
               
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-600 flex items-center">
-                  <Certificate className="h-4 w-4 mr-2 text-green-500" />
+                  <FileText className="h-4 w-4 mr-2 text-green-500" />
                   Completed Courses
                 </span>
                 <Badge variant="outline">
@@ -220,7 +220,7 @@ export default function ProfilePage() {
           </CardHeader>
           <CardContent>
             <div className="flex items-center space-x-3 p-4 bg-green-50 text-green-800 rounded-lg">
-              <Certificate className="h-6 w-6 text-green-600" />
+              <FileText className="h-6 w-6 text-green-600" />
               <div>
                 <p className="font-medium">Course Completed!</p>
                 <p className="text-sm mt-1">
@@ -255,7 +255,7 @@ export default function ProfilePage() {
                 onClick={() => router.push('/dashboard/certifications')}
                 className="border-green-600 text-green-600 hover:bg-green-50"
               >
-                <Certificate className="h-4 w-4 mr-2" />
+                <FileText className="h-4 w-4 mr-2" />
                 View Certifications
               </Button>
             </div>

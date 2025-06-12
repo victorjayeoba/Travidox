@@ -1,10 +1,12 @@
 "use client"
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Card, CardContent } from '@/components/ui/card'
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react'
 import { StockPurchaseModal } from '@/components/StockPurchaseModal'
 import { usePortfolio } from '@/hooks/usePortfolio'
+import { isValidStockSymbol } from '@/lib/stock-mapping'
 
 interface StockCardProps {
   symbol: string
@@ -25,6 +27,7 @@ export function StockCard({
 }: StockCardProps) {
   const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false)
   const { portfolio } = usePortfolio()
+  const router = useRouter()
   
   // Determine color and icon based on change value
   let changeColor = 'text-gray-500'  // Default black/gray for no change
@@ -58,7 +61,12 @@ export function StockCard({
     if (onClick) {
       onClick()
     } else {
-      setIsPurchaseModalOpen(true)
+      // Navigate to stock detail page if it's a valid stock symbol, otherwise show modal
+      if (isValidStockSymbol(symbol)) {
+        router.push(`/dashboard/markets/${symbol.toLowerCase()}`)
+      } else {
+        setIsPurchaseModalOpen(true)
+      }
     }
   }
 

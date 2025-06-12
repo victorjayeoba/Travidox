@@ -66,7 +66,7 @@ export function CommunitySection({ id }: CommunitySectionProps) {
                       <span className="text-white text-sm font-bold">J</span>
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">John D.</p>
+                      <p className="font-medium text-gray-900">Mubarak D.</p>
                       <p className="text-xs text-gray-600">2 hours ago</p>
                     </div>
                   </div>
@@ -91,7 +91,7 @@ export function CommunitySection({ id }: CommunitySectionProps) {
                 </div>
 
                 <div className="text-center pt-4">
-                  <p className="text-sm text-gray-600">Join 50,000+ active community members</p>
+                  <p className="text-sm text-gray-600">Join thousands of successful investors sharing insights daily</p>
                 </div>
               </div>
             </div>
