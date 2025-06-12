@@ -13,6 +13,7 @@ export interface NigeriaStock {
   Chg?: number;
   sector?: string;
   PairType?: string;
+  changePercent?: number;
   // Keep original fields
   AvgVolume?: number;
   ChgPct?: number;

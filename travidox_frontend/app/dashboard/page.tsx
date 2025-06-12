@@ -4,7 +4,27 @@ import React, { Suspense } from 'react'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import Link from 'next/link'
-import { BarChart3, TrendingUp, Wallet, ArrowUpRight, Plus, ShoppingCart, LineChart } from 'lucide-react'
+import { 
+  BarChart3, 
+  TrendingUp, 
+  Wallet, 
+  ArrowUpRight, 
+  Plus, 
+  ShoppingCart, 
+  LineChart,
+  PieChart,
+  Activity,
+  Target,
+  BookOpen,
+  Award,
+  Shield,
+  Users,
+  Zap,
+  ArrowDown,
+  ArrowUp,
+  DollarSign,
+  Percent
+} from 'lucide-react'
 import { useAuth } from '@/components/auth/auth-provider'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -17,9 +37,14 @@ import { useState } from 'react'
 import { StockPurchaseButton } from '@/components/dashboard/StockPurchaseButton'
 
 function getRandomColor(key: string) {
-  // Simple hash to color mapping for demo purposes
   const colors = [
-    "#34d399", "#60a5fa", "#fbbf24", "#f87171", "#a78bfa", "#f472b6", "#38bdf8"
+    "bg-gradient-to-r from-blue-500 to-purple-600",
+    "bg-gradient-to-r from-green-500 to-teal-600", 
+    "bg-gradient-to-r from-yellow-500 to-orange-600",
+    "bg-gradient-to-r from-pink-500 to-rose-600",
+    "bg-gradient-to-r from-indigo-500 to-blue-600",
+    "bg-gradient-to-r from-purple-500 to-pink-600",
+    "bg-gradient-to-r from-teal-500 to-cyan-600"
   ];
   let hash = 0;
   for (let i = 0; i < key.length; i++) {
@@ -27,6 +52,67 @@ function getRandomColor(key: string) {
   }
   return colors[Math.abs(hash) % colors.length];
 }
+
+// Component interfaces
+interface QuickActionCardProps {
+  icon: React.ComponentType<{ size: number }>
+  title: string
+  description: string
+  onClick: () => void
+  color: string
+}
+
+interface MetricCardProps {
+  title: string
+  value: string
+  change: string
+  changeType: 'positive' | 'negative' | 'neutral'
+  icon: React.ComponentType<{ size: number }>
+  color: string
+}
+
+// Quick Action Card Component
+const QuickActionCard: React.FC<QuickActionCardProps> = ({ icon: Icon, title, description, onClick, color }) => (
+  <Card className="group hover:shadow-lg transition-all duration-300 cursor-pointer bg-white/60 backdrop-blur-sm border-white/20 hover:bg-white/80" onClick={onClick}>
+    <CardContent className="p-6">
+      <div className="flex items-center space-x-4">
+        <div className={`w-12 h-12 rounded-xl ${color} flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300`}>
+          <Icon size={24} />
+        </div>
+        <div className="flex-1">
+          <h3 className="font-semibold text-gray-900 text-sm lg:text-base">{title}</h3>
+          <p className="text-xs lg:text-sm text-gray-600 mt-1">{description}</p>
+        </div>
+        <ArrowUpRight className="w-5 h-5 text-gray-400 group-hover:text-gray-600 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
+      </div>
+    </CardContent>
+  </Card>
+)
+
+// Metric Card Component
+const MetricCard: React.FC<MetricCardProps> = ({ title, value, change, changeType, icon: Icon, color }) => (
+  <Card className="bg-white/60 backdrop-blur-sm border-white/20 hover:bg-white/80 transition-all duration-300">
+    <CardContent className="p-6">
+      <div className="flex items-center justify-between">
+        <div className="flex-1">
+          <p className="text-sm font-medium text-gray-600 mb-1">{title}</p>
+          <p className="text-2xl lg:text-3xl font-bold text-gray-900">{value}</p>
+          <div className={`flex items-center mt-2 text-sm ${
+            changeType === 'positive' ? 'text-green-600' : 
+            changeType === 'negative' ? 'text-red-600' : 'text-gray-600'
+          }`}>
+            {changeType === 'positive' ? <ArrowUp size={16} /> : 
+             changeType === 'negative' ? <ArrowDown size={16} /> : null}
+            <span className="ml-1">{change}</span>
+          </div>
+        </div>
+        <div className={`w-12 h-12 rounded-xl ${color} flex items-center justify-center text-white`}>
+          <Icon size={24} />
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+)
 
 export default function DashboardPage() {
   const { user, loading: authLoading } = useAuth()
@@ -48,7 +134,6 @@ export default function DashboardPage() {
   // Update portfolio prices with the latest stock data
   useEffect(() => {
     if (!stocksLoading && stocks.length > 0 && !isRefreshing) {
-      // Add a small delay to prevent rapid consecutive updates
       const timer = setTimeout(() => {
         updatePrices(stocks);
       }, 500);
@@ -73,8 +158,6 @@ export default function DashboardPage() {
   // Handler for manual refresh
   const handleRefresh = async () => {
     setIsRefreshing(true)
-    // In a real implementation, you would fetch the latest data from your API
-    // For now, we'll just simulate a delay
     setTimeout(() => {
       setIsRefreshing(false)
     }, 1000)
@@ -82,8 +165,11 @@ export default function DashboardPage() {
 
   if (authLoading || portfolioLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center">
+        <div className="relative">
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-green-500 border-t-transparent"></div>
+          <div className="absolute inset-0 animate-ping rounded-full h-12 w-12 border-4 border-green-300 opacity-20"></div>
+        </div>
       </div>
     )
   }
@@ -116,212 +202,294 @@ export default function DashboardPage() {
   
   const portfolioWithAllocations = calculateAllocations();
   
-  // Find recommended stock if user has no portfolio
-  const recommendedStock = stocks.length > 0 ? stocks[0] : null;
+  // Find recommended stock if user has no portfolio - pick a high-performing stock
+  const getRecommendedStock = () => {
+    if (stocks.length === 0) return null;
+    
+    // Normalize stock data and find a good performing stock
+    const normalizedStocks = stocks.map(stock => ({
+      symbol: stock.symbol || stock.Symbol || '',
+      name: stock.name || stock.Name || '',
+      price: stock.price || stock.Last || 0,
+      change: stock.change || stock.Chg || 0,
+    })).filter(stock => stock.price > 0); // Filter out stocks with zero price
+    
+    if (normalizedStocks.length === 0) return null;
+    
+    // Find a stock with positive change, or fallback to any stock with valid price
+    const gainers = normalizedStocks.filter(stock => stock.change > 0);
+    const validStocks = gainers.length > 0 ? gainers : normalizedStocks;
+    
+    // Return a random performing stock from the top choices
+    return validStocks[Math.floor(Math.random() * Math.min(5, validStocks.length))];
+  };
+  
+  const recommendedStock = getRecommendedStock();
+
+  // Quick actions data
+  const quickActions = [
+    {
+      icon: TrendingUp,
+      title: "Trade Stocks",
+      description: "Buy and sell Nigerian stocks",
+      onClick: () => router.push('/dashboard/markets'),
+      color: "bg-gradient-to-r from-green-500 to-emerald-600"
+    },
+    {
+      icon: BookOpen,
+      title: "Learn & Earn",
+      description: "Complete courses to earn XP",
+      onClick: () => router.push('/dashboard/learn'),
+      color: "bg-gradient-to-r from-blue-500 to-indigo-600"
+    },
+    {
+      icon: Award,
+      title: "Certifications",
+      description: "Get certified in trading",
+      onClick: () => router.push('/dashboard/certifications'),
+      color: "bg-gradient-to-r from-purple-500 to-pink-600"
+    },
+    {
+      icon: Zap,
+      title: "Trading Bot",
+      description: "Automate your trading",
+      onClick: () => router.push('/dashboard/trading-bot'),
+      color: "bg-gradient-to-r from-yellow-500 to-orange-600"
+    }
+  ];
   
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900">My Portfolio</h1>
-        <Button onClick={() => router.push('/dashboard/overview')}>
-          View Dashboard
-        </Button>
+    <div className="space-y-8">
+      {/* Welcome Section */}
+      <div className="bg-gradient-to-r from-green-600 via-green-700 to-emerald-800 rounded-2xl lg:rounded-3xl p-6 lg:p-8 text-white relative overflow-hidden">
+        <div className="absolute inset-0 opacity-20">
+          <div 
+            className="w-full h-full"
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+            }}
+          />
+        </div>
+        <div className="relative">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+            <div className="mb-4 lg:mb-0">
+              <h1 className="text-2xl lg:text-4xl font-bold mb-2">
+                Welcome back, {user?.displayName?.split(' ')[0] || 'Trader'}! 👋
+              </h1>
+              <p className="text-green-100 text-base lg:text-lg">
+                Ready to grow your portfolio today?
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3 lg:gap-4">
+              <Button 
+                onClick={() => router.push('/dashboard/overview')}
+                className="bg-white/20 hover:bg-white/30 text-white border-white/30 backdrop-blur-sm transition-all duration-300"
+                variant="outline"
+              >
+                <Activity className="mr-2 h-4 w-4" />
+                View Full Dashboard
+              </Button>
+              <Button 
+                onClick={() => router.push('/dashboard/markets')}
+                className="bg-white text-green-700 hover:bg-gray-50 font-semibold transition-all duration-300"
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Start Trading
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
-      
+
+      {/* Portfolio Metrics */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+        <MetricCard
+          title="Portfolio Value"
+          value={`₦${totalValue.toFixed(2)}`}
+          change={`₦${Math.abs(totalChange).toFixed(2)} (${percentChange.toFixed(2)}%)`}
+          changeType={totalChange >= 0 ? 'positive' : 'negative'}
+          icon={DollarSign}
+          color="bg-gradient-to-r from-blue-500 to-blue-600"
+        />
+        <MetricCard
+          title="Available Cash"
+          value={`₦${(profile?.balance || 0).toFixed(2)}`}
+          change="Ready to invest"
+          changeType="neutral"
+          icon={Wallet}
+          color="bg-gradient-to-r from-green-500 to-green-600"
+        />
+        <MetricCard
+          title="Total Assets"
+          value={portfolio.assets.length.toString()}
+          change={hasPortfolio ? "Diversified" : "Start investing"}
+          changeType={hasPortfolio ? 'positive' : 'neutral'}
+          icon={PieChart}
+          color="bg-gradient-to-r from-purple-500 to-purple-600"
+        />
+        <MetricCard
+          title="XP Earned"
+          value={`${(profile?.xp || 0).toFixed(0)}`}
+          change="Keep learning!"
+          changeType="positive"
+          icon={Award}
+          color="bg-gradient-to-r from-yellow-500 to-orange-600"
+        />
+      </div>
+
+      {/* Quick Actions */}
+      <div>
+        <h2 className="text-xl lg:text-2xl font-bold text-gray-900 mb-4 lg:mb-6">Quick Actions</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+          {quickActions.map((action, index) => (
+            <QuickActionCard key={index} {...action} />
+          ))}
+        </div>
+      </div>
+
       {hasPortfolio ? (
         <>
-          {/* Portfolio Summary */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-gray-500 font-normal">Total Value</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">
-                  ₦{totalValue.toFixed(2)}
-                </div>
-                <div className={`flex items-center text-sm mt-1 ${totalChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  <ArrowUpRight className={`h-4 w-4 ${totalChange < 0 ? 'rotate-180' : ''}`} />
-                  <span>₦{Math.abs(totalChange).toFixed(2)} ({percentChange.toFixed(2)}%)</span>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-gray-500 font-normal">Performance</CardTitle>
-              </CardHeader>
-              <CardContent className="flex items-center">
-                <BarChart3 className="h-9 w-9 text-blue-500 mr-3" />
-                <div>
-                  <div className="text-2xl font-bold">{totalChange >= 0 ? 'Good' : 'Down'}</div>
-                  <div className="text-sm text-gray-500">
-                    {totalChange >= 0 ? 'Outperforming the market' : 'Market is volatile'}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-gray-500 font-normal">Available Cash</CardTitle>
-              </CardHeader>
-              <CardContent className="flex items-center">
-                <Wallet className="h-9 w-9 text-green-500 mr-3" />
-                <div>
-                  <div className="text-2xl font-bold">₦{profile?.balance.toFixed(2) || '0.00'}</div>
-                  <div className="text-sm text-gray-500">Available to invest</div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-          
           {/* Top Performers */}
           <div>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-gray-900 flex items-center">
-                <TrendingUp className="mr-2 h-5 w-5 text-green-600" />
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 lg:mb-6">
+              <h2 className="text-xl lg:text-2xl font-bold text-gray-900 mb-2 sm:mb-0 flex items-center">
+                <TrendingUp className="mr-2 h-5 w-5 lg:h-6 lg:w-6 text-green-600" />
                 Top Performers
               </h2>
               <Button 
                 variant="outline" 
-                size="sm" 
                 onClick={() => router.push('/dashboard/markets')}
+                className="bg-white/60 backdrop-blur-sm border-white/20 hover:bg-white/80"
               >
                 View All Assets
               </Button>
             </div>
             
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
               {portfolioWithAllocations
                 .sort((a, b) => b.change - a.change)
                 .slice(0, 3)
-                .map((asset) => (
-                  <Card key={asset.symbol} className="overflow-hidden">
-                    <CardContent className="p-0">
-                      <div className="p-4">
+                .map((asset, index) => (
+                  <Card key={asset.symbol} className="bg-white/60 backdrop-blur-sm border-white/20 hover:bg-white/80 transition-all duration-300">
+                    <CardContent className="p-6">
+                      <div className="space-y-4">
                         <StockCard 
                           symbol={asset.symbol}
                           name={asset.name}
                           price={asset.value / (asset.allocation / 100)}
                           change={asset.change}
                         />
-                      </div>
-                      <div className="px-4 pb-4">
-                        <div className="flex justify-between text-sm mb-1">
-                          <span className="text-gray-500">Allocation</span>
-                          <span className="font-medium">{asset.allocation}%</span>
+                        <div>
+                          <div className="flex justify-between text-sm mb-2">
+                            <span className="text-gray-600">Portfolio Allocation</span>
+                            <span className="font-semibold text-gray-900">{asset.allocation}%</span>
+                          </div>
+                          <Progress 
+                            value={asset.allocation} 
+                            className="h-2" 
+                          />
                         </div>
-                        <Progress value={asset.allocation} className="h-1.5" />
                       </div>
                     </CardContent>
                   </Card>
                 ))
               }
-              
+            </div>
+            
+            <div className="mt-6">
               <Button 
                 variant="outline" 
-                className="w-full" 
+                className="w-full bg-white/60 backdrop-blur-sm border-white/20 hover:bg-white/80" 
                 size="lg" 
                 onClick={() => router.push('/dashboard/markets')}
               >
                 <Plus className="mr-2 h-4 w-4" />
-                Add New Asset
+                Add New Investment
               </Button>
             </div>
           </div>
           
-          {/* Asset Allocation */}
-          <Card>
+          {/* Asset Allocation Chart */}
+          <Card className="bg-white/60 backdrop-blur-sm border-white/20">
             <CardHeader>
-              <CardTitle>Asset Allocation</CardTitle>
+              <CardTitle className="flex items-center">
+                <PieChart className="mr-2 h-5 w-5 text-blue-600" />
+                Asset Allocation
+              </CardTitle>
               <CardDescription>
                 Distribution of your investment portfolio
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="h-14 flex items-center space-x-1">
-                {portfolioWithAllocations.map((asset) => (
-                  <div 
-                    key={asset.symbol}
-                    className="h-full rounded-sm"
-                    style={{ 
-                      width: `${asset.allocation}%`,
-                      backgroundColor: getRandomColor(asset.symbol)
-                    }}
-                    title={`${asset.symbol}: ${asset.allocation}%`}
-                  />
-                ))}
-              </div>
-              
-              <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {portfolioWithAllocations.map((asset) => (
-                  <div key={asset.symbol} className="flex items-center">
+              <div className="space-y-4">
+                <div className="h-4 flex items-center space-x-1 rounded-full overflow-hidden bg-gray-100">
+                  {portfolioWithAllocations.map((asset, index) => (
                     <div 
-                      className="w-3 h-3 rounded-full mr-2"
-                      style={{ backgroundColor: getRandomColor(asset.symbol) }}
+                      key={asset.symbol}
+                      className={`h-full ${getRandomColor(asset.symbol)}`}
+                      style={{ width: `${asset.allocation}%` }}
                     />
-                    <div className="text-sm">{asset.symbol} <span className="text-gray-500">{asset.allocation}%</span></div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {portfolioWithAllocations.map((asset, index) => (
+                    <div key={asset.symbol} className="flex items-center space-x-2">
+                      <div 
+                        className={`w-3 h-3 rounded-full ${getRandomColor(asset.symbol)}`}
+                      />
+                      <span className="text-sm text-gray-600">{asset.symbol}</span>
+                      <span className="text-sm font-semibold text-gray-900 ml-auto">{asset.allocation}%</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </CardContent>
           </Card>
         </>
       ) : (
-        // Empty portfolio state
-        <div className="flex flex-col items-center justify-center py-12 space-y-6">
-          <div className="bg-gray-50 rounded-full p-8">
-            <LineChart className="h-24 w-24 text-gray-300" />
-          </div>
-          <div className="text-center space-y-2 max-w-md">
-            <h2 className="text-2xl font-bold">You don't have any portfolio yet</h2>
-            <p className="text-gray-600">
-              Start investing by purchasing your first stock. Browse available stocks in the market.
-            </p>
-          </div>
-          
-          {recommendedStock && (
-            <Card className="w-full max-w-md">
-              <CardHeader>
-                <CardTitle className="text-lg">Recommended Stock</CardTitle>
-                <CardDescription>Start with a popular option</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <StockCard
-                  symbol={recommendedStock.Symbol || recommendedStock.symbol}
-                  name={recommendedStock.Name || recommendedStock.name}
-                  price={recommendedStock.Last || recommendedStock.price || 0}
-                  change={recommendedStock.Chg || recommendedStock.change || 0}
-                />
-                
-                <div className="mt-4">
-                  <StockPurchaseButton 
-                    stock={{
-                      symbol: recommendedStock.Symbol || recommendedStock.symbol,
-                      name: recommendedStock.Name || recommendedStock.name,
-                      price: recommendedStock.Last || recommendedStock.price || 0,
-                    }}
-                    size="lg" 
-                    className="w-full"
-                  >
-                    <ShoppingCart className="mr-2 h-4 w-4" />
-                    Buy Stock
-                  </StockPurchaseButton>
+        /* Getting Started Section */
+        <Card className="bg-gradient-to-br from-blue-50 to-indigo-100 border-blue-200">
+          <CardContent className="p-8 text-center">
+            <div className="max-w-md mx-auto">
+              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Target className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-2">Start Your Investment Journey</h3>
+              <p className="text-gray-600 mb-6">
+                You haven't made any investments yet. Explore Nigerian stocks and start building your portfolio today.
+              </p>
+              {recommendedStock && (
+                <div className="bg-white rounded-lg p-4 mb-6">
+                  <p className="text-sm text-gray-600 mb-2">Recommended for you:</p>
+                  <StockCard 
+                    symbol={recommendedStock.symbol || ''}
+                    name={recommendedStock.name || ''}
+                    price={recommendedStock.price || 0}
+                    change={recommendedStock.change || 0}
+                  />
                 </div>
-              </CardContent>
-            </Card>
-          )}
-          
-          <Button 
-            onClick={() => router.push('/dashboard/markets')}
-            className="mt-4"
-          >
-            Browse All Stocks
-          </Button>
-        </div>
+              )}
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Button 
+                  onClick={() => router.push('/dashboard/learn')}
+                  variant="outline"
+                  className="bg-white/80 hover:bg-white"
+                >
+                  <BookOpen className="mr-2 h-4 w-4" />
+                  Learn First
+                </Button>
+                <Button 
+                  onClick={() => router.push('/dashboard/markets')}
+                  className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700"
+                >
+                  <ShoppingCart className="mr-2 h-4 w-4" />
+                  Explore Markets
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       )}
-      
     </div>
   )
 } 

@@ -254,7 +254,7 @@ export function MarketsSection({ id }: MarketsSectionProps) {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
               <div>
                 <h3 className="text-xl font-bold text-gray-900">Weekly Stock Performance</h3>
-                <p className="text-sm text-gray-500 mt-1">160 weeks • Historical Data</p>
+                <p className="text-sm text-gray-500 mt-1">52 weeks • Historical Data</p>
               </div>
               
               <div className="flex gap-2">

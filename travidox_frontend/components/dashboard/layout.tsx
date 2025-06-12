@@ -3,6 +3,7 @@
 import { ReactNode, useState, useEffect } from 'react'
 import { Sidebar } from './sidebar'
 import { DashboardHeader } from './header'
+import HeaderMarketSwiper from './header-market-swiper'
 import { useAuth } from '@/components/auth/auth-provider'
 import { useRouter } from 'next/navigation'
 import { Menu, X } from 'lucide-react'
@@ -59,8 +60,11 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   // Protect dashboard routes
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center">
+        <div className="relative">
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-green-500 border-t-transparent"></div>
+          <div className="absolute inset-0 animate-ping rounded-full h-12 w-12 border-4 border-green-300 opacity-20"></div>
+        </div>
       </div>
     )
   }
@@ -72,51 +76,62 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50 relative">
-      {/* Mobile Hamburger Menu Button */}
-      <Button
-        id="hamburger-button"
-        variant="ghost"
-        size="icon"
-        className={cn(
-          "fixed top-4 left-4 z-50 lg:hidden",
-          sidebarOpen ? "text-white" : "text-gray-700"
-        )}
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-      >
-        {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
-      </Button>
-      
-      {/* Mobile Sidebar Overlay */}
-      {isMobile && sidebarOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-      
-      {/* Sidebar - fixed on mobile, sticky on desktop */}
+    <div className="flex min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      {/* Sidebar */}
       <div 
         id="mobile-sidebar"
         className={cn(
-          "lg:sticky lg:top-0 z-40",
-          isMobile ? "fixed top-0 bottom-0 left-0 transition-transform duration-300 ease-in-out transform" : "",
+          "h-screen",
+          isMobile ? "fixed top-0 bottom-0 left-0 transition-transform duration-300 ease-in-out transform z-50" : "sticky top-0",
           isMobile && !sidebarOpen ? "-translate-x-full" : "translate-x-0"
         )}
       >
         <Sidebar />
       </div>
       
+      {/* Mobile-specific elements */}
+      {isMobile && (
+        <>
+          {/* Hamburger Menu Button */}
+          <Button
+            id="hamburger-button"
+            variant="ghost"
+            size="icon"
+            className={cn(
+              "fixed top-4 left-4 z-[60] shadow-lg bg-white/80 backdrop-blur-md border border-white/20 hover:bg-white/95 transition-all duration-200",
+              sidebarOpen ? "text-gray-700" : "text-gray-700"
+            )}
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+          >
+            {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
+          </Button>
+      
+          {/* Sidebar Overlay */}
+          {sidebarOpen && (
+            <div 
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+              onClick={() => setSidebarOpen(false)}
+            />
+          )}
+        </>
+      )}
+
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <DashboardHeader 
-          showMobileMenu={isMobile} 
-          onMenuClick={() => setSidebarOpen(!sidebarOpen)}
-          isSidebarOpen={sidebarOpen}
-        />
-        <main className="flex-1 overflow-auto">
-          <div className="mx-auto max-w-6xl px-4 py-6">
-            {children}
+      <div className="flex-1 flex flex-col w-full">
+        {/* Sticky Header Container */}
+        <div className="sticky top-0 z-30 flex-shrink-0 bg-slate-50/50 backdrop-blur-lg border-b border-slate-200/50">
+          <DashboardHeader 
+            onMenuClick={() => setSidebarOpen(!sidebarOpen)}
+          />
+          <HeaderMarketSwiper />
+        </div>
+        
+        {/* Scrollable Main Content */}
+        <main className="flex-1 overflow-y-auto">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
+            <div className="space-y-6">
+              {children}
+            </div>
           </div>
         </main>
       </div>
