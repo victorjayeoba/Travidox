@@ -303,9 +303,8 @@ export default function CertificatePage() {
                   </p>
                   
                   {/* User Name - Main Focus */}
-                  <div className="mb-8 py-6 px-8 bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-50 rounded-lg border-l-4 border-r-4 border-amber-400">
-                    <h3 className="text-6xl font-bold text-amber-700 leading-tight" 
-                        style={{ fontFamily: 'Georgia, Times, serif' }}>
+                  <div className="mb-8 py-6 px-8 bg-amber-50 rounded-lg border-l-4 border-r-4 border-amber-400">
+                    <h3 className="text-6xl font-bold text-amber-800 leading-tight">
                       {certificate.userName}
                     </h3>
                   </div>
