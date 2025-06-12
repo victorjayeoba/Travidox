@@ -64,7 +64,17 @@ export default function StockDetailPage() {
   
   // Use hooks
   const { stocks, loading: stocksLoading } = useNigeriaStocks();
-  const { portfolio } = usePortfolio();
+  const { portfolio, loading: portfolioLoading } = usePortfolio();
+  
+  const [ownedQuantity, setOwnedQuantity] = useState(0);
+
+  // Memoize calculation for owned quantity
+  useEffect(() => {
+    if (!portfolioLoading && portfolio) {
+      const ownedAsset = portfolio.assets.find(asset => asset.symbol === symbol);
+      setOwnedQuantity(ownedAsset ? ownedAsset.quantity : 0);
+    }
+  }, [portfolio, portfolioLoading, symbol]);
   
   // Check if symbol is valid
   if (!symbol || !isValidStockSymbol(symbol)) {
@@ -223,10 +233,6 @@ export default function StockDetailPage() {
     return '';
   };
 
-  // Find owned quantity
-  const ownedAsset = portfolio.assets.find(asset => asset.symbol === symbol);
-  const ownedQuantity = ownedAsset ? ownedAsset.quantity : 0;
-
   if (!currentStock) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -319,10 +325,18 @@ export default function StockDetailPage() {
             <CardTitle className="text-xs sm:text-sm text-gray-500">Shares Owned</CardTitle>
           </CardHeader>
           <CardContent className="px-3 pb-3 pt-0">
-            <div className="text-xl sm:text-2xl font-bold text-gray-900">{ownedQuantity}</div>
-            <div className="text-xs sm:text-sm text-gray-500 truncate">
-              Value: ₦{(ownedQuantity * currentStock.price).toLocaleString('en-US', { minimumFractionDigits: 2 })}
-            </div>
+            {portfolioLoading ? (
+              <div className="h-10 flex items-center">
+                <div className="animate-spin h-5 w-5 border-2 border-primary border-t-transparent rounded-full" />
+              </div>
+            ) : (
+              <>
+                <div className="text-xl sm:text-2xl font-bold text-gray-900">{ownedQuantity}</div>
+                <div className="text-xs sm:text-sm text-gray-500 truncate">
+                  Value: ₦{(ownedQuantity * currentStock.price).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                </div>
+              </>
+            )}
           </CardContent>
         </Card>
 
