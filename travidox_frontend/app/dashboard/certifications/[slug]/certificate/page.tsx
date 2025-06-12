@@ -10,6 +10,9 @@ import { fetchCourseProgress, getCertificate, Certificate } from '@/lib/firebase
 import { getCourseById } from '@/lib/course-data'
 import { toast } from 'sonner'
 import Image from 'next/image'
+import jsPDF from 'jspdf'
+import html2canvas from 'html2canvas'
+import { CEOSignature, DirectorSignature, TravidoxSignature } from '@/components/ui/signature'
 
 export default function CertificatePage() {
   const params = useParams()
@@ -72,87 +75,74 @@ export default function CertificatePage() {
     });
   }
   
-  // Download certificate as image
+  // Download certificate as PDF automatically
   const handleDownload = async () => {
     if (!certificateRef.current || !certificate) return
     
     try {
       setGenerating(true)
       
-      // Create a link element
-      const link = document.createElement('a')
+      // Wait a moment for any animations to complete
+      await new Promise(resolve => setTimeout(resolve, 500))
       
-      // Set link properties
-      link.download = `Travidox_Certificate_${courseData.title.replace(/\s+/g, '_') || certificate.courseName.replace(/\s+/g, '_')}.png`
+      // Create a high-quality canvas from the certificate element
+      const canvas = await html2canvas(certificateRef.current, {
+        scale: 3, // Even higher quality for professional output
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+        logging: false,
+        width: certificateRef.current.offsetWidth,
+        height: certificateRef.current.offsetHeight,
+        scrollX: 0,
+        scrollY: 0,
+        windowWidth: certificateRef.current.offsetWidth,
+        windowHeight: certificateRef.current.offsetHeight
+      })
       
-      // Open certificate in a new tab to allow the user to download/print it
-      const certificateWindow = window.open('', '_blank')
+      // Create PDF in landscape format with better dimensions
+      const pdf = new jsPDF({
+        orientation: 'landscape',
+        unit: 'mm',
+        format: 'a4',
+        compress: false // Better quality
+      })
       
-      if (certificateWindow) {
-        // Write certificate HTML to the new window
-        certificateWindow.document.write(`
-          <html>
-            <head>
-              <title>Travidox Certificate - ${courseData.title || certificate.courseName}</title>
-              <style>
-                body { margin: 0; padding: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; }
-                .certificate-container { border: 8px solid #fde68a; padding: 2rem; width: 100%; max-width: 800px; margin: 2rem auto; background-color: white; }
-                .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-                .brand { font-size: 1.5rem; font-weight: bold; color: #059669; }
-                .title { font-size: 2rem; font-weight: bold; margin-bottom: 0.5rem; font-family: serif; }
-                .subtitle { color: #6b7280; margin-bottom: 2rem; }
-                .name { font-size: 2.25rem; font-weight: bold; margin: 2rem 0; color: #92400e; font-family: serif; }
-                .course-name { font-size: 1.75rem; font-weight: bold; margin: 2rem 0; font-family: serif; }
-                .details { display: flex; justify-content: center; gap: 3rem; text-align: center; }
-                .details-label { color: #6b7280; font-size: 0.875rem; }
-                .footer { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-between; }
-                .verification { font-size: 0.875rem; color: #6b7280; }
-                .verification-code { font-family: monospace; }
-                .print-button { margin-top: 2rem; padding: 0.75rem 1.5rem; background-color: #059669; color: white; border: none; border-radius: 0.25rem; cursor: pointer; font-size: 1rem; }
-                @media print {
-                  .print-button { display: none; }
-                }
-              </style>
-            </head>
-            <body>
-              <div class="certificate-container">
-                <div class="header">
-                  <div class="brand">${certificate.brandedName || 'TRAVIDOX'}</div>
-                  <div>Certificate of Excellence</div>
-                </div>
-                <div class="title">Certificate of Completion</div>
-                <div class="subtitle">This certifies that</div>
-                <div class="name">${certificate.userName}</div>
-                <div>has successfully completed the course</div>
-                <div class="course-name">${courseData.title || certificate.courseName}</div>
-                <div class="details">
-                  <div>
-                    <div class="details-label">Issue Date</div>
-                    <div>${formatDate(certificate.issueDate)}</div>
-                  </div>
-                  <div>
-                    <div class="details-label">Certificate ID</div>
-                    <div>${certificate.id.substring(0, 8)}</div>
-                  </div>
-                </div>
-                <div class="footer">
-                  <div class="verification">
-                    Verify this certificate using code: 
-                    <span class="verification-code">${certificate.verificationCode}</span>
-                  </div>
-                  <div class="brand">${certificate.brandedName || 'TRAVIDOX'}</div>
-                </div>
-              </div>
-              <button class="print-button" onclick="window.print()">Print / Save as PDF</button>
-            </body>
-          </html>
-        `)
-        
-        toast.success('Certificate opened in new tab - use Print or Save as PDF')
+      // Calculate dimensions to fit the certificate properly while maintaining aspect ratio
+      const pdfWidth = pdf.internal.pageSize.getWidth()
+      const pdfHeight = pdf.internal.pageSize.getHeight()
+      const imgAspectRatio = canvas.width / canvas.height
+      const pdfAspectRatio = pdfWidth / pdfHeight
+      
+      let finalWidth, finalHeight, imgX, imgY
+      
+      if (imgAspectRatio > pdfAspectRatio) {
+        // Image is wider than PDF
+        finalWidth = pdfWidth * 0.95 // 95% of page width for margins
+        finalHeight = finalWidth / imgAspectRatio
+        imgX = (pdfWidth - finalWidth) / 2
+        imgY = (pdfHeight - finalHeight) / 2
       } else {
-        toast.error('Please allow pop-ups to download the certificate')
+        // Image is taller than PDF
+        finalHeight = pdfHeight * 0.95 // 95% of page height for margins
+        finalWidth = finalHeight * imgAspectRatio
+        imgX = (pdfWidth - finalWidth) / 2
+        imgY = (pdfHeight - finalHeight) / 2
       }
       
+      // Convert canvas to high-quality image and add to PDF
+      const imgData = canvas.toDataURL('image/jpeg', 0.95) // Use JPEG with high quality
+      pdf.addImage(imgData, 'JPEG', imgX, imgY, finalWidth, finalHeight)
+      
+      // Generate a clean filename with user's name
+      const cleanUserName = certificate.userName.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_')
+      const cleanCourseTitle = (courseData?.title || certificate.courseName).replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_')
+      const filename = `Travidox_Certificate_${cleanCourseTitle}_${cleanUserName}_${new Date().getFullYear()}.pdf`
+      
+      // Download the PDF automatically
+      pdf.save(filename)
+      
+      toast.success('Certificate downloaded successfully!')
       setGenerating(false)
     } catch (error) {
       console.error('Error generating certificate:', error)
@@ -219,70 +209,203 @@ export default function CertificatePage() {
               <Button
                 onClick={handleDownload}
                 disabled={generating}
+                className="bg-green-600 hover:bg-green-700"
               >
                 {generating ? (
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                 ) : (
                   <Download className="h-4 w-4 mr-2" />
                 )}
-                Get Certificate
+                Download PDF
               </Button>
             </div>
           </div>
           
           {/* Certificate Display */}
-          <Card className="p-1 overflow-hidden">
+          <Card className="p-1 overflow-hidden shadow-2xl">
             <div 
               ref={certificateRef} 
-              className="bg-gradient-to-r from-blue-50 to-purple-50 text-center p-12 min-h-[500px] flex flex-col items-center justify-center"
+              className="bg-white p-16 min-h-[700px] flex flex-col items-center justify-center relative print:shadow-none"
+              style={{ fontFamily: 'Georgia, Times, serif' }}
             >
-              <div className="border-8 border-amber-100 p-8 w-full max-w-4xl mx-auto bg-white bg-opacity-90">
-                {/* Travidox Logo & Branding */}
-                <div className="flex justify-between items-center mb-8">
-                  <div className="text-xl font-bold text-green-600">{certificate.brandedName || 'TRAVIDOX'}</div>
-                  <div className="flex justify-center">
-                    <Award className="h-16 w-16 text-amber-600" />
+              {/* Elegant Border Frame */}
+              <div className="absolute inset-8 border-4 border-double border-amber-300"></div>
+              <div className="absolute inset-12 border border-amber-200"></div>
+              
+              {/* Watermark Pattern */}
+              <div className="absolute inset-0 opacity-3">
+                <div className="absolute top-20 left-20">
+                  <Image src="/logo.png" alt="Travidox" width={80} height={80} className="opacity-10" />
+                </div>
+                <div className="absolute top-20 right-20">
+                  <Image src="/logo.png" alt="Travidox" width={80} height={80} className="opacity-10" />
+                </div>
+                <div className="absolute bottom-20 left-20">
+                  <Image src="/logo.png" alt="Travidox" width={80} height={80} className="opacity-10" />
+                </div>
+                <div className="absolute bottom-20 right-20">
+                  <Image src="/logo.png" alt="Travidox" width={80} height={80} className="opacity-10" />
+                </div>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                  <Image src="/logo.png" alt="Travidox" width={200} height={200} className="opacity-5" />
+                </div>
+              </div>
+              
+              <div className="relative z-10 text-center max-w-5xl mx-auto w-full">
+                {/* Header Section */}
+                <div className="mb-16">
+                  <div className="flex items-center justify-center mb-8">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-16 h-16 bg-gradient-to-br from-amber-400 via-yellow-500 to-amber-600 rounded-full flex items-center justify-center shadow-lg">
+                        <Image src="/logo.png" alt="Travidox" width={40} height={40} className="object-contain" />
+                      </div>
+                      <div className="text-left">
+                        <h1 className="text-4xl font-bold text-amber-600 tracking-wider" style={{ fontFamily: 'Georgia, Times, serif' }}>
+                          TRAVIDOX
+                        </h1>
+                        <p className="text-lg text-gray-600 font-medium tracking-wide">LEARNING EXCELLENCE PLATFORM</p>
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-right text-sm text-gray-500">
-                    Certificate of Excellence
+                  
+                  {/* Decorative Award Icon */}
+                  <div className="flex justify-center mb-8">
+                    <div className="relative">
+                      <div className="w-24 h-24 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-full flex items-center justify-center shadow-xl">
+                        <Award className="h-16 w-16 text-white" />
+                      </div>
+                      <div className="absolute -inset-2 bg-gradient-to-br from-amber-300 to-yellow-400 rounded-full -z-10 opacity-30"></div>
+                      <div className="absolute -inset-4 bg-gradient-to-br from-amber-200 to-yellow-300 rounded-full -z-20 opacity-20"></div>
+                    </div>
                   </div>
                 </div>
                 
-                <h2 className="text-2xl font-serif mb-1">Certificate of Completion</h2>
-                <p className="text-gray-600 mb-8">This certifies that</p>
+                {/* Main Certificate Title */}
+                <div className="mb-12">
+                  <h2 className="text-6xl font-bold mb-4 text-gray-800" style={{ fontFamily: 'Georgia, Times, serif' }}>
+                    CERTIFICATE
+                  </h2>
+                  <div className="flex items-center justify-center gap-4 mb-6">
+                    <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-amber-400 to-transparent"></div>
+                    <p className="text-2xl text-amber-600 font-semibold tracking-widest">OF</p>
+                    <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-amber-400 to-transparent"></div>
+                  </div>
+                  <h3 className="text-4xl font-bold text-gray-800" style={{ fontFamily: 'Georgia, Times, serif' }}>
+                    EXCELLENCE
+                  </h3>
+                </div>
                 
-                <h3 className="text-3xl font-bold mb-8 text-amber-800 font-serif">
-                  {certificate.userName}
-                </h3>
+                {/* Recognition Text */}
+                <div className="mb-12">
+                  <p className="text-2xl text-gray-700 mb-8 font-medium" style={{ fontFamily: 'Georgia, Times, serif' }}>
+                    This is to certify that
+                  </p>
+                  
+                  {/* User Name - Main Focus */}
+                  <div className="mb-8 py-6 px-8 bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-50 rounded-lg border-l-4 border-r-4 border-amber-400">
+                    <h3 className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-600 via-yellow-600 to-amber-700 leading-tight" 
+                        style={{ fontFamily: 'Georgia, Times, serif' }}>
+                      {certificate.userName}
+                    </h3>
+                  </div>
+                  
+                  <p className="text-2xl mb-8 text-gray-700 font-medium" style={{ fontFamily: 'Georgia, Times, serif' }}>
+                    has successfully completed the comprehensive course
+                  </p>
+                  
+                  {/* Course Title */}
+                  <div className="mb-12 py-4 px-6 bg-gray-50 rounded-lg border border-gray-200">
+                    <h4 className="text-3xl font-bold text-gray-800 leading-relaxed" style={{ fontFamily: 'Georgia, Times, serif' }}>
+                      {courseData.title}
+                    </h4>
+                  </div>
+                  
+                  <p className="text-xl text-gray-600 mb-12" style={{ fontFamily: 'Georgia, Times, serif' }}>
+                    demonstrating exceptional knowledge, dedication, and mastery of the subject matter
+                  </p>
+                </div>
                 
-                <p className="text-lg mb-8">
-                  has successfully completed the course
-                </p>
-                
-                <h3 className="text-2xl font-bold mb-8 font-serif">
-                  {courseData.title}
-                </h3>
-                
-                <div className="flex justify-center gap-12 text-center">
-                  <div>
-                    <p className="text-gray-600 text-sm">Issue Date</p>
-                    <p className="font-medium">
+                {/* Certificate Details Grid */}
+                <div className="grid grid-cols-3 gap-8 mb-16">
+                  <div className="bg-gradient-to-br from-amber-50 to-yellow-50 p-6 rounded-lg border border-amber-200 shadow-sm">
+                    <p className="text-amber-700 text-sm font-bold uppercase tracking-wider mb-3">Completion Date</p>
+                    <p className="font-bold text-xl text-gray-800" style={{ fontFamily: 'Georgia, Times, serif' }}>
                       {formatDate(certificate.issueDate)}
                     </p>
                   </div>
                   
-                  <div>
-                    <p className="text-gray-600 text-sm">Certificate ID</p>
-                    <p className="font-medium">{certificate.id.substring(0, 8)}</p>
+                  <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-lg border border-green-200 shadow-sm">
+                    <p className="text-green-700 text-sm font-bold uppercase tracking-wider mb-3">Certificate ID</p>
+                    <p className="font-bold text-xl text-gray-800 font-mono">
+                      {certificate.id.substring(0, 12).toUpperCase()}
+                    </p>
+                  </div>
+                  
+                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-lg border border-blue-200 shadow-sm">
+                    <p className="text-blue-700 text-sm font-bold uppercase tracking-wider mb-3">Verification Code</p>
+                    <p className="font-bold text-xl text-gray-800 font-mono">
+                      {certificate.verificationCode}
+                    </p>
                   </div>
                 </div>
                 
-                <div className="mt-8 pt-8 border-t border-gray-200">
+                                 {/* Signature Section */}
+                 <div className="grid grid-cols-3 gap-12 mb-16">
+                   <div className="text-center">
+                     <div className="mb-4 flex justify-center">
+                       <CEOSignature className="transform scale-90" />
+                     </div>
+                     <div className="border-t-2 border-gray-400 pt-4 mb-2">
+                       <p className="font-bold text-lg text-gray-800" style={{ fontFamily: 'Georgia, Times, serif' }}>Dr. Sarah Johnson</p>
+                       <p className="text-gray-600 font-medium">Chief Education Officer</p>
+                       <p className="text-sm text-gray-500">Travidox Learning Platform</p>
+                     </div>
+                   </div>
+                   
+                   <div className="text-center">
+                     <div className="mb-4 flex justify-center">
+                       <TravidoxSignature className="transform scale-110" />
+                     </div>
+                     <div className="border-t-2 border-amber-400 pt-4 mb-2">
+                       <p className="font-bold text-xl text-amber-600" style={{ fontFamily: 'Georgia, Times, serif' }}>TRAVIDOX</p>
+                       <p className="text-gray-700 font-semibold">Official Certification Seal</p>
+                       <p className="text-sm text-gray-500">Authorized Learning Institution</p>
+                     </div>
+                   </div>
+                   
+                   <div className="text-center">
+                     <div className="mb-4 flex justify-center">
+                       <DirectorSignature className="transform scale-90" />
+                     </div>
+                     <div className="border-t-2 border-gray-400 pt-4 mb-2">
+                       <p className="font-bold text-lg text-gray-800" style={{ fontFamily: 'Georgia, Times, serif' }}>Michael Chen</p>
+                       <p className="text-gray-600 font-medium">Director of Certifications</p>
+                       <p className="text-sm text-gray-500">Travidox Learning Platform</p>
+                     </div>
+                   </div>
+                 </div>
+                
+                {/* Footer */}
+                <div className="pt-8 border-t border-gray-300">
                   <div className="flex justify-between items-center">
-                    <p className="text-sm text-gray-500">
-                      Verify this certificate at <span className="font-mono">verification code: {certificate.verificationCode}</span>
-                    </p>
-                    <div className="text-green-600 font-bold">{certificate.brandedName || 'TRAVIDOX'}</div>
+                    <div className="flex items-center space-x-3">
+                      <Image src="/logo.png" alt="Travidox" width={32} height={32} className="opacity-70" />
+                      <div className="text-left">
+                        <p className="text-sm text-gray-600 font-medium">
+                          Verify this certificate at:
+                        </p>
+                        <p className="text-sm font-bold text-amber-600">www.travidox.com/verify</p>
+                      </div>
+                    </div>
+                    
+                    <div className="text-right">
+                      <p className="text-sm text-gray-600">
+                        Issued by Travidox Learning Platform
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        © {new Date().getFullYear()} Travidox. All rights reserved.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
