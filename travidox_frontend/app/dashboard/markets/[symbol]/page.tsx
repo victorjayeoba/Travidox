@@ -71,7 +71,16 @@ export default function StockDetailPage() {
   // Memoize calculation for owned quantity
   useEffect(() => {
     if (!portfolioLoading && portfolio) {
-      const ownedAsset = portfolio.assets.find(asset => asset.symbol === symbol);
+      console.log('Portfolio loaded:', portfolio);
+      console.log('Looking for symbol:', symbol);
+      console.log('Available assets:', portfolio.assets.map(asset => ({ symbol: asset.symbol, quantity: asset.quantity })));
+      
+      // Make symbol matching case-insensitive
+      const ownedAsset = portfolio.assets.find(asset => 
+        asset.symbol.toLowerCase() === symbol.toLowerCase()
+      );
+      console.log('Found owned asset:', ownedAsset);
+      
       setOwnedQuantity(ownedAsset ? ownedAsset.quantity : 0);
     }
   }, [portfolio, portfolioLoading, symbol]);
