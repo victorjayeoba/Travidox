@@ -41,17 +41,22 @@ export function StockCard({
     ChangeIcon = TrendingDown
   }
   
+  const safeToFixed = (x: any, digits = 2) => {
+    const num = typeof x === 'number' && !isNaN(x) ? x : 0;
+    return num.toFixed(digits);
+  };
+
   const changeText = change === 0 
     ? `₦0.00` 
     : change > 0 
-      ? `+₦${change.toFixed(2)}` 
-      : `-₦${Math.abs(change).toFixed(2)}`
+      ? `+₦${safeToFixed(change)}` 
+      : `-₦${safeToFixed(Math.abs(change))}`
       
   const changePercent = change === 0 
     ? `(0.00%)` 
     : change > 0 
-      ? `(+${(change / (price - change) * 100).toFixed(2)}%)` 
-      : `(-${(Math.abs(change) / (price + change) * 100).toFixed(2)}%)`
+      ? `(+${safeToFixed((change / ((typeof price === 'number' && price - change !== 0) ? price - change : 1) * 100))}%)` 
+      : `(-${safeToFixed((Math.abs(change) / ((typeof price === 'number' && price + change !== 0) ? price + change : 1) * 100))}%)`
   
   // Find if user owns any of this stock
   const ownedAsset = portfolio.assets.find(asset => asset.symbol === symbol)
@@ -90,7 +95,7 @@ export function StockCard({
           </div>
           
           <div className="text-right">
-            <div className="font-medium">₦{price.toFixed(2)}</div>
+            <div className="font-medium">₦{safeToFixed(price)}</div>
             <div className={`flex items-center justify-end gap-1 ${changeColor}`}>
               <ChangeIcon size={14} />
               <span>{changeText} {changePercent}</span>
