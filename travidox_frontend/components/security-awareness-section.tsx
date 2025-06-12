@@ -165,9 +165,9 @@ export function SecurityAwarenessSection({ id }: SecurityAwarenessProps) {
                 </div>
                 
                 <div className="text-right">
-                  <Button variant="outline" size="sm" className="border-yellow-400 text-yellow-600 hover:bg-yellow-50">
+                  <a href="/dashboard/security"><Button variant="outline" size="sm" className="border-yellow-400 text-yellow-600 hover:bg-yellow-50">
                     View all alerts
-                  </Button>
+                  </Button></a>
                 </div>
               </div>
             </div>

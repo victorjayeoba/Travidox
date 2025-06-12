@@ -49,7 +49,7 @@ export function LearnBasicsSection() {
             </div>
           </div>
           <Button size="lg" className="bg-green-600 hover:bg-green-700">
-            Enroll in courses
+            <a href="/dashboard/certifications">Enroll in courses</a>
           </Button>
         </div>
       </div>
