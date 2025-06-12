@@ -12,7 +12,6 @@ import { toast } from 'sonner'
 import Image from 'next/image'
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
-import { CEOSignature, DirectorSignature, TravidoxSignature } from '@/components/ui/signature'
 
 export default function CertificatePage() {
   const params = useParams()
@@ -79,74 +78,71 @@ export default function CertificatePage() {
   const handleDownload = async () => {
     if (!certificateRef.current || !certificate) return
     
+    setGenerating(true)
+    toast.info('Generating PDF... Please wait.')
+
     try {
-      setGenerating(true)
+      // Temporarily set a high-resolution for the capture
+      const originalWidth = certificateRef.current.style.width
+      const originalMaxWidth = certificateRef.current.style.maxWidth
+      certificateRef.current.style.width = '1200px'
+      certificateRef.current.style.maxWidth = '1200px'
       
-      // Wait a moment for any animations to complete
-      await new Promise(resolve => setTimeout(resolve, 500))
-      
-      // Create a high-quality canvas from the certificate element
+      await new Promise(resolve => setTimeout(resolve, 100)); // allow repaint
+
       const canvas = await html2canvas(certificateRef.current, {
-        scale: 3, // Even higher quality for professional output
+        scale: 2, // Use a high scale for better resolution
         useCORS: true,
         allowTaint: true,
-        backgroundColor: '#ffffff',
         logging: false,
-        width: certificateRef.current.offsetWidth,
-        height: certificateRef.current.offsetHeight,
-        scrollX: 0,
-        scrollY: 0,
-        windowWidth: certificateRef.current.offsetWidth,
-        windowHeight: certificateRef.current.offsetHeight
+        backgroundColor: null, // Use transparent background
       })
       
-      // Create PDF in landscape format with better dimensions
+      // Restore original style
+      certificateRef.current.style.width = originalWidth
+      certificateRef.current.style.maxWidth = originalMaxWidth
+
+      // Create PDF in A4 Landscape format
       const pdf = new jsPDF({
         orientation: 'landscape',
         unit: 'mm',
         format: 'a4',
-        compress: false // Better quality
       })
       
-      // Calculate dimensions to fit the certificate properly while maintaining aspect ratio
-      const pdfWidth = pdf.internal.pageSize.getWidth()
-      const pdfHeight = pdf.internal.pageSize.getHeight()
-      const imgAspectRatio = canvas.width / canvas.height
-      const pdfAspectRatio = pdfWidth / pdfHeight
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
       
-      let finalWidth, finalHeight, imgX, imgY
-      
-      if (imgAspectRatio > pdfAspectRatio) {
-        // Image is wider than PDF
-        finalWidth = pdfWidth * 0.95 // 95% of page width for margins
-        finalHeight = finalWidth / imgAspectRatio
-        imgX = (pdfWidth - finalWidth) / 2
-        imgY = (pdfHeight - finalHeight) / 2
+      // Calculate the aspect ratio
+      const canvasAspectRatio = canvas.width / canvas.height;
+      const pdfAspectRatio = pdfWidth / pdfHeight;
+
+      let finalWidth, finalHeight;
+      if (canvasAspectRatio > pdfAspectRatio) {
+        finalWidth = pdfWidth;
+        finalHeight = pdfWidth / canvasAspectRatio;
       } else {
-        // Image is taller than PDF
-        finalHeight = pdfHeight * 0.95 // 95% of page height for margins
-        finalWidth = finalHeight * imgAspectRatio
-        imgX = (pdfWidth - finalWidth) / 2
-        imgY = (pdfHeight - finalHeight) / 2
+        finalHeight = pdfHeight;
+        finalWidth = pdfHeight * canvasAspectRatio;
       }
+
+      // Center the image on the PDF page
+      const x = (pdfWidth - finalWidth) / 2;
+      const y = (pdfHeight - finalHeight) / 2;
       
-      // Convert canvas to high-quality image and add to PDF
-      const imgData = canvas.toDataURL('image/jpeg', 0.95) // Use JPEG with high quality
-      pdf.addImage(imgData, 'JPEG', imgX, imgY, finalWidth, finalHeight)
+      const imgData = canvas.toDataURL('image/png', 1.0)
+      pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight, undefined, 'FAST')
       
-      // Generate a clean filename with user's name
-      const cleanUserName = certificate.userName.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_')
-      const cleanCourseTitle = (courseData?.title || certificate.courseName).replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_')
-      const filename = `Travidox_Certificate_${cleanCourseTitle}_${cleanUserName}_${new Date().getFullYear()}.pdf`
+      const cleanUserName = certificate.userName.replace(/[^a-zA-Z0-9]/g, '_')
+      const cleanCourseTitle = (courseData?.title || certificate.courseName).replace(/[^a-zA-Z0-9]/g, '_')
+      const filename = `Travidox_Certificate_${cleanCourseTitle}_${cleanUserName}.pdf`
       
-      // Download the PDF automatically
       pdf.save(filename)
       
       toast.success('Certificate downloaded successfully!')
-      setGenerating(false)
     } catch (error) {
       console.error('Error generating certificate:', error)
-      toast.error('Failed to download certificate')
+      toast.error('Failed to download certificate. Please try again.')
+    } finally {
       setGenerating(false)
     }
   }
@@ -225,8 +221,13 @@ export default function CertificatePage() {
           <Card className="p-1 overflow-hidden shadow-2xl">
             <div 
               ref={certificateRef} 
-              className="bg-white p-16 min-h-[700px] flex flex-col items-center justify-center relative print:shadow-none"
-              style={{ fontFamily: 'Georgia, Times, serif' }}
+              className="bg-white text-center p-12 flex flex-col items-center justify-center relative print:shadow-none w-full mx-auto"
+              style={{ 
+                fontFamily: 'Georgia, Times, serif',
+                // Enforce A4 Landscape aspect ratio: 297mm / 210mm = 1.414
+                aspectRatio: '297 / 210',
+                maxWidth: '1000px', // Set a max-width for large screens
+              }}
             >
               {/* Elegant Border Frame */}
               <div className="absolute inset-8 border-4 border-double border-amber-300"></div>
@@ -303,7 +304,7 @@ export default function CertificatePage() {
                   
                   {/* User Name - Main Focus */}
                   <div className="mb-8 py-6 px-8 bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-50 rounded-lg border-l-4 border-r-4 border-amber-400">
-                    <h3 className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-600 via-yellow-600 to-amber-700 leading-tight" 
+                    <h3 className="text-6xl font-bold text-amber-700 leading-tight" 
                         style={{ fontFamily: 'Georgia, Times, serif' }}>
                       {certificate.userName}
                     </h3>
@@ -349,44 +350,25 @@ export default function CertificatePage() {
                   </div>
                 </div>
                 
-                                 {/* Signature Section */}
-                 <div className="grid grid-cols-3 gap-12 mb-16">
-                   <div className="text-center">
-                     <div className="mb-4 flex justify-center">
-                       <CEOSignature className="transform scale-90" />
-                     </div>
-                     <div className="border-t-2 border-gray-400 pt-4 mb-2">
-                       <p className="font-bold text-lg text-gray-800" style={{ fontFamily: 'Georgia, Times, serif' }}>Dr. Sarah Johnson</p>
-                       <p className="text-gray-600 font-medium">Chief Education Officer</p>
-                       <p className="text-sm text-gray-500">Travidox Learning Platform</p>
-                     </div>
-                   </div>
-                   
-                   <div className="text-center">
-                     <div className="mb-4 flex justify-center">
-                       <TravidoxSignature className="transform scale-110" />
-                     </div>
-                     <div className="border-t-2 border-amber-400 pt-4 mb-2">
-                       <p className="font-bold text-xl text-amber-600" style={{ fontFamily: 'Georgia, Times, serif' }}>TRAVIDOX</p>
-                       <p className="text-gray-700 font-semibold">Official Certification Seal</p>
-                       <p className="text-sm text-gray-500">Authorized Learning Institution</p>
-                     </div>
-                   </div>
-                   
-                   <div className="text-center">
-                     <div className="mb-4 flex justify-center">
-                       <DirectorSignature className="transform scale-90" />
-                     </div>
-                     <div className="border-t-2 border-gray-400 pt-4 mb-2">
-                       <p className="font-bold text-lg text-gray-800" style={{ fontFamily: 'Georgia, Times, serif' }}>Michael Chen</p>
-                       <p className="text-gray-600 font-medium">Director of Certifications</p>
-                       <p className="text-sm text-gray-500">Travidox Learning Platform</p>
-                     </div>
-                   </div>
-                 </div>
+                {/* Signature Section */}
+                <div className="grid grid-cols-2 gap-16 mt-16 mb-8">
+                  <div className="text-center">
+                    <div className="border-t-2 border-gray-300 pt-4">
+                      <p className="font-bold text-lg text-gray-800" style={{ fontFamily: 'Georgia, Times, serif' }}>Travidox Leadership</p>
+                      <p className="text-gray-600 font-medium">Authorizing Body</p>
+                    </div>
+                  </div>
+                  
+                  <div className="text-center">
+                    <div className="border-t-2 border-gray-300 pt-4">
+                      <p className="font-bold text-lg text-gray-800" style={{ fontFamily: 'Georgia, Times, serif' }}>Certification Department</p>
+                      <p className="text-gray-600 font-medium">Issuing Authority</p>
+                    </div>
+                  </div>
+                </div>
                 
                 {/* Footer */}
-                <div className="pt-8 border-t border-gray-300">
+                <div className="pt-8 border-t border-gray-200">
                   <div className="flex justify-between items-center">
                     <div className="flex items-center space-x-3">
                       <Image src="/logo.png" alt="Travidox" width={32} height={32} className="opacity-70" />
