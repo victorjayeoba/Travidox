@@ -1,6 +1,6 @@
 # Environment variables and credentials
 .env
-firebase-credentials.json
+#firebase-credentials.json
 
 # Python cache files
 __pycache__/
