@@ -49,7 +49,7 @@ export function QuizCelebration({
               startVelocity: 30,
               spread: 360,
               origin: { x: Math.random(), y: Math.random() * 0.5 },
-              colors: ['#FFD700', '#FFA500', '#FF4500', '#FF6347', '#FF8C00'],
+              colors: ['#84cc16', '#65a30d', '#4d7c0f', '#a3e635', '#d9f99d'],
             });
             
             if (Date.now() < end) {
@@ -62,7 +62,8 @@ export function QuizCelebration({
           confetti({
             particleCount: 100,
             spread: 70,
-            origin: { y: 0.6 }
+            origin: { y: 0.6 },
+            colors: ['#84cc16', '#65a30d', '#4d7c0f', '#a3e635', '#d9f99d'],
           });
         }
       }
@@ -91,22 +92,22 @@ export function QuizCelebration({
           delay: 0.2
         }}
       >
-        <div className={`${isRetake ? 'bg-gradient-to-r from-indigo-500 to-purple-500' : 'bg-gradient-to-r from-blue-600 to-purple-600'} py-6 px-4 text-white text-center`}>
+        <div className={`${isRetake ? 'bg-gradient-to-r from-lime-500 to-green-600' : 'bg-gradient-to-r from-lime-500 to-green-600'} py-6 px-4 text-white text-center`}>
           <div className="flex justify-center mb-4">
             {isRetake ? (
-              <div className="h-20 w-20 rounded-full bg-indigo-400 flex items-center justify-center">
+              <div className="h-20 w-20 rounded-full bg-lime-400 flex items-center justify-center">
                 <RefreshCw className="h-12 w-12 text-white" />
               </div>
             ) : isPerfect ? (
-              <div className="h-20 w-20 rounded-full bg-yellow-500 flex items-center justify-center">
+              <div className="h-20 w-20 rounded-full bg-lime-400 flex items-center justify-center">
                 <Trophy className="h-12 w-12 text-white" />
               </div>
             ) : isExcellent ? (
-              <div className="h-20 w-20 rounded-full bg-blue-500 flex items-center justify-center">
+              <div className="h-20 w-20 rounded-full bg-lime-500 flex items-center justify-center">
                 <Medal className="h-12 w-12 text-white" />
               </div>
             ) : (
-              <div className="h-20 w-20 rounded-full bg-green-500 flex items-center justify-center">
+              <div className="h-20 w-20 rounded-full bg-lime-600 flex items-center justify-center">
                 <Award className="h-12 w-12 text-white" />
               </div>
             )}
@@ -129,10 +130,10 @@ export function QuizCelebration({
               <div 
                 className={`h-3 rounded-full ${
                   isPerfect 
-                    ? 'bg-gradient-to-r from-yellow-400 to-yellow-600' 
+                    ? 'bg-gradient-to-r from-lime-400 to-lime-600' 
                     : isExcellent 
-                      ? 'bg-gradient-to-r from-blue-400 to-blue-600'
-                      : 'bg-gradient-to-r from-green-400 to-green-600'
+                      ? 'bg-gradient-to-r from-lime-400 to-lime-600'
+                      : 'bg-gradient-to-r from-lime-400 to-lime-600'
                 }`}
                 style={{ width: `${percentage}%` }}
               ></div>
@@ -140,36 +141,36 @@ export function QuizCelebration({
           </div>
           
           {isRetake ? (
-            <div className="bg-indigo-50 border border-indigo-100 rounded-lg p-4 flex items-center mb-6">
-              <div className="h-12 w-12 rounded-full bg-indigo-100 flex items-center justify-center mr-4">
-                <RefreshCw className="h-6 w-6 text-indigo-600" />
+            <div className="bg-lime-50 border border-lime-100 rounded-lg p-4 flex items-center mb-6">
+              <div className="h-12 w-12 rounded-full bg-lime-100 flex items-center justify-center mr-4">
+                <RefreshCw className="h-6 w-6 text-lime-600" />
               </div>
               <div>
-                <p className="font-medium text-indigo-800">Quiz Retake Complete</p>
-                <p className="text-sm text-indigo-600">No additional XP for retakes</p>
+                <p className="font-medium text-lime-800">Quiz Retake Complete</p>
+                <p className="text-sm text-lime-600">No additional XP for retakes</p>
               </div>
             </div>
           ) : (
-            <div className="bg-green-50 border border-green-100 rounded-lg p-4 flex items-center mb-6">
-              <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center mr-4">
-                <Zap className="h-6 w-6 text-green-600" />
+            <div className="bg-lime-50 border border-lime-100 rounded-lg p-4 flex items-center mb-6">
+              <div className="h-12 w-12 rounded-full bg-lime-100 flex items-center justify-center mr-4">
+                <Zap className="h-6 w-6 text-lime-600" />
               </div>
               <div>
-                <p className="font-medium text-green-800">+{xpEarned} XP Earned!</p>
-                <p className="text-sm text-green-600">Added to your profile</p>
+                <p className="font-medium text-lime-800">+{xpEarned} XP Earned!</p>
+                <p className="text-sm text-lime-600">Added to your profile</p>
               </div>
             </div>
           )}
           
           {isPerfect && !isRetake && (
             <motion.div 
-              className="bg-yellow-50 border border-yellow-100 rounded-lg p-4 mb-6"
+              className="bg-lime-50 border border-lime-100 rounded-lg p-4 mb-6"
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.5 }}
             >
-              <p className="text-yellow-800 font-medium flex items-center">
-                <Trophy className="h-5 w-5 mr-2 text-yellow-600" />
+              <p className="text-lime-800 font-medium flex items-center">
+                <Trophy className="h-5 w-5 mr-2 text-lime-600" />
                 Achievement Unlocked: Perfect Score!
               </p>
             </motion.div>
@@ -177,13 +178,13 @@ export function QuizCelebration({
           
           {isPerfect && isRetake && (
             <motion.div 
-              className="bg-purple-50 border border-purple-100 rounded-lg p-4 mb-6"
+              className="bg-lime-50 border border-lime-100 rounded-lg p-4 mb-6"
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.5 }}
             >
-              <p className="text-purple-800 font-medium flex items-center">
-                <Star className="h-5 w-5 mr-2 text-purple-600" />
+              <p className="text-lime-800 font-medium flex items-center">
+                <Star className="h-5 w-5 mr-2 text-lime-600" />
                 Perfect retake! Your knowledge is solid.
               </p>
             </motion.div>
@@ -191,7 +192,7 @@ export function QuizCelebration({
           
           <div className="flex justify-center">
             <motion.button
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium flex items-center"
+              className="bg-lime-600 hover:bg-lime-700 text-white px-6 py-2 rounded-lg font-medium flex items-center"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={onClose}

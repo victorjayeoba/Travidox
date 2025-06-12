@@ -187,8 +187,8 @@ export default function LearnPage() {
           <CardContent>
           <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
-              <div className="bg-blue-50 rounded-lg p-4">
-                <div className="text-sm text-blue-600 mb-1">Total XP Earned</div>
+              <div className="bg-lime-50 rounded-lg p-4">
+                <div className="text-sm text-lime-600 mb-1">Total XP Earned</div>
                     <div className="text-2xl font-bold">{(profile?.xp || 0).toFixed(0)} XP</div>
               </div>
               <div className="bg-green-50 rounded-lg p-4">
@@ -241,7 +241,7 @@ export default function LearnPage() {
                       Completed
                     </Badge>
                   ) : (
-                              <Badge variant="outline" className="bg-blue-50 text-blue-700 whitespace-nowrap max-w-[90px]">
+                              <Badge variant="outline" className="bg-lime-50 text-lime-700 whitespace-nowrap max-w-[90px]">
                                 <Star className="h-3.5 w-3.5 mr-1 flex-shrink-0" />
                                 <span className="truncate">{quiz.xpReward} XP</span>
                               </Badge>
@@ -304,7 +304,7 @@ export default function LearnPage() {
                               Completed
                             </Badge>
                           ) : (
-                            <Badge variant="outline" className="bg-blue-50 text-blue-700 whitespace-nowrap max-w-[90px]">
+                            <Badge variant="outline" className="bg-lime-50 text-lime-700 whitespace-nowrap max-w-[90px]">
                               <Star className="h-3.5 w-3.5 mr-1 flex-shrink-0" />
                               <span className="truncate">{quiz.xpReward} XP</span>
                             </Badge>
@@ -346,19 +346,19 @@ export default function LearnPage() {
           transition={{ duration: 0.5 }}
         >
           <Card className="max-w-2xl mx-auto overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-lime-400 via-lime-500 to-green-500"></div>
             <CardHeader className="text-center pb-2">
               <div className="flex justify-center mb-2">
                 {score >= activeQuiz!.questions.length * 0.8 ? (
-                  <div className="h-20 w-20 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center">
+                  <div className="h-20 w-20 rounded-full bg-gradient-to-br from-lime-400 to-lime-600 flex items-center justify-center">
                     <Trophy className="h-10 w-10 text-white" />
                   </div>
                 ) : score >= activeQuiz!.questions.length * 0.5 ? (
-                  <div className="h-20 w-20 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
+                  <div className="h-20 w-20 rounded-full bg-gradient-to-br from-lime-400 to-lime-600 flex items-center justify-center">
                     <Medal className="h-10 w-10 text-white" />
                   </div>
                 ) : (
-                  <div className="h-20 w-20 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
+                  <div className="h-20 w-20 rounded-full bg-gradient-to-br from-lime-400 to-lime-600 flex items-center justify-center">
                     <Check className="h-10 w-10 text-white" />
                   </div>
                 )}
@@ -373,31 +373,31 @@ export default function LearnPage() {
                 <h3 className="text-3xl font-bold mb-3">Your Score: {score}/{activeQuiz?.questions.length}</h3>
                 <div className="w-full max-w-xs bg-gray-200 rounded-full h-2.5 mb-6">
                   <div 
-                    className="bg-blue-600 h-2.5 rounded-full" 
+                    className="bg-lime-500 h-2.5 rounded-full" 
                     style={{ width: `${(score / (activeQuiz?.questions.length || 1)) * 100}%` }}
                   ></div>
                 </div>
-                <div className="flex items-center gap-3 bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-lg border border-green-100">
-                  <Zap className="h-8 w-8 text-yellow-500" />
+                <div className="flex items-center gap-3 bg-gradient-to-r from-lime-50 to-lime-100 p-4 rounded-lg border border-lime-200">
+                  <Zap className="h-8 w-8 text-lime-500" />
                   <div>
-                    <p className="text-lg font-medium text-green-800">
+                    <p className="text-lg font-medium text-lime-800">
                       +{xpEarned} XP Earned!
                     </p>
-                    <p className="text-sm text-green-600">Added to your profile</p>
+                    <p className="text-sm text-lime-600">Added to your profile</p>
                   </div>
                 </div>
                 
                 {score === activeQuiz?.questions.length && (
-                  <div className="mt-4 bg-yellow-50 p-4 rounded-lg border border-yellow-100 flex items-center gap-3">
-                    <Trophy className="h-6 w-6 text-yellow-500" />
-                    <p className="text-yellow-800 font-medium">Perfect Score! You're a trading genius!</p>
+                  <div className="mt-4 bg-lime-50 p-4 rounded-lg border border-lime-200 flex items-center gap-3">
+                    <Trophy className="h-6 w-6 text-lime-500" />
+                    <p className="text-lime-800 font-medium">Perfect Score! You're a trading genius!</p>
                   </div>
                 )}
                 
                 {score >= activeQuiz!.questions.length * 0.8 && score < activeQuiz!.questions.length && (
-                  <div className="mt-4 bg-blue-50 p-4 rounded-lg border border-blue-100 flex items-center gap-3">
-                    <Flame className="h-6 w-6 text-blue-500" />
-                    <p className="text-blue-800 font-medium">Excellent work! You're on fire!</p>
+                  <div className="mt-4 bg-lime-50 p-4 rounded-lg border border-lime-200 flex items-center gap-3">
+                    <Flame className="h-6 w-6 text-lime-500" />
+                    <p className="text-lime-800 font-medium">Excellent work! You're on fire!</p>
                   </div>
                 )}
               </div>
@@ -413,7 +413,7 @@ export default function LearnPage() {
                     onClick={handleFinishQuiz} 
                     size="lg"
                     disabled={isSubmitting}
-                    className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+                    className="bg-gradient-to-r from-lime-500 to-green-600 hover:from-lime-600 hover:to-green-700"
                   >
                     {isSubmitting ? (
                           <>
@@ -447,8 +447,8 @@ export default function LearnPage() {
                 <CardTitle>{activeQuiz?.title}</CardTitle>
                 <CardDescription>Question {currentQuestionIndex + 1} of {activeQuiz?.questions.length}</CardDescription>
               </div>
-              <Badge variant="outline" className="flex items-center gap-1.5 bg-blue-50 text-blue-700 max-w-[100px]">
-                <Star className="h-3.5 w-3.5 flex-shrink-0 fill-blue-500 text-blue-500" />
+              <Badge variant="outline" className="flex items-center gap-1.5 bg-lime-50 text-lime-700 max-w-[100px]">
+                <Star className="h-3.5 w-3.5 flex-shrink-0 fill-lime-500 text-lime-500" />
                 <span className="truncate">+{xpEarned} XP</span>
               </Badge>
             </div>

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Search, Bell, Star, AlertTriangle, ChevronDown, Menu } from 'lucide-react'
+import { Search, Bell, AlertTriangle, ChevronDown, Menu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { 
@@ -15,9 +15,10 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { useAuth } from '@/components/auth/auth-provider'
-import { useUserProfile, XP_BALANCE_UPDATE_EVENT } from '@/hooks/useUserProfile'
+import { useUserProfile } from '@/hooks/useUserProfile'
 import { cn } from '@/lib/utils'
 import { Logo } from '@/components/ui/logo'
+import { XpIndicator } from '@/components/ui/xp-indicator'
 
 interface DashboardHeaderProps {
   showSearch?: boolean;
@@ -33,43 +34,8 @@ export function DashboardHeader({
   onMenuClick
 }: DashboardHeaderProps) {
   const { user } = useAuth()
-  const { profile, loading: profileLoading } = useUserProfile()
   const router = useRouter()
   const [searchQuery, setSearchQuery] = useState('')
-  const [xpValue, setXpValue] = useState(0)
-  
-  // Initialize XP from profile and listen for updates
-  useEffect(() => {
-    if (profile && typeof profile.xp === 'number') {
-      setXpValue(profile.xp)
-    }
-    
-    // Create a handler for XP update events
-    const handleXpUpdate = () => {
-      // Get the latest profile from localStorage
-      if (user) {
-        const storedProfile = localStorage.getItem(`userProfile_${user.uid}`)
-        if (storedProfile) {
-          try {
-          const parsedProfile = JSON.parse(storedProfile)
-            if (parsedProfile && typeof parsedProfile.xp === 'number') {
-          setXpValue(parsedProfile.xp)
-            }
-          } catch (error) {
-            console.error('Error parsing stored profile:', error)
-          }
-        }
-      }
-    }
-    
-    // Listen for XP update events
-    window.addEventListener(XP_BALANCE_UPDATE_EVENT, handleXpUpdate)
-    
-    // Cleanup
-    return () => {
-      window.removeEventListener(XP_BALANCE_UPDATE_EVENT, handleXpUpdate)
-    }
-  }, [profile, user])
   
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -88,44 +54,8 @@ export function DashboardHeader({
       .join('')
   }
   
-  // Animation for XP display
-  const animateXpChange = (oldValue: number, newValue: number) => {
-    if (oldValue === newValue) return;
-    
-    // Add a CSS class for animation
-    const xpElement = document.getElementById('xp-display');
-    if (xpElement) {
-      xpElement.classList.add('xp-updated');
-      
-      // Remove the class after animation completes
-      setTimeout(() => {
-        xpElement.classList.remove('xp-updated');
-      }, 1500);
-    }
-  };
-  
-  // Watch for XP changes and animate
-  useEffect(() => {
-    if (profile && profile.xp !== xpValue && xpValue !== 0) {
-      animateXpChange(xpValue, profile.xp);
-    }
-  }, [profile, xpValue]);
-  
   return (
     <header className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 sm:px-6">
-      {/* Add animation styles */}
-      <style jsx global>{`
-        @keyframes xpPulse {
-          0% { transform: scale(1); }
-          50% { transform: scale(1.2); color: #f59e0b; }
-          100% { transform: scale(1); }
-        }
-        
-        .xp-updated {
-          animation: xpPulse 1.5s ease;
-        }
-      `}</style>
-      
       <div className="h-16 flex items-center justify-between">
         <div className="flex items-center gap-4">
           {/* Mobile menu toggle */}
@@ -173,13 +103,14 @@ export function DashboardHeader({
             </Button>
           )}
           
-          {/* XP - hide on mobile */}
-          <div 
-            id="xp-display"
-            className="hidden md:flex items-center gap-1.5 text-yellow-700 bg-yellow-50 px-2.5 py-1 rounded-full"
-          >
-            <Star size={16} className="fill-yellow-500 text-yellow-500" />
-            <span className="text-sm font-medium">{(xpValue || 0).toFixed(2)} XP</span>
+          {/* XP - desktop version */}
+          <div className="hidden md:block">
+            <XpIndicator />
+          </div>
+          
+          {/* XP - mobile version */}
+          <div className="md:hidden">
+            <XpIndicator variant="compact" />
           </div>
           
           {/* Notifications */}

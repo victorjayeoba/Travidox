@@ -6,12 +6,14 @@ import { usePathname } from 'next/navigation'
 import { 
   LayoutDashboard, BookOpen, Shield, Bot, PieChart, 
   DollarSign, School, ListChecks, Heart, Clock, Settings, ChevronRight,
-  X, LogOut, Trophy, GraduationCap
+  X, LogOut, Trophy, GraduationCap, User
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/components/auth/auth-provider'
 import { Logo } from '@/components/ui/logo'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { XpIndicator } from '@/components/ui/xp-indicator'
 
 interface SidebarItemProps {
   icon: React.ReactNode
@@ -92,6 +94,14 @@ export function Sidebar() {
     }
   }
 
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase())
+      .slice(0, 2)
+      .join('')
+  }
+
   return (
     <aside className="w-64 border-r border-gray-200 h-screen flex flex-col bg-white overflow-y-auto">
       {/* Logo - only visible on desktop */}
@@ -102,6 +112,29 @@ export function Sidebar() {
       {/* Mobile header */}
       <div className="lg:hidden flex items-center justify-between px-4 py-3 border-b">
         <Logo href="/" size="md" />
+      </div>
+
+      {/* User info - visible on mobile */}
+      <div className="lg:hidden px-4 py-3 border-b flex items-center space-x-3">
+        <Avatar className="h-10 w-10">
+          <AvatarImage src={user?.photoURL || undefined} alt={user?.displayName || 'User'} />
+          <AvatarFallback className="bg-green-100 text-green-800">
+            {user?.displayName ? getInitials(user.displayName) : 'U'}
+          </AvatarFallback>
+        </Avatar>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium text-gray-900 truncate">
+            {user?.displayName || 'User'}
+          </p>
+          <p className="text-xs text-gray-500 truncate">
+            {user?.email || ''}
+          </p>
+        </div>
+      </div>
+
+      {/* XP indicator - visible on mobile */}
+      <div className="lg:hidden px-4 py-3 border-b">
+        <XpIndicator />
       </div>
 
       {/* Navigation */}
@@ -186,35 +219,34 @@ export function Sidebar() {
           active={pathname.startsWith('/dashboard/settings')}
           onClick={closeMenuOnMobile}
         />
-      </nav>
 
-      {/* User Account */}
-      <div className="p-3 border-t border-gray-200">
-        <Link href="/dashboard/profile" onClick={closeMenuOnMobile}>
-          <div className="flex items-center p-3 rounded-lg hover:bg-gray-100 cursor-pointer">
-            <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-semibold">
-              {user?.displayName ? user.displayName.charAt(0).toUpperCase() : user?.email?.charAt(0).toUpperCase() || '?'}
-            </div>
-            <div className="ml-3 flex-1">
-              <p className="text-sm font-medium text-gray-900 truncate">
-                {user?.displayName || user?.email?.split('@')[0] || 'User'}
-              </p>
-              <p className="text-xs font-medium text-gray-500">{balance}</p>
-            </div>
-            <ChevronRight size={16} className="text-gray-400" />
-          </div>
-        </Link>
-        
-        {/* Logout Button */}
-        <Button 
-          variant="ghost" 
-          className="w-full mt-2 text-red-600 hover:bg-red-50 hover:text-red-700 flex items-center gap-2 justify-start"
-          onClick={handleLogout}
-        >
-          <LogOut size={18} />
-          <span>Logout</span>
-        </Button>
-      </div>
+        <div className="pt-4 mt-4 border-t border-gray-200">
+          <SidebarItem 
+            icon={<User size={18} />} 
+            label="Profile" 
+            href="/dashboard/profile" 
+            active={pathname === '/dashboard/profile'}
+            onClick={closeMenuOnMobile}
+          />
+          
+          <SidebarItem 
+            icon={<Settings size={18} />} 
+            label="Settings" 
+            href="/dashboard/settings" 
+            active={pathname === '/dashboard/settings'}
+            onClick={closeMenuOnMobile}
+          />
+          
+          <a 
+            href="#" 
+            onClick={handleLogout}
+            className="flex items-center px-3 py-2.5 rounded-md text-red-600 hover:bg-red-50 transition-colors"
+          >
+            <span className="mr-3"><LogOut size={18} /></span>
+            <span>Logout</span>
+          </a>
+        </div>
+      </nav>
     </aside>
   )
 } 

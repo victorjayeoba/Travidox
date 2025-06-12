@@ -147,13 +147,13 @@ export function GameSession({
             
             <div>
               <h3 className="text-lg font-semibold mb-4">Rewards Earned</h3>
-              <div className="bg-blue-50 p-4 rounded-lg mb-4">
+              <div className="bg-lime-50 p-4 rounded-lg mb-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Star className="h-5 w-5 text-yellow-500" />
+                    <Star className="h-5 w-5 text-lime-500" />
                     <span className="font-medium">Total XP</span>
                   </div>
-                  <div className="text-2xl font-bold text-blue-600">+{results.totalXP.toFixed(2)}</div>
+                  <div className="text-2xl font-bold text-lime-600">+{results.totalXP.toFixed(2)}</div>
                 </div>
               </div>
               
@@ -168,7 +168,7 @@ export function GameSession({
                       <Badge className="bg-yellow-100 text-yellow-800 mr-2">Expert {category}</Badge>
                     )}
                     {results.accuracy >= 80 && results.timeSpent < questions.length * 20 && (
-                      <Badge className="bg-blue-100 text-blue-800 mr-2">Speed Demon</Badge>
+                      <Badge className="bg-lime-100 text-lime-800 mr-2">Speed Demon</Badge>
                     )}
                     {results.correctAnswers === questions.length && (
                       <Badge className="bg-green-100 text-green-800">Perfect Score</Badge>

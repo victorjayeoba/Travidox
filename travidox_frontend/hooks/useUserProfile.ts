@@ -163,11 +163,17 @@ export const useUserProfile = () => {
     }
   };
 
+  // Function to directly update the profile in state (for demo purposes)
+  const updateProfile = useCallback((updatedProfile: UserProfile) => {
+    setProfile(updatedProfile);
+  }, []);
+
   return {
     profile,
     loading,
     error,
     addXpAndUpdateBalance,
-    setXpAndBalance
+    setXpAndBalance,
+    updateProfile
   };
 }; 
