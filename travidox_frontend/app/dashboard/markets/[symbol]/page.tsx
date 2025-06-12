@@ -9,9 +9,9 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContai
 import { TrendingUp, TrendingDown, BarChart3, Activity, ArrowLeft, RefreshCw } from 'lucide-react'
 import { getStockById, isValidStockSymbol } from "@/lib/stock-mapping"
 import { getStandardSector, getSectorColor } from "@/lib/sector-mapping"
-import { useNigeriaStocks } from "@/hooks/useNigeriaStocks"
+import { useNigeriaStocks, STOCK_PRICES_UPDATE_EVENT } from "@/hooks/useNigeriaStocks"
 import { StockPurchaseModal } from "@/components/StockPurchaseModal"
-import { usePortfolio } from "@/hooks/usePortfolio"
+import { usePortfolio, PORTFOLIO_UPDATE_EVENT } from "@/hooks/usePortfolio"
 
 interface ChartDataPoint {
   date: string;
@@ -63,23 +63,37 @@ export default function StockDetailPage() {
   const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
   
   // Use hooks
-  const { stocks, loading: stocksLoading } = useNigeriaStocks();
+  const { stocks, loading: stocksLoading, refresh: refreshStocks } = useNigeriaStocks();
   const { portfolio, loading: portfolioLoading } = usePortfolio();
   
   const [ownedQuantity, setOwnedQuantity] = useState(0);
 
+  // Listen for real-time updates
+  useEffect(() => {
+    const handlePortfolioUpdate = () => {
+      // Portfolio will be automatically refreshed by the hook
+    };
+
+    const handleStockUpdate = () => {
+      // Stock data will be automatically refreshed by the hook
+    };
+
+    window.addEventListener(PORTFOLIO_UPDATE_EVENT, handlePortfolioUpdate);
+    window.addEventListener(STOCK_PRICES_UPDATE_EVENT, handleStockUpdate);
+    
+    return () => {
+      window.removeEventListener(PORTFOLIO_UPDATE_EVENT, handlePortfolioUpdate);
+      window.removeEventListener(STOCK_PRICES_UPDATE_EVENT, handleStockUpdate);
+    };
+  }, []);
+
   // Memoize calculation for owned quantity
   useEffect(() => {
     if (!portfolioLoading && portfolio) {
-      console.log('Portfolio loaded:', portfolio);
-      console.log('Looking for symbol:', symbol);
-      console.log('Available assets:', portfolio.assets.map(asset => ({ symbol: asset.symbol, quantity: asset.quantity })));
-      
       // Make symbol matching case-insensitive
       const ownedAsset = portfolio.assets.find(asset => 
         asset.symbol.toLowerCase() === symbol.toLowerCase()
       );
-      console.log('Found owned asset:', ownedAsset);
       
       setOwnedQuantity(ownedAsset ? ownedAsset.quantity : 0);
     }

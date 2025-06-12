@@ -2,7 +2,7 @@
 
 import React, { Suspense } from 'react'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { 
   BarChart3, 
@@ -23,7 +23,8 @@ import {
   ArrowDown,
   ArrowUp,
   DollarSign,
-  Percent
+  Percent,
+  RefreshCw
 } from 'lucide-react'
 import { useAuth } from '@/components/auth/auth-provider'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
@@ -32,8 +33,8 @@ import { StockCard } from '@/components/dashboard/stock-card'
 import { Progress } from '@/components/ui/progress'
 import { useUserPortfolioBalance } from '@/hooks/useUserPortfolioBalance'
 import { useUserProfile } from '@/hooks/useUserProfile'
-import { useNigeriaStocks } from '@/hooks/useNigeriaStocks'
-import { useState } from 'react'
+import { useNigeriaStocks, STOCK_PRICES_UPDATE_EVENT } from '@/hooks/useNigeriaStocks'
+import { usePortfolio, PORTFOLIO_UPDATE_EVENT } from '@/hooks/usePortfolio'
 import { StockPurchaseButton } from '@/components/dashboard/StockPurchaseButton'
 
 function getRandomColor(key: string) {
@@ -127,21 +128,52 @@ export default function DashboardPage() {
     updatePrices,
     sellStock
   } = useUserPortfolioBalance()
-  const { stocks, loading: stocksLoading, isMockData } = useNigeriaStocks()
+  const { stocks, loading: stocksLoading, isMockData, refresh: refreshStocks, lastUpdated } = useNigeriaStocks()
   const [isRefreshing, setIsRefreshing] = useState(false)
+  const [showRefreshIndicator, setShowRefreshIndicator] = useState(false)
   const router = useRouter()
   
-  // Update portfolio prices with the latest stock data
-  useEffect(() => {
-    if (!stocksLoading && stocks.length > 0 && !isRefreshing) {
-      const timer = setTimeout(() => {
-        updatePrices(stocks);
-      }, 500);
+  // Handle refresh of all data
+  const handleRefresh = async () => {
+    setIsRefreshing(true)
+    setShowRefreshIndicator(true)
+    
+    try {
+      // Refresh stock data (this will trigger portfolio updates automatically)
+      await refreshStocks()
       
-      return () => clearTimeout(timer);
+      // Hide indicator after a short delay to show it worked
+      setTimeout(() => {
+        setShowRefreshIndicator(false)
+      }, 1000)
+    } catch (error) {
+      console.error('Error refreshing data:', error)
+    } finally {
+      setIsRefreshing(false)
     }
-  }, [stocks, stocksLoading, updatePrices, isRefreshing]);
-  
+  }
+
+  // Listen for real-time updates and show refresh indicator
+  useEffect(() => {
+    const handlePortfolioUpdate = () => {
+      setShowRefreshIndicator(true)
+      setTimeout(() => setShowRefreshIndicator(false), 1000)
+    }
+
+    const handleStockUpdate = () => {
+      setShowRefreshIndicator(true)
+      setTimeout(() => setShowRefreshIndicator(false), 1000)
+    }
+
+    window.addEventListener(PORTFOLIO_UPDATE_EVENT, handlePortfolioUpdate)
+    window.addEventListener(STOCK_PRICES_UPDATE_EVENT, handleStockUpdate)
+    
+    return () => {
+      window.removeEventListener(PORTFOLIO_UPDATE_EVENT, handlePortfolioUpdate)
+      window.removeEventListener(STOCK_PRICES_UPDATE_EVENT, handleStockUpdate)
+    }
+  }, [])
+
   useEffect(() => {
     // Redirect to login if not authenticated
     if (!authLoading && !user) {
@@ -154,14 +186,6 @@ export default function DashboardPage() {
       router.push('/dashboard/overview')
     }
   }, [user, authLoading, router])
-
-  // Handler for manual refresh
-  const handleRefresh = async () => {
-    setIsRefreshing(true)
-    setTimeout(() => {
-      setIsRefreshing(false)
-    }, 1000)
-  }
 
   if (authLoading || portfolioLoading) {
     return (
@@ -273,14 +297,35 @@ export default function DashboardPage() {
         <div className="relative">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
             <div className="mb-4 lg:mb-0">
-              <h1 className="text-2xl lg:text-4xl font-bold mb-2">
-                Welcome back, {user?.displayName?.split(' ')[0] || 'Trader'}! 👋
-              </h1>
+              <div className="flex items-center gap-3 mb-2">
+                <h1 className="text-2xl lg:text-4xl font-bold">
+                  Welcome back, {user?.displayName?.split(' ')[0] || 'Trader'}! 👋
+                </h1>
+                {showRefreshIndicator && (
+                  <div className="bg-white/20 rounded-full p-2">
+                    <RefreshCw className="h-5 w-5 animate-spin" />
+                  </div>
+                )}
+              </div>
               <p className="text-green-100 text-base lg:text-lg">
                 Ready to grow your portfolio today?
               </p>
+              {lastUpdated && (
+                <p className="text-green-200 text-sm mt-1">
+                  Last updated: {lastUpdated.toLocaleTimeString()}
+                </p>
+              )}
             </div>
             <div className="flex flex-col sm:flex-row gap-3 lg:gap-4">
+              <Button 
+                onClick={handleRefresh}
+                disabled={isRefreshing}
+                variant="outline"
+                className="bg-white/10 border-white/20 text-white hover:bg-white/20 font-semibold transition-all duration-300"
+              >
+                <RefreshCw className={`mr-2 h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+                {isRefreshing ? 'Updating...' : 'Refresh'}
+              </Button>
               <Button 
                 onClick={() => router.push('/dashboard/markets')}
                 className="bg-white text-green-700 hover:bg-gray-50 font-semibold transition-all duration-300"
