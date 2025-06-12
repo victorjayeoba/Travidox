@@ -115,6 +115,26 @@ const MetricCard: React.FC<MetricCardProps> = ({ title, value, change, changeTyp
   </Card>
 )
 
+// Custom Naira Icon Component
+const NairaIcon = ({ size = 24 }: { size?: number }) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round"
+  >
+    <path d="M6 4v16" />
+    <path d="M18 4v16" />
+    <path d="M6 4l12 16" />
+    <path d="M4 9h16" />
+    <path d="M4 15h16" />
+  </svg>
+)
+
 export default function DashboardPage() {
   const { user, loading: authLoading } = useAuth()
   const { profile, addXpAndUpdateBalance } = useUserProfile()
@@ -353,7 +373,7 @@ export default function DashboardPage() {
           value={`₦${totalValue.toFixed(2)}`}
           change={`₦${Math.abs(totalChange).toFixed(2)} (${percentChange.toFixed(2)}%)`}
           changeType={totalChange >= 0 ? 'positive' : 'negative'}
-          icon={DollarSign}
+          icon={NairaIcon}
           color="bg-gradient-to-r from-blue-500 to-blue-600"
         />
         <MetricCard
