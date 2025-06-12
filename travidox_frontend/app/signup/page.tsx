@@ -5,8 +5,9 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '@/components/auth/auth-provider'
 import { SignUpForm } from '@/components/auth/sign-up-form'
-import { ArrowLeft, TrendingUp } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Logo } from '@/components/ui/logo'
 
 export default function SignUpPage() {
   const { user, loading } = useAuth()
@@ -53,12 +54,7 @@ export default function SignUpPage() {
               >
                 <ArrowLeft className="h-5 w-5" />
               </Button>
-              <Link href="/" className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
-                  <TrendingUp className="w-5 h-5 text-white" />
-                </div>
-                <span className="text-xl font-bold text-gray-900">travidox</span>
-              </Link>
+              <Logo href="/" size="md" />
             </div>
             <div className="text-sm text-gray-600">
               Already have an account?{" "}
@@ -76,7 +72,7 @@ export default function SignUpPage() {
           <div className="bg-white rounded-2xl shadow-xl p-8">
             <SignUpForm 
               onSuccess={handleSignUpSuccess} 
-              onSwitchToSignIn={switchToSignIn} 
+              switchToSignIn={switchToSignIn} 
             />
           </div>
           

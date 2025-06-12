@@ -19,7 +19,7 @@ export function FAQSection() {
     },
     {
       question: "What types of investments are available on Travidox?",
-      answer: "Travidox offers a wide range of investment options including stocks, bonds, ETFs, mutual funds, commodities, cryptocurrencies, and forex trading. We also provide fractional shares to make investing more accessible."
+      answer: "Travidox offers a comprehensive range of investment options including stocks and forex trading with our AI-powered trading bot. You can also access professional financial education courses for certification, join our community for expert insights, and utilize our security center to protect your investments."
     },
     {
       question: "Is there a minimum deposit required?",

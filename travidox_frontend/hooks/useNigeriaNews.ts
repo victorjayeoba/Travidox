@@ -31,9 +31,13 @@ export const useNigeriaNews = () => {
     try {
       setLoading(true);
       
+      // Add cache busting in development
+      const isDev = process.env.NODE_ENV === 'development';
+      const cacheParam = isDev ? `?_t=${Date.now()}` : '';
+      
       // Fetch news from our API route
-      const response = await fetch('/api/nigeria-news', {
-        cache: 'force-cache', // Use cache (will be revalidated per our API route settings)
+      const response = await fetch(`/api/nigeria-news${cacheParam}`, {
+        cache: isDev ? 'no-store' : 'force-cache', // No cache in dev, use cache in production
       });
       
       if (!response.ok) {
@@ -41,6 +45,15 @@ export const useNigeriaNews = () => {
       }
       
       const result: NewsResponse = await response.json();
+      
+      // Log for debugging
+      console.log('Nigeria News API Response:', {
+        success: result.success,
+        count: result.count,
+        source: result.source,
+        timestamp: result.timestamp,
+        firstItem: result.data?.[0]?.title
+      });
       
       // Check if we got mock data
       if (result.source === "mock") {
@@ -56,6 +69,7 @@ export const useNigeriaNews = () => {
       // Set news items
       if (result.success && result.data && Array.isArray(result.data)) {
         setNews(result.data);
+        console.log(`✅ Loaded ${result.data.length} news articles`);
       } else {
         setNews([]);
         throw new Error('Invalid data format received');

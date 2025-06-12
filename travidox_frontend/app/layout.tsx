@@ -7,8 +7,53 @@ import { Toaster } from "sonner"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Travidox",
-  description: "Travidox - Invest in a secure and profitable future",
+  title: {
+    default: "Travidox - Smart Investing for Nigerians",
+    template: "%s | Travidox"
+  },
+  description: "Empowering Nigerians to build wealth through smart investing in local and global markets. Trade stocks, earn XP, get certified, and grow your portfolio with AI-powered tools.",
+  keywords: ["investing", "Nigeria", "stocks", "trading", "portfolio", "wealth building", "financial education"],
+  authors: [{ name: "Travidox Team" }],
+  creator: "Travidox",
+  publisher: "Travidox",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL("https://travidox.com"),
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Travidox - Smart Investing for Nigerians",
+    description: "Empowering Nigerians to build wealth through smart investing in local and global markets.",
+    url: "https://travidox.com",
+    siteName: "Travidox",
+    images: [
+      {
+        url: "/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Travidox - Smart Investing Platform",
+      },
+    ],
+    locale: "en_NG",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Travidox - Smart Investing for Nigerians",
+    description: "Empowering Nigerians to build wealth through smart investing in local and global markets.",
+    images: ["/logo.png"],
+    creator: "@travidox",
+  },
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
+  manifest: "/manifest.json",
 }
 
 export default function RootLayout({

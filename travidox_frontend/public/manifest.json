@@ -1,0 +1,21 @@
+{
+  "name": "Travidox - Smart Investing for Nigerians",
+  "short_name": "Travidox",
+  "description": "Empowering Nigerians to build wealth through smart investing in local and global markets",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#16a34a",
+  "orientation": "portrait-primary",
+  "categories": ["finance", "business", "productivity"],
+  "lang": "en-NG",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+} 

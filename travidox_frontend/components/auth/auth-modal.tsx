@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { X, TrendingUp } from "lucide-react"
+import { X } from "lucide-react"
 import { 
   Dialog, 
   DialogContent, 
@@ -14,6 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useAuth } from "./auth-provider"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
+import { Logo } from "@/components/ui/logo"
 
 type AuthTab = 'signin' | 'signup'
 
@@ -55,12 +56,7 @@ export function AuthModal({ isOpen, onOpenChange, defaultTab = 'signin' }: AuthM
           
           {/* Logo and header */}
           <div className="pt-6 pb-4 flex justify-center">
-            <Link href="/" className="flex items-center space-x-2 transition-transform hover:scale-105">
-              <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center shadow-md">
-                <TrendingUp className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-2xl font-bold text-gray-900">travidox</span>
-            </Link>
+            <Logo href="/" size="md" />
           </div>
           
           <Tabs 

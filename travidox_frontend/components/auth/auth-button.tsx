@@ -23,14 +23,14 @@ export function AuthButton({ text = "Get Started", defaultRoute = "signup", clas
   }
   
   return (
-    <Button 
-      onClick={handleClick}
-      className={className}
-      variant={variant}
-      size={size}
-      {...props}
-    >
-      {text}
-    </Button>
+      <Button 
+        onClick={handleClick}
+        className={className}
+        variant={variant}
+        size={size}
+        {...props}
+      >
+        {text}
+      </Button>
   )
 } 

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
-// Cache duration in seconds: 3 hours
-const CACHE_DURATION = 60 * 60 * 3;
+// Cache duration in seconds: 30 minutes (reduced from 3 hours for more frequent updates)
+const CACHE_DURATION = 60 * 30;
 
 // Mock data for when the external API is down
 const MOCK_NIGERIA_NEWS = {
@@ -51,10 +51,10 @@ export async function GET() {
     try {
       const response = await fetch('https://travidoxapi.opulentencounters.com/nigeria-news', {
         next: { 
-          revalidate: CACHE_DURATION // Cache for 3 hours
+          revalidate: CACHE_DURATION // Cache for 30 minutes
         },
         headers: {
-          'Cache-Control': 'public, max-age=10800, s-maxage=10800' // 3 hours in seconds
+          'Cache-Control': 'public, max-age=1800, s-maxage=1800' // 30 minutes in seconds
         }
       });
 

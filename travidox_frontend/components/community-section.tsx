@@ -50,7 +50,7 @@ export function CommunitySection({ id }: CommunitySectionProps) {
           </div>
 
           <Button size="lg" className="bg-green-600 hover:bg-green-700">
-            Join community
+            <a href="https://chat.whatsapp.com/I5PAMkie6r3KM8xBlPot4U">Join community</a>
           </Button>
         </div>
 

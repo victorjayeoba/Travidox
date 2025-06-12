@@ -2,10 +2,11 @@
 
 import { useState, useEffect, KeyboardEvent } from "react"
 import Link from "next/link"
-import { Menu, X, TrendingUp } from "lucide-react"
+import { Menu, X } from "lucide-react"
 import { NigeriaStockSlider } from "./nigeria-stock-slider"
 import { useActiveSection } from "@/hooks/useActiveSection"
 import { UserAccountButton } from "./auth/user-account-button"
+import { Logo } from "./ui/logo"
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -80,12 +81,7 @@ export function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2" aria-label="Travidox Home">
-            <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-white" aria-hidden="true" />
-            </div>
-            <span className="text-2xl font-bold text-gray-900">travidox</span>
-          </Link>
+          <Logo href="/" size="md" />
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8" aria-label="Main Navigation">

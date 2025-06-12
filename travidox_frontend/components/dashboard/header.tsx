@@ -17,6 +17,7 @@ import { Badge } from '@/components/ui/badge'
 import { useAuth } from '@/components/auth/auth-provider'
 import { useUserProfile, XP_BALANCE_UPDATE_EVENT } from '@/hooks/useUserProfile'
 import { cn } from '@/lib/utils'
+import { Logo } from '@/components/ui/logo'
 
 interface DashboardHeaderProps {
   showSearch?: boolean;
@@ -50,9 +51,9 @@ export function DashboardHeader({
         const storedProfile = localStorage.getItem(`userProfile_${user.uid}`)
         if (storedProfile) {
           try {
-            const parsedProfile = JSON.parse(storedProfile)
+          const parsedProfile = JSON.parse(storedProfile)
             if (parsedProfile && typeof parsedProfile.xp === 'number') {
-              setXpValue(parsedProfile.xp)
+          setXpValue(parsedProfile.xp)
             }
           } catch (error) {
             console.error('Error parsing stored profile:', error)
@@ -141,10 +142,7 @@ export function DashboardHeader({
           )}
           
           {/* Logo */}
-          <Link href="/dashboard" className="flex items-center gap-2">
-            <div className="bg-green-600 text-white p-1.5 rounded text-sm font-bold">TX</div>
-            <span className="font-bold text-gray-800 hidden sm:inline-block">Travidox</span>
-          </Link>
+          <Logo href="/dashboard" size="sm" />
         </div>
         
         <div className="flex-1 max-w-md mx-4 hidden md:block">

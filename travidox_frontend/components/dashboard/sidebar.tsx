@@ -11,6 +11,7 @@ import {
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/components/auth/auth-provider'
+import { Logo } from '@/components/ui/logo'
 
 interface SidebarItemProps {
   icon: React.ReactNode
@@ -95,24 +96,12 @@ export function Sidebar() {
     <aside className="w-64 border-r border-gray-200 h-screen flex flex-col bg-white overflow-y-auto">
       {/* Logo - only visible on desktop */}
       <div className="px-4 py-4 lg:block hidden">
-        <Link href="/">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-green-600 rounded-md flex items-center justify-center">
-              <span className="text-white font-bold">T</span>
-            </div>
-            <span className="text-xl font-bold text-gray-900">Travidox</span>
-          </div>
-        </Link>
+        <Logo href="/" size="md" />
       </div>
       
       {/* Mobile header */}
       <div className="lg:hidden flex items-center justify-between px-4 py-3 border-b">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-green-600 rounded-md flex items-center justify-center">
-            <span className="text-white font-bold">T</span>
-          </div>
-          <span className="text-xl font-bold text-gray-900">Travidox</span>
-        </div>
+        <Logo href="/" size="md" />
       </div>
 
       {/* Navigation */}

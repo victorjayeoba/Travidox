@@ -86,19 +86,19 @@ export function UserAccountButton() {
 
   // If user is not logged in, show only the Get Started button
   return (
-    <div className="flex items-center">
-      <Button 
-        onClick={() => {
+      <div className="flex items-center">
+        <Button 
+          onClick={() => {
           router.push('/signup')
-        }}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        className={`bg-green-600 hover:bg-green-700 text-sm sm:text-base px-4 sm:px-6 py-2 rounded-lg transition-all duration-300 transform ${isHovered ? 'scale-105 shadow-lg' : 'shadow-md'} flex items-center gap-1`}
-        disabled={isLoading}
-      >
-        Get Started
-        {/* <ArrowRight className={`h-4 w-4 ml-1 transition-transform duration-300 ${isHovered ? 'translate-x-1' : ''}`} /> */}
-      </Button>
-    </div>
+          }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          className={`bg-green-600 hover:bg-green-700 text-sm sm:text-base px-4 sm:px-6 py-2 rounded-lg transition-all duration-300 transform ${isHovered ? 'scale-105 shadow-lg' : 'shadow-md'} flex items-center gap-1`}
+          disabled={isLoading}
+        >
+          Get Started
+          {/* <ArrowRight className={`h-4 w-4 ml-1 transition-transform duration-300 ${isHovered ? 'translate-x-1' : ''}`} /> */}
+        </Button>
+      </div>
   )
 } 

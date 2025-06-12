@@ -4,6 +4,7 @@ import { Section } from "@/components/ui/section"
 import { useAuth } from "./auth/auth-provider"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
+import { Logo } from "@/components/ui/logo"
 
 export function HeroSection() {
   const { user, isAuthenticated } = useAuth();
@@ -48,8 +49,8 @@ export function HeroSection() {
           <div className="bg-green-600 rounded-3xl p-8 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-green-700 opacity-90"></div>
             <div className="relative z-10 text-center">
-              <div className="w-24 h-24 bg-white rounded-2xl mx-auto mb-6 flex items-center justify-center">
-                <span className="text-2xl font-bold text-green-600">T</span>
+              <div className="w-24 h-24 bg-white rounded-2xl mx-auto mb-6 flex items-center justify-center p-4">
+                <Logo showText={false} size="xl" />
               </div>
               <h2 className="text-3xl font-bold text-white mb-4">travidox</h2>
               <p className="text-green-100">Your gateway to financial freedom</p>
