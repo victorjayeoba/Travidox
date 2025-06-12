@@ -228,13 +228,13 @@ export default function DashboardPage() {
 
   // Quick actions data
   const quickActions = [
-    {
-      icon: TrendingUp,
-      title: "Trade Stocks",
-      description: "Buy and sell Nigerian stocks",
-      onClick: () => router.push('/dashboard/markets'),
-      color: "bg-gradient-to-r from-green-500 to-emerald-600"
-    },
+          {
+        icon: TrendingUp,
+        title: "Trade Stocks",
+        description: "Buy and sell Nigerian stocks",
+        onClick: () => router.push('/dashboard/markets'),
+        color: "bg-gradient-to-r from-green-500 to-emerald-600"
+      },
     {
       icon: BookOpen,
       title: "Learn & Earn",
@@ -281,14 +281,6 @@ export default function DashboardPage() {
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-3 lg:gap-4">
-              <Button 
-                onClick={() => router.push('/dashboard/overview')}
-                className="bg-white/20 hover:bg-white/30 text-white border-white/30 backdrop-blur-sm transition-all duration-300"
-                variant="outline"
-              >
-                <Activity className="mr-2 h-4 w-4" />
-                View Full Dashboard
-              </Button>
               <Button 
                 onClick={() => router.push('/dashboard/markets')}
                 className="bg-white text-green-700 hover:bg-gray-50 font-semibold transition-all duration-300"

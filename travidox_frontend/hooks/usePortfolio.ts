@@ -3,25 +3,18 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/components/auth/auth-provider';
 import { useUserProfile } from '@/hooks/useUserProfile';
+import { 
+  getUserPortfolio, 
+  getUserTransactions, 
+  buyStock as buyStockDB, 
+  sellStock as sellStockDB, 
+  updatePortfolioPrices,
+  PortfolioAsset, 
+  PortfolioTransaction 
+} from '@/lib/firebase-portfolio';
 
-export interface PortfolioAsset {
-  symbol: string;
-  name: string;
-  quantity: number;
-  averageBuyPrice: number;
-  currentPrice: number;
-}
-
-export interface PortfolioTransaction {
-  id: string;
-  type: 'buy' | 'sell';
-  symbol: string;
-  name: string;
-  quantity: number;
-  price: number;
-  total: number;
-  date: string;
-}
+// Re-export interfaces for backward compatibility
+export type { PortfolioAsset, PortfolioTransaction };
 
 interface PortfolioState {
   assets: PortfolioAsset[];
@@ -35,7 +28,7 @@ export const usePortfolio = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Load portfolio data from localStorage
+  // Load portfolio data from Firestore
   useEffect(() => {
     if (!user) {
       setPortfolio({ assets: [], transactions: [] });
@@ -43,34 +36,33 @@ export const usePortfolio = () => {
       return;
     }
 
-    try {
-      setLoading(true);
-      // In a real implementation, this would fetch from your backend API
-      // const response = await fetch(`/api/portfolio/${user.uid}`);
-      // const data = await response.json();
-      
-      // For demonstration, we'll use localStorage
-      const storedPortfolio = localStorage.getItem(`portfolio_${user.uid}`);
-      
-      if (storedPortfolio) {
-        setPortfolio(JSON.parse(storedPortfolio));
-      } else {
-        // Initialize empty portfolio
-        const initialPortfolio: PortfolioState = {
-          assets: [],
-          transactions: []
-        };
-        localStorage.setItem(`portfolio_${user.uid}`, JSON.stringify(initialPortfolio));
-        setPortfolio(initialPortfolio);
+    const loadPortfolioData = async () => {
+      try {
+        setLoading(true);
+        
+        // Load portfolio and transactions from Firestore
+        const [portfolioData, transactionsData] = await Promise.all([
+          getUserPortfolio(user.uid),
+          getUserTransactions(user.uid)
+        ]);
+        
+        if (portfolioData) {
+          setPortfolio({
+            assets: portfolioData.assets,
+            transactions: transactionsData
+          });
+        }
+        
+        setError(null);
+      } catch (err) {
+        console.error('Error loading portfolio:', err);
+        setError('Failed to load portfolio data');
+      } finally {
+        setLoading(false);
       }
-      
-      setError(null);
-    } catch (err) {
-      console.error('Error loading portfolio:', err);
-      setError('Failed to load portfolio data');
-    } finally {
-      setLoading(false);
-    }
+    };
+
+    loadPortfolioData();
   }, [user]);
 
   // Calculate total portfolio value
@@ -98,39 +90,26 @@ export const usePortfolio = () => {
   };
 
   // Update asset prices with latest market data
-  const updatePrices = (marketData: any[]) => {
+  const updatePrices = async (marketData: any[]) => {
     if (!user || portfolio.assets.length === 0) return;
 
     try {
-      let hasChanges = false;
-      const updatedAssets = portfolio.assets.map(asset => {
-        const latestData = marketData.find(stock => 
-          stock.Symbol === asset.symbol || stock.symbol === asset.symbol
-        );
-        
-        if (latestData) {
-          const newPrice = latestData.Last || latestData.price || asset.currentPrice;
-          // Only mark as changed if the price is actually different
-          if (newPrice !== asset.currentPrice) {
-            hasChanges = true;
-            return {
-              ...asset,
-              currentPrice: newPrice
-            };
-          }
-        }
-        return asset;
-      });
-
-      // Only update state if there were actual price changes
-      if (hasChanges) {
-        const updatedPortfolio = {
-          ...portfolio,
-          assets: updatedAssets
-        };
-
-        setPortfolio(updatedPortfolio);
-        localStorage.setItem(`portfolio_${user.uid}`, JSON.stringify(updatedPortfolio));
+      // Normalize market data to expected format
+      const normalizedData = marketData.map(stock => ({
+        symbol: stock.Symbol || stock.symbol || '',
+        price: stock.Last || stock.price || 0
+      })).filter(stock => stock.symbol && stock.price > 0);
+      
+      // Update prices in Firestore
+      await updatePortfolioPrices(user.uid, normalizedData);
+      
+      // Reload portfolio data to get updated prices
+      const updatedPortfolio = await getUserPortfolio(user.uid);
+      if (updatedPortfolio) {
+        setPortfolio(prev => ({
+          ...prev,
+          assets: updatedPortfolio.assets
+        }));
       }
     } catch (err) {
       console.error('Error updating prices:', err);
@@ -138,7 +117,7 @@ export const usePortfolio = () => {
     }
   };
 
-  // Buy a stock
+  // Buy a stock using Firestore
   const buyStock = async (
     stock: { symbol: string; name: string; price: number },
     quantity: number
@@ -154,66 +133,27 @@ export const usePortfolio = () => {
     }
     
     try {
-      // Find if the asset is already in portfolio
-      const existingAssetIndex = portfolio.assets.findIndex(
-        asset => asset.symbol === stock.symbol
-      );
+      // Use Firestore to buy stock
+      const success = await buyStockDB(user.uid, stock, quantity);
       
-      let updatedAssets = [...portfolio.assets];
-      
-      if (existingAssetIndex >= 0) {
-        // Update existing asset
-        const existingAsset = updatedAssets[existingAssetIndex];
-        const newTotalQuantity = existingAsset.quantity + quantity;
-        const newTotalCost = existingAsset.quantity * existingAsset.averageBuyPrice + totalCost;
-        const newAveragePrice = newTotalCost / newTotalQuantity;
+      if (success) {
+        // Reload portfolio data
+        const [portfolioData, transactionsData] = await Promise.all([
+          getUserPortfolio(user.uid),
+          getUserTransactions(user.uid)
+        ]);
         
-        updatedAssets[existingAssetIndex] = {
-          ...existingAsset,
-          quantity: newTotalQuantity,
-          averageBuyPrice: newAveragePrice,
-          currentPrice: stock.price // Update current price too
-        };
-      } else {
-        // Add new asset
-        updatedAssets.push({
-          symbol: stock.symbol,
-          name: stock.name,
-          quantity: quantity,
-          averageBuyPrice: stock.price,
-          currentPrice: stock.price
-        });
+        if (portfolioData) {
+          setPortfolio({
+            assets: portfolioData.assets,
+            transactions: transactionsData
+          });
+        }
+        
+        setError(null);
       }
       
-      // Create a new transaction
-      const newTransaction: PortfolioTransaction = {
-        id: Date.now().toString(),
-        type: 'buy',
-        symbol: stock.symbol,
-        name: stock.name,
-        quantity: quantity,
-        price: stock.price,
-        total: totalCost,
-        date: new Date().toISOString()
-      };
-      
-      const updatedPortfolio = {
-        assets: updatedAssets,
-        transactions: [newTransaction, ...portfolio.transactions]
-      };
-      
-      // Save to localStorage
-      setPortfolio(updatedPortfolio);
-      localStorage.setItem(`portfolio_${user.uid}`, JSON.stringify(updatedPortfolio));
-      
-      // In a real app, you would update your backend here
-      // await fetch(`/api/portfolio/${user.uid}`, {
-      //   method: 'PUT',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(updatedPortfolio)
-      // });
-      
-      return true;
+      return success;
     } catch (err) {
       console.error('Error buying stock:', err);
       setError('Failed to complete purchase');
@@ -221,7 +161,7 @@ export const usePortfolio = () => {
     }
   };
 
-  // Sell a stock
+  // Sell a stock using Firestore
   const sellStock = async (
     symbol: string,
     quantity: number,
@@ -230,68 +170,27 @@ export const usePortfolio = () => {
     if (!user) return false;
     
     try {
-      // Find the asset in portfolio
-      const assetIndex = portfolio.assets.findIndex(
-        asset => asset.symbol === symbol
-      );
+      // Use Firestore to sell stock
+      const success = await sellStockDB(user.uid, symbol, quantity, currentPrice);
       
-      if (assetIndex === -1) {
-        setError('Asset not found in portfolio');
-        return false;
+      if (success) {
+        // Reload portfolio data
+        const [portfolioData, transactionsData] = await Promise.all([
+          getUserPortfolio(user.uid),
+          getUserTransactions(user.uid)
+        ]);
+        
+        if (portfolioData) {
+          setPortfolio({
+            assets: portfolioData.assets,
+            transactions: transactionsData
+          });
+        }
+        
+        setError(null);
       }
       
-      const asset = portfolio.assets[assetIndex];
-      
-      // Check if user has enough quantity
-      if (asset.quantity < quantity) {
-        setError('Insufficient shares to complete this sale');
-        return false;
-      }
-      
-      const saleValue = currentPrice * quantity;
-      
-      let updatedAssets = [...portfolio.assets];
-      
-      if (asset.quantity === quantity) {
-        // Remove the asset if selling all
-        updatedAssets = updatedAssets.filter((_, index) => index !== assetIndex);
-      } else {
-        // Update the asset quantity
-        updatedAssets[assetIndex] = {
-          ...asset,
-          quantity: asset.quantity - quantity
-        };
-      }
-      
-      // Create a new transaction
-      const newTransaction: PortfolioTransaction = {
-        id: Date.now().toString(),
-        type: 'sell',
-        symbol: asset.symbol,
-        name: asset.name,
-        quantity: quantity,
-        price: currentPrice,
-        total: saleValue,
-        date: new Date().toISOString()
-      };
-      
-      const updatedPortfolio = {
-        assets: updatedAssets,
-        transactions: [newTransaction, ...portfolio.transactions]
-      };
-      
-      // Save to localStorage
-      setPortfolio(updatedPortfolio);
-      localStorage.setItem(`portfolio_${user.uid}`, JSON.stringify(updatedPortfolio));
-      
-      // In a real app, you would update your backend here
-      // await fetch(`/api/portfolio/${user.uid}`, {
-      //   method: 'PUT',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(updatedPortfolio)
-      // });
-      
-      return true;
+      return success;
     } catch (err) {
       console.error('Error selling stock:', err);
       setError('Failed to complete sale');
@@ -306,8 +205,8 @@ export const usePortfolio = () => {
     getTotalValue,
     getTotalChange,
     getPercentChange,
+    updatePrices,
     buyStock,
-    sellStock,
-    updatePrices
+    sellStock
   };
 }; 
