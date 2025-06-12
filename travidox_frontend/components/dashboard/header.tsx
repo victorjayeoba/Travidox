@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { Search, Bell, Star, AlertTriangle, ChevronDown, Menu, User, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -35,6 +35,7 @@ export function DashboardHeader({
   const { stocks } = useNigeriaStocks()
   const router = useRouter()
   const searchParams = useSearchParams()
+  const pathname = usePathname()
   const [searchQuery, setSearchQuery] = useState('')
   const [xpValue, setXpValue] = useState(0)
   const [searchFocused, setSearchFocused] = useState(false)
@@ -49,11 +50,9 @@ export function DashboardHeader({
     }
   }, [searchParams])
   
-  // Get current section title based on pathname
+  // Get current section title based on pathname - now reactive to route changes
   const getCurrentSectionTitle = () => {
-    if (typeof window === 'undefined') return 'Travidox Dashboard';
-    
-    const pathname = window.location.pathname;
+    if (!pathname) return 'Travidox Dashboard';
     
     if (pathname.includes('/dashboard/markets')) {
       return 'Nigerian Markets';
@@ -71,6 +70,12 @@ export function DashboardHeader({
       return 'Settings';
     } else if (pathname.includes('/dashboard/history')) {
       return 'Transaction History';
+    } else if (pathname.includes('/dashboard/portfolio')) {
+      return 'My Portfolio';
+    } else if (pathname.includes('/dashboard/leaderboard')) {
+      return 'Leaderboard';
+    } else if (pathname.includes('/dashboard/news')) {
+      return 'Market News';
     } else if (pathname === '/dashboard' || pathname === '/dashboard/overview') {
       return 'Dashboard Overview';
     }
