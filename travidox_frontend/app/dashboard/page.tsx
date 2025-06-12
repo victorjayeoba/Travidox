@@ -128,7 +128,7 @@ export default function DashboardPage() {
     updatePrices,
     sellStock
   } = useUserPortfolioBalance()
-  const { stocks, loading: stocksLoading, isMockData, refresh: refreshStocks, lastUpdated } = useNigeriaStocks()
+  const { stocks, loading: stocksLoading, isMockData, refresh: refreshStocks, silentRefresh, lastUpdated } = useNigeriaStocks()
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [showRefreshIndicator, setShowRefreshIndicator] = useState(false)
   const router = useRouter()
@@ -139,7 +139,7 @@ export default function DashboardPage() {
     setShowRefreshIndicator(true)
     
     try {
-      // Refresh stock data (this will trigger portfolio updates automatically)
+      // Refresh stock data
       await refreshStocks()
       
       // Hide indicator after a short delay to show it worked
@@ -153,24 +153,32 @@ export default function DashboardPage() {
     }
   }
 
-  // Listen for real-time updates and show refresh indicator
+  // Silent refresh for trading activities only
+  const handleSilentRefresh = async () => {
+    setShowRefreshIndicator(true)
+    try {
+      await silentRefresh()
+      setTimeout(() => setShowRefreshIndicator(false), 1000)
+    } catch (error) {
+      console.error('Error in silent refresh:', error)
+    }
+  }
+
+  // Listen only for portfolio updates (trading activities)
   useEffect(() => {
     const handlePortfolioUpdate = () => {
+      // Show a brief indicator that something updated
       setShowRefreshIndicator(true)
-      setTimeout(() => setShowRefreshIndicator(false), 1000)
-    }
-
-    const handleStockUpdate = () => {
-      setShowRefreshIndicator(true)
-      setTimeout(() => setShowRefreshIndicator(false), 1000)
+      setTimeout(() => setShowRefreshIndicator(false), 1500)
+      
+      // Trigger a silent refresh to get updated stock prices for accurate portfolio values
+      handleSilentRefresh()
     }
 
     window.addEventListener(PORTFOLIO_UPDATE_EVENT, handlePortfolioUpdate)
-    window.addEventListener(STOCK_PRICES_UPDATE_EVENT, handleStockUpdate)
     
     return () => {
       window.removeEventListener(PORTFOLIO_UPDATE_EVENT, handlePortfolioUpdate)
-      window.removeEventListener(STOCK_PRICES_UPDATE_EVENT, handleStockUpdate)
     }
   }, [])
 

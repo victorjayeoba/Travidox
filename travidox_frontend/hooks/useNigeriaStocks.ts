@@ -54,7 +54,7 @@ interface StocksResponse {
 // Export event for stock price updates
 export const STOCK_PRICES_UPDATE_EVENT = 'stock_prices_update';
 
-export const useNigeriaStocks = (autoRefresh: boolean = true) => {
+export const useNigeriaStocks = (autoRefresh: boolean = false) => {
   const [stocks, setStocks] = useState<NigeriaStock[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -112,10 +112,12 @@ export const useNigeriaStocks = (autoRefresh: boolean = true) => {
       setStocks(newStocks);
       setLastUpdated(new Date());
       
-      // Dispatch event to notify other components about price updates
-      window.dispatchEvent(new CustomEvent(STOCK_PRICES_UPDATE_EVENT, { 
-        detail: newStocks 
-      }));
+      // Only dispatch event for silent updates to avoid UI glitches
+      if (silent) {
+        window.dispatchEvent(new CustomEvent(STOCK_PRICES_UPDATE_EVENT, { 
+          detail: newStocks 
+        }));
+      }
       
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred');
@@ -125,28 +127,27 @@ export const useNigeriaStocks = (autoRefresh: boolean = true) => {
     }
   }, []);
 
-  // Setup automatic refresh
+  // Setup initial fetch only (no auto-refresh)
   useEffect(() => {
     // Initial fetch
     fetchStocks();
     
-    if (autoRefresh) {
-      // Set up interval for automatic refresh every 30 seconds
-      intervalRef.current = setInterval(() => {
-        fetchStocks(true); // Silent refresh
-      }, 30000);
-    }
-    
+    // Remove automatic refresh - only manual refresh now
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
     };
-  }, [fetchStocks, autoRefresh]);
+  }, [fetchStocks]);
 
   // Manual refresh function
   const refresh = useCallback(() => {
     fetchStocks(false); // Non-silent refresh
+  }, [fetchStocks]);
+
+  // Silent refresh function for background updates
+  const silentRefresh = useCallback(() => {
+    fetchStocks(true); // Silent refresh
   }, [fetchStocks]);
   
   // Return the stocks, loading state, error, and refresh functions
@@ -156,6 +157,7 @@ export const useNigeriaStocks = (autoRefresh: boolean = true) => {
     error,
     isMockData,
     lastUpdated,
-    refresh
+    refresh,
+    silentRefresh
   };
 }; 

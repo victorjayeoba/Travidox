@@ -83,24 +83,8 @@ export const usePortfolio = () => {
     };
   }, [user]);
 
-  // Listen for stock price updates and update portfolio prices automatically
-  useEffect(() => {
-    const handleStockPriceUpdate = (event: CustomEvent) => {
-      if (!user || portfolio.assets.length === 0) return;
-      
-      const stockData = event.detail;
-      if (stockData && Array.isArray(stockData)) {
-        // Update portfolio prices with new stock data
-        updatePrices(stockData);
-      }
-    };
-
-    window.addEventListener(STOCK_PRICES_UPDATE_EVENT, handleStockPriceUpdate as EventListener);
-    
-    return () => {
-      window.removeEventListener(STOCK_PRICES_UPDATE_EVENT, handleStockPriceUpdate as EventListener);
-    };
-  }, [user, portfolio.assets.length]);
+  // Remove automatic price updates - only update on manual refresh or trading activity
+  // This prevents UI glitches from constant updates
 
   // Calculate total portfolio value
   const getTotalValue = (): number => {

@@ -68,22 +68,17 @@ export default function StockDetailPage() {
   
   const [ownedQuantity, setOwnedQuantity] = useState(0);
 
-  // Listen for real-time updates
+  // Listen for portfolio updates only (when user trades)
   useEffect(() => {
     const handlePortfolioUpdate = () => {
-      // Portfolio will be automatically refreshed by the hook
-    };
-
-    const handleStockUpdate = () => {
-      // Stock data will be automatically refreshed by the hook
+      // Portfolio data will be automatically refreshed by the hook
+      // This ensures shares owned count updates when you buy/sell
     };
 
     window.addEventListener(PORTFOLIO_UPDATE_EVENT, handlePortfolioUpdate);
-    window.addEventListener(STOCK_PRICES_UPDATE_EVENT, handleStockUpdate);
     
     return () => {
       window.removeEventListener(PORTFOLIO_UPDATE_EVENT, handlePortfolioUpdate);
-      window.removeEventListener(STOCK_PRICES_UPDATE_EVENT, handleStockUpdate);
     };
   }, []);
 
