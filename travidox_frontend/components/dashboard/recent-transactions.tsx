@@ -12,7 +12,7 @@ const transactions = [
     symbol: 'AAPL', 
     amount: 5, 
     price: 182.63, 
-    date: '2023-12-15' 
+    date: '2025-06-15' 
   },
   { 
     id: 2, 
@@ -20,7 +20,7 @@ const transactions = [
     symbol: 'MSFT', 
     amount: 2, 
     price: 337.42, 
-    date: '2023-12-12' 
+    date: '2025-06-12' 
   },
   { 
     id: 3, 
@@ -28,7 +28,7 @@ const transactions = [
     symbol: 'TSLA', 
     amount: 3, 
     price: 239.29, 
-    date: '2023-12-10' 
+    date: '2025-06-10' 
   },
   { 
     id: 4, 
@@ -36,7 +36,7 @@ const transactions = [
     symbol: 'AMZN', 
     amount: 1, 
     price: 145.89, 
-    date: '2023-12-05' 
+    date: '2025-06-05' 
   },
   { 
     id: 5, 
@@ -44,7 +44,7 @@ const transactions = [
     symbol: 'NVDA', 
     amount: 2, 
     price: 465.74, 
-    date: '2023-12-01' 
+    date: '2025-06-01' 
   },
 ]
 

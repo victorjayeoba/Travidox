@@ -118,8 +118,8 @@ export default function ContactPage() {
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">Phone Support</h3>
                 <p className="text-gray-600 mb-3">Available Monday to Friday</p>
-                <a href="tel:+2341234567890" className="text-green-600 font-medium hover:text-green-700">
-                  +234 (0) 123 456 7890
+                <a href="tel:+2348089032359" className="text-green-600 font-medium hover:text-green-700">
+                  +234 808 903 2359
                 </a>
               </div>
               
@@ -129,8 +129,8 @@ export default function ContactPage() {
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">Email Support</h3>
                 <p className="text-gray-600 mb-3">We'll respond within 24 hours</p>
-                <a href="mailto:support@travidox.com" className="text-blue-600 font-medium hover:text-blue-700">
-                  support@travidox.com
+                <a href="mailto:hellotravidox@gmail.com" className="text-blue-600 font-medium hover:text-blue-700">
+                  hellotravidox@gmail.com
                 </a>
               </div>
               
@@ -347,7 +347,7 @@ export default function ContactPage() {
               <div className="bg-gray-50 rounded-lg p-6">
                 <h3 className="text-lg font-bold text-gray-900 mb-2">How can I report a technical issue with the platform?</h3>
                 <p className="text-gray-600">
-                  You can report technical issues through this contact form by selecting "Technical Issue" as the reason, or by emailing support@travidox.com with details about the problem you're experiencing.
+                  You can report technical issues through this contact form by selecting "Technical Issue" as the reason, or by emailing hellotravidox@gmail.com with details about the problem you're experiencing.
                 </p>
               </div>
               

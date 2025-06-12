@@ -35,7 +35,7 @@ export function FAQSection() {
     },
     {
       question: "How can I contact customer support?",
-      answer: "Our customer support team is available 24/7 via live chat, email, or phone. Premium account holders also get access to dedicated account managers for personalized assistance."
+      answer: "Our customer support team is available 24/7 via live chat, email (hellotravidox@gmail.com), or phone (+234 808 903 2359). Premium account holders also get access to dedicated account managers for personalized assistance."
     }
   ]
 

@@ -251,11 +251,11 @@ export default function TradingBotPage() {
 
   // Sample trade history - would be replaced with actual API data
   const tradeHistory = [
-    { id: 1, symbol: 'EUR/USD', type: 'buy', amount: 0.5, price: 1.0823, time: '2023-06-15 14:23', profit: null },
-    { id: 2, symbol: 'EUR/USD', type: 'sell', amount: 0.5, price: 1.0855, time: '2023-06-16 10:15', profit: 16.00 },
-    { id: 3, symbol: 'GBP/JPY', type: 'buy', amount: 0.25, price: 186.732, time: '2023-06-16 11:30', profit: null },
-    { id: 4, symbol: 'BTC/USD', type: 'buy', amount: 0.01, price: 42675.84, time: '2023-06-17 09:45', profit: null },
-    { id: 5, symbol: 'GBP/JPY', type: 'sell', amount: 0.25, price: 187.125, time: '2023-06-18 15:20', profit: 9.83 },
+    { id: 1, symbol: 'EUR/USD', type: 'buy', amount: 0.5, price: 1.0823, time: '2025-06-15 14:23', profit: null },
+    { id: 2, symbol: 'EUR/USD', type: 'sell', amount: 0.5, price: 1.0855, time: '2025-06-16 10:15', profit: 16.00 },
+    { id: 3, symbol: 'GBP/JPY', type: 'buy', amount: 0.25, price: 186.732, time: '2025-06-16 11:30', profit: null },
+    { id: 4, symbol: 'BTC/USD', type: 'buy', amount: 0.01, price: 42675.84, time: '2025-06-17 09:45', profit: null },
+    { id: 5, symbol: 'GBP/JPY', type: 'sell', amount: 0.25, price: 187.125, time: '2025-06-18 15:20', profit: 9.83 },
   ]
   
   // Trade notification component with raw API response

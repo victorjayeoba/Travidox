@@ -45,7 +45,7 @@ export default function AboutPage() {
                 <h2 className="text-3xl font-bold text-gray-900 mb-6">Our Story</h2>
                 <div className="space-y-4 text-gray-600">
                   <p>
-                    Founded in 2021, Travidox emerged from a simple yet powerful vision: to democratize access to global financial markets for everyday Nigerians. Our founders, experienced financial professionals and technology experts, recognized the significant barriers that prevented many Nigerians from participating in wealth-building opportunities through investing.
+                    Founded in 2024, Travidox emerged from a simple yet powerful vision: to democratize access to global financial markets for everyday Nigerians. Our founders, experienced financial professionals and technology experts, recognized the significant barriers that prevented many Nigerians from participating in wealth-building opportunities through investing.
                   </p>
                   <p>
                     What began as a small team working out of a Lagos co-working space has grown into a thriving fintech company serving thousands of investors across Nigeria. Our journey has been driven by a relentless focus on creating accessible, transparent, and powerful investment tools that work for everyone—from first-time investors to seasoned traders.

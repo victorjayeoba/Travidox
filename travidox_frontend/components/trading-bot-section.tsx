@@ -44,9 +44,9 @@ export function TradingBotSection({ id }: TradingBotSectionProps) {
             </div>
           </div>
           
-          <Button size="lg" className="bg-yellow-400 hover:bg-yellow-500 text-black">
-            <a href="/dashboard/trading-bot">Try Trading Bot</a>
-          </Button>
+          <a href="/dashboard/trading-bot"><Button size="lg" className="bg-yellow-400 hover:bg-yellow-500 text-black">
+            Try Trading Bot
+          </Button></a>
         </div>
 
         <div className="relative">

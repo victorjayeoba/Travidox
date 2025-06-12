@@ -61,11 +61,11 @@ export default function PrivacyPolicyPage() {
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-gray-300 text-sm">
               <div className="flex items-center gap-2">
                 <CalendarClock className="w-4 h-4" />
-                <span>Last Updated: April 15, 2023</span>
+                <span>Last Updated: June 10, 2025</span>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4" />
-                <Link href="mailto:privacy@travidox.com" className="hover:text-white">privacy@travidox.com</Link>
+                <Link href="mailto:hellotravidox@gmail.com" className="hover:text-white">hellotravidox@gmail.com</Link>
               </div>
             </div>
             
@@ -193,7 +193,7 @@ export default function PrivacyPolicyPage() {
                       <li>Objection: You can object to our processing of your data in certain circumstances.</li>
                     </ul>
                     <p className="mt-4">
-                      To exercise these rights, please contact us at <Link href="mailto:privacy@travidox.com" className="text-amber-600 hover:text-amber-700">privacy@travidox.com</Link>.
+                      To exercise these rights, please contact us at <Link href="mailto:hellotravidox@gmail.com" className="text-amber-600 hover:text-amber-700">hellotravidox@gmail.com</Link>.
                     </p>
                   </PolicySection>
                   
@@ -250,7 +250,7 @@ export default function PrivacyPolicyPage() {
                       Our services are not intended for individuals under the age of 18. We do not knowingly collect personal information from children. If we learn that we have collected personal information from a child, we will take steps to delete that information as soon as possible.
                     </p>
                     <p className="mt-4">
-                      If you believe we have collected information from a child, please contact us at <Link href="mailto:privacy@travidox.com" className="text-amber-600 hover:text-amber-700">privacy@travidox.com</Link>.
+                      If you believe we have collected information from a child, please contact us at <Link href="mailto:hellotravidox@gmail.com" className="text-amber-600 hover:text-amber-700">hellotravidox@gmail.com</Link>.
                     </p>
                   </PolicySection>
                   
@@ -273,9 +273,9 @@ export default function PrivacyPolicyPage() {
                       If you have questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us at:
                     </p>
                     <div className="mt-4 space-y-2">
-                      <p><strong>Email:</strong> <Link href="mailto:privacy@travidox.com" className="text-amber-600 hover:text-amber-700">privacy@travidox.com</Link></p>
+                      <p><strong>Email:</strong> <Link href="mailto:hellotravidox@gmail.com" className="text-amber-600 hover:text-amber-700">hellotravidox@gmail.com</Link></p>
                       <p><strong>Address:</strong> Travidox Headquarters, Victoria Island, Lagos, Nigeria</p>
-                      <p><strong>Phone:</strong> +234 (0) 1234 5678</p>
+                      <p><strong>Phone:</strong> +234 808 903 2359</p>
                     </div>
                     <p className="mt-4">
                       We will respond to your inquiries as soon as possible and within the timeframe required by applicable law.

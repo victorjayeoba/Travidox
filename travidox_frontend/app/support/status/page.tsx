@@ -95,17 +95,17 @@ const recentIncidents: Incident[] = [
   {
     id: "inc-001",
     title: "AI Trading Bot Performance Degradation",
-    date: "June 9, 2023",
+    date: "June 9, 2025",
     status: "investigating",
     affected: ["AI Trading Bot"],
     updates: [
       {
-        timestamp: "June 9, 2023 - 10:15 WAT",
+        timestamp: "June 9, 2025 - 10:15 WAT",
         message: "We are investigating reports of delayed execution and performance issues with the AI Trading Bot.",
         status: "investigating"
       },
       {
-        timestamp: "June 9, 2023 - 10:45 WAT",
+        timestamp: "June 9, 2025 - 10:45 WAT",
         message: "We have identified an issue with our machine learning pipeline that is causing increased latency in trading decisions.",
         status: "identified"
       }
@@ -114,27 +114,27 @@ const recentIncidents: Incident[] = [
   {
     id: "inc-002",
     title: "Market Data Delays",
-    date: "June 2, 2023",
+    date: "June 2, 2025",
     status: "resolved",
     affected: ["Market Data"],
     updates: [
       {
-        timestamp: "June 2, 2023 - 14:30 WAT",
+        timestamp: "June 2, 2025 - 14:30 WAT",
         message: "We are investigating delays in market data updates across all markets.",
         status: "investigating"
       },
       {
-        timestamp: "June 2, 2023 - 15:15 WAT",
+        timestamp: "June 2, 2025 - 15:15 WAT",
         message: "We have identified an issue with our data provider's feed. Working with them to resolve the issue.",
         status: "identified"
       },
       {
-        timestamp: "June 2, 2023 - 16:45 WAT",
+        timestamp: "June 2, 2025 - 16:45 WAT",
         message: "The data provider has resolved the issue on their end. We are monitoring the system to ensure stability.",
         status: "monitoring"
       },
       {
-        timestamp: "June 2, 2023 - 17:30 WAT",
+        timestamp: "June 2, 2025 - 17:30 WAT",
         message: "All market data is now updating correctly and historical data has been backfilled. This incident is now resolved.",
         status: "resolved"
       }
@@ -146,7 +146,7 @@ const upcomingMaintenance: MaintenanceEvent[] = [
   {
     id: "maint-001",
     title: "Database Optimization",
-    date: "June 15, 2023",
+    date: "June 15, 2025",
     startTime: "02:00 WAT",
     endTime: "04:00 WAT",
     status: "scheduled",
@@ -156,7 +156,7 @@ const upcomingMaintenance: MaintenanceEvent[] = [
   {
     id: "maint-002",
     title: "Mobile App Update Deployment",
-    date: "June 20, 2023",
+    date: "June 20, 2025",
     startTime: "23:00 WAT",
     endTime: "23:30 WAT",
     status: "scheduled",
