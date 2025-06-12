@@ -368,7 +368,7 @@ export default function DashboardPage() {
                         <StockCard 
                           symbol={asset.symbol}
                           name={asset.name}
-                          price={asset.value / (asset.allocation / 100)}
+                          price={asset.value}
                           change={asset.change}
                         />
                         <div>
