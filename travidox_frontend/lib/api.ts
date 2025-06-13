@@ -97,4 +97,11 @@ export const tradingApi = {
     apiRequest(`/close-position/${positionId}`, {
       method: 'POST',
     }),
+
+  /**
+   * Get real-time market price for a symbol
+   */
+  getMarketPrice: async (symbol: string): Promise<any> => {
+    return apiRequest(`/market-price/${symbol}`);
+  },
 }; 

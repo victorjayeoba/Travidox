@@ -163,21 +163,21 @@ export default function TradingSecurityCenterPage() {
       type: 'warning',
       title: 'Phishing Alert',
       description: 'Beware of emails claiming to be from Travidox requesting account verification.',
-      date: 'July 15, 2023'
+      date: 'June 15, 2025'
     },
     {
       id: 'alert2',
       type: 'info',
       description: 'We\'ve enhanced our two-factor authentication system for improved security.',
       title: 'Security Update',
-      date: 'July 10, 2023'
+      date: 'June 10, 2025'
     },
     {
       id: 'alert3',
       type: 'warning',
       title: 'Fake Mobile Apps',
       description: 'Fraudulent Travidox mobile apps spotted on unofficial app stores. Only download our app from official sources.',
-      date: 'July 5, 2023'
+      date: 'June 5, 2025'
     }
   ]
 

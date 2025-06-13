@@ -21,7 +21,7 @@ export function StatsSection() {
               <Users className="w-8 h-8 text-green-600" />
             </div>
             <div>
-              <h3 className="text-4xl font-bold text-gray-900">------</h3>
+              <h3 className="text-4xl font-bold text-gray-900">50K+</h3>
               <p className="text-gray-600">Registered users</p>
             </div>
           </div>
@@ -31,7 +31,7 @@ export function StatsSection() {
               <TrendingUp className="w-8 h-8 text-green-600" />
             </div>
             <div>
-              <h3 className="text-4xl font-bold text-gray-900">₦ -----</h3>
+              <h3 className="text-4xl font-bold text-gray-900">₦ 1.5B+</h3>
               <p className="text-gray-600">Assets under management</p>
             </div>
           </div>

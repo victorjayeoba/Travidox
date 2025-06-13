@@ -12,7 +12,7 @@ const newsItems = [
     title: 'Federal Reserve Holds Interest Rates Steady',
     summary: 'The Federal Reserve announced it will keep interest rates unchanged following its latest meeting.',
     source: 'Financial Times',
-    date: '2023-12-14',
+    date: '2025-06-14',
     image: '/images/news/fed.jpg',
     url: '#'
   },
@@ -21,7 +21,7 @@ const newsItems = [
     title: 'Tech Stocks Rally on AI Advancements',
     summary: 'Major technology stocks saw gains as companies announced new artificial intelligence capabilities.',
     source: 'Bloomberg',
-    date: '2023-12-12',
+    date: '2025-06-12',
     image: '/images/news/tech.jpg',
     url: '#'
   },
@@ -30,7 +30,7 @@ const newsItems = [
     title: 'Oil Prices Drop Amid Supply Concerns',
     summary: 'Crude oil prices fell as OPEC+ members discussed potential increases in production quotas.',
     source: 'Reuters',
-    date: '2023-12-10',
+    date: '2025-06-10',
     image: '/images/news/oil.jpg',
     url: '#'
   }

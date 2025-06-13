@@ -36,7 +36,7 @@ const pressReleases: PressRelease[] = [
   {
     id: "pr-001",
     title: "Travidox Raises $10 Million in Series A Funding to Expand Investment Platform",
-    date: "May 15, 2023",
+    date: "June 15, 2025",
     category: "Funding",
     excerpt: "Travidox, Nigeria's leading investment platform, has secured $10 million in Series A funding to expand its services across Africa and enhance its AI-powered trading tools.",
     image: "/images/press/funding-announcement.jpg",
@@ -45,7 +45,7 @@ const pressReleases: PressRelease[] = [
   {
     id: "pr-002",
     title: "Travidox Launches Revolutionary AI Trading Bot for Nigerian Investors",
-    date: "April 3, 2023",
+    date: "June 3, 2025",
     category: "Product Launch",
     excerpt: "Travidox introduces an AI-powered trading bot designed specifically for Nigerian investors, offering automated trading strategies based on local and global market conditions.",
     image: "/images/press/ai-bot-launch.jpg",
@@ -54,7 +54,7 @@ const pressReleases: PressRelease[] = [
   {
     id: "pr-003",
     title: "Travidox Partners with Lagos Business School to Offer Investment Education",
-    date: "March 10, 2023",
+    date: "June 10, 2025",
     category: "Partnership",
     excerpt: "Travidox announces a strategic partnership with Lagos Business School to develop comprehensive investment education programs for Nigerian investors.",
     image: "/images/press/lbs-partnership.jpg",
@@ -63,7 +63,7 @@ const pressReleases: PressRelease[] = [
   {
     id: "pr-004",
     title: "Travidox Expands Access to Global Markets for Nigerian Investors",
-    date: "February 22, 2023",
+    date: "June 22, 2025",
     category: "Expansion",
     excerpt: "Travidox now offers Nigerian investors access to 15 global markets, including US, UK, and European exchanges, furthering its mission to democratize global investment opportunities.",
     image: "/images/press/global-markets.jpg",
@@ -72,7 +72,7 @@ const pressReleases: PressRelease[] = [
   {
     id: "pr-005",
     title: "Travidox Achieves 50,000 Active Users Milestone",
-    date: "January 18, 2023",
+    date: "June 18, 2025",
     category: "Milestone",
     excerpt: "Travidox celebrates reaching 50,000 active users on its investment platform, marking significant growth in Nigeria's retail investment landscape.",
     image: "/images/press/user-milestone.jpg",
@@ -84,7 +84,7 @@ const mediaMentions: MediaMention[] = [
   {
     id: "mm-001",
     title: "How Travidox is Revolutionizing Investing in Nigeria",
-    date: "June 2, 2023",
+    date: "June 2, 2025",
     source: "TechCabal",
     logo: "/images/press/techcabal-logo.png",
     excerpt: "TechCabal explores how Travidox is making investment accessible to everyday Nigerians through innovative technology and education.",
@@ -93,7 +93,7 @@ const mediaMentions: MediaMention[] = [
   {
     id: "mm-002",
     title: "Travidox CEO Featured in '40 Under 40' Finance Leaders",
-    date: "May 20, 2023",
+    date: "June 20, 2025",
     source: "BusinessDay",
     logo: "/images/press/businessday-logo.png",
     excerpt: "Oluwaseun Adeyemi, CEO of Travidox, has been recognized in BusinessDay's annual '40 Under 40' list of influential finance leaders in Nigeria.",
@@ -102,7 +102,7 @@ const mediaMentions: MediaMention[] = [
   {
     id: "mm-003",
     title: "The Rise of AI in Nigerian Investment Platforms",
-    date: "April 25, 2023",
+    date: "June 25, 2025",
     source: "CNN Africa",
     logo: "/images/press/cnn-africa-logo.png",
     excerpt: "CNN Africa features Travidox in an in-depth analysis of how AI is transforming investment platforms across Africa.",
@@ -111,7 +111,7 @@ const mediaMentions: MediaMention[] = [
   {
     id: "mm-004",
     title: "Travidox: Bridging the Investment Gap for Nigeria's Middle Class",
-    date: "March 15, 2023",
+    date: "June 15, 2025",
     source: "The Guardian Nigeria",
     logo: "/images/press/guardian-logo.png",
     excerpt: "The Guardian Nigeria examines how Travidox is making sophisticated investment tools accessible to Nigeria's growing middle class.",
@@ -120,7 +120,7 @@ const mediaMentions: MediaMention[] = [
   {
     id: "mm-005",
     title: "Nigeria's Fintech Revolution: Spotlight on Travidox",
-    date: "February 10, 2023",
+    date: "June 10, 2025",
     source: "Bloomberg Africa",
     logo: "/images/press/bloomberg-logo.png",
     excerpt: "Bloomberg Africa highlights Travidox as a key player in Nigeria's fintech revolution, transforming how Nigerians invest and build wealth.",
@@ -143,7 +143,7 @@ export default function PressPage() {
   });
   
   const categories = ['All', ...Array.from(new Set(pressReleases.map(pr => pr.category)))];
-  const years = ['All', '2023', '2022', '2021'];
+  const years = ['All', '2025', '2024', '2023'];
   
   return (
     <>
@@ -223,6 +223,7 @@ export default function PressPage() {
                     className="w-full h-10 px-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
                     value={categoryFilter}
                     onChange={(e) => setCategoryFilter(e.target.value)}
+                    title="Filter by category"
                   >
                     {categories.map(category => (
                       <option key={category} value={category}>{category}</option>
@@ -234,6 +235,7 @@ export default function PressPage() {
                     className="w-full h-10 px-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
                     value={yearFilter}
                     onChange={(e) => setYearFilter(e.target.value)}
+                    title="Filter by year"
                   >
                     {years.map(year => (
                       <option key={year} value={year}>{year}</option>
@@ -364,11 +366,11 @@ export default function PressPage() {
               <div className="space-y-4">
                 <div>
                   <p className="font-medium text-gray-900">Media Relations</p>
-                  <p className="text-gray-600">press@travidox.com</p>
+                  <p className="text-gray-600">hellotravidox@gmail.com</p>
                 </div>
                 <div>
                   <p className="font-medium text-gray-900">Phone</p>
-                  <p className="text-gray-600">+234 (0) 123 456 7890</p>
+                  <p className="text-gray-600">+234 808 903 2359</p>
                 </div>
                 <div>
                   <p className="font-medium text-gray-900">Office Hours</p>

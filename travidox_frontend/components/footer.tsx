@@ -5,6 +5,13 @@ import { X, Linkedin, Instagram, Mail, Shield, ChevronRight, ArrowUpRight } from
 import { Button } from "@/components/ui/button"
 import { AuthButton } from "@/components/auth/auth-button"
 import { Logo } from "@/components/ui/logo"
+// Import Font Awesome components
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faXTwitter } from '@fortawesome/free-brands-svg-icons'
+
+// Add icons to the library
+library.add(faXTwitter)
 
 // Define types for the footer links
 interface FooterLink {
@@ -92,8 +99,8 @@ export function Footer() {
                     className="group w-9 h-9 rounded-lg bg-gray-800 flex items-center justify-center text-gray-400 hover:text-white hover:bg-green-600 transition-all duration-200 hover:scale-110"
                     aria-label="Follow us on X (formerly Twitter)"
                   >
-                    <X className="w-4 h-4" />
-                </a>
+                    <FontAwesomeIcon icon={faXTwitter} className="w-4 h-4" />
+                  </a>
                   <a 
                     href="https://linkedin.com/company/travidox" 
                     target="_blank" 
@@ -113,7 +120,7 @@ export function Footer() {
                     <Instagram className="w-4 h-4" />
                 </a>
                   <a 
-                    href="mailto:hello@travidox.com" 
+                    href="mailto:hellotravidox@gmail.com" 
                     className="group w-9 h-9 rounded-lg bg-gray-800 flex items-center justify-center text-gray-400 hover:text-white hover:bg-green-600 transition-all duration-200 hover:scale-110"
                     aria-label="Email us"
                   >

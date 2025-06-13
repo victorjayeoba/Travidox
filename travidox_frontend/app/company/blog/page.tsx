@@ -32,7 +32,7 @@ const blogPosts: BlogPost[] = [
   {
     id: "blog-001",
     title: "5 Strategies for Investing in Nigerian Stocks During Economic Uncertainty",
-    date: "June 5, 2023",
+    date: "June 5, 2025",
     author: {
       name: "Oluwaseun Adeyemi",
       avatar: "/images/team/ceo.jpg",
@@ -48,7 +48,7 @@ const blogPosts: BlogPost[] = [
   {
     id: "blog-002",
     title: "Understanding AI Trading Algorithms: How They Work and Their Benefits",
-    date: "May 28, 2023",
+    date: "June 8, 2025",
     author: {
       name: "Chinedu Okonkwo",
       avatar: "/images/team/cto.jpg",
@@ -64,7 +64,7 @@ const blogPosts: BlogPost[] = [
   {
     id: "blog-003",
     title: "Beginner's Guide to Global Market Investing for Nigerians",
-    date: "May 15, 2023",
+    date: "June 15, 2025",
     author: {
       name: "Amina Ibrahim",
       avatar: "/images/team/cfo.jpg",
@@ -80,7 +80,7 @@ const blogPosts: BlogPost[] = [
   {
     id: "blog-004",
     title: "How to Build a Balanced Investment Portfolio in Nigeria",
-    date: "May 8, 2023",
+    date: "June 20, 2025",
     author: {
       name: "Folake Adebayo",
       avatar: "/images/team/investment-advisor.jpg",
@@ -96,7 +96,7 @@ const blogPosts: BlogPost[] = [
   {
     id: "blog-005",
     title: "The Impact of CBN Policies on Nigerian Investment Strategies",
-    date: "April 30, 2023",
+    date: "June 25, 2025",
     author: {
       name: "Emmanuel Okafor",
       avatar: "/images/team/market-analyst.jpg",
@@ -112,7 +112,7 @@ const blogPosts: BlogPost[] = [
   {
     id: "blog-006",
     title: "Tax-Efficient Investing: Maximizing Returns for Nigerian Investors",
-    date: "April 22, 2023",
+    date: "June 30, 2025",
     author: {
       name: "Amina Ibrahim",
       avatar: "/images/team/cfo.jpg",
@@ -272,6 +272,7 @@ export default function BlogPage() {
                           setCategoryFilter(e.target.value);
                           setCurrentPage(1);
                         }}
+                        title="Filter by category"
                       >
                         {categories.map(category => (
                           <option key={category} value={category}>{category}</option>

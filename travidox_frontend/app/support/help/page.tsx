@@ -316,7 +316,7 @@ export default function HelpCenterPage() {
                 <h3 className="text-lg font-bold text-gray-900 mb-2">Call Us</h3>
                 <p className="text-gray-600 mb-4">Speak directly with our customer support representatives.</p>
                 <Button variant="outline" className="w-full">
-                  +234 800 123 4567
+                  <a href="tel:+2348089032359">+234 808 903 2359</a>
                 </Button>
               </div>
               
@@ -328,7 +328,7 @@ export default function HelpCenterPage() {
                 <h3 className="text-lg font-bold text-gray-900 mb-2">Email Support</h3>
                 <p className="text-gray-600 mb-4">Send us an email and we'll get back to you within 24 hours.</p>
                 <Button variant="outline" className="w-full">
-                  support@travidox.com
+                  <a href="mailto:hellotravidox@gmail.com">hellotravidox@gmail.com</a>
                 </Button>
               </div>
             </div>

@@ -61,11 +61,11 @@ export default function CookiePolicyPage() {
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-gray-300 text-sm">
               <div className="flex items-center gap-2">
                 <CalendarClock className="w-4 h-4" />
-                <span>Last Updated: April 15, 2023</span>
+                <span>Last Updated: June 10, 2025</span>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4" />
-                <Link href="mailto:privacy@travidox.com" className="hover:text-white">privacy@travidox.com</Link>
+                <Link href="mailto:hellotravidox@gmail.com" className="hover:text-white">hellotravidox@gmail.com</Link>
               </div>
             </div>
             
@@ -278,7 +278,7 @@ export default function CookiePolicyPage() {
                       If you have any questions about our use of cookies or other technologies, please contact us at:
                     </p>
                     <p className="mt-4">
-                      Email: <Link href="mailto:privacy@travidox.com" className="text-amber-600 hover:text-amber-700">privacy@travidox.com</Link>
+                      Email: <Link href="mailto:hellotravidox@gmail.com" className="text-amber-600 hover:text-amber-700">hellotravidox@gmail.com</Link>
                     </p>
                     <p>
                       Address: Travidox Headquarters, 25 Marina Street, Lagos, Nigeria

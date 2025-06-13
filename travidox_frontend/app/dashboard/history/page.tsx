@@ -34,22 +34,22 @@ import {
   Lock
 } from 'lucide-react'
 
-// Mock transaction data
+// Sample transaction history - would be replaced with actual API data
 const transactions = [
-  { id: 'TX-2403-8A7B', type: 'buy', symbol: 'MSFT', shares: 5, price: 224.75, amount: 1123.75, date: '2023-03-15', status: 'completed' },
-  { id: 'TX-2403-7C6D', type: 'sell', symbol: 'AAPL', shares: 10, price: 156.30, amount: 1563.00, date: '2023-03-10', status: 'completed' },
-  { id: 'TX-2403-9E2F', type: 'buy', symbol: 'GOOGL', shares: 2, price: 2250.80, amount: 4501.60, date: '2023-03-05', status: 'completed' },
-  { id: 'TX-2402-5B3A', type: 'buy', symbol: 'TSLA', shares: 8, price: 190.25, amount: 1522.00, date: '2023-02-28', status: 'completed' },
-  { id: 'TX-2402-4D1C', type: 'deposit', amount: 5000.00, date: '2023-02-20', status: 'completed' },
+  { id: 'TX-2506-8A7B', type: 'buy', symbol: 'MSFT', shares: 5, price: 224.75, amount: 1123.75, date: '2025-06-15', status: 'completed' },
+  { id: 'TX-2506-7C6D', type: 'sell', symbol: 'AAPL', shares: 10, price: 156.30, amount: 1563.00, date: '2025-06-10', status: 'completed' },
+  { id: 'TX-2506-9E2F', type: 'buy', symbol: 'GOOGL', shares: 2, price: 2250.80, amount: 4501.60, date: '2025-06-05', status: 'completed' },
+  { id: 'TX-2506-5B3A', type: 'buy', symbol: 'TSLA', shares: 8, price: 190.25, amount: 1522.00, date: '2025-06-02', status: 'completed' },
+  { id: 'TX-2506-4D1C', type: 'deposit', amount: 5000.00, date: '2025-06-01', status: 'completed' },
 ]
 
-// Mock account activities
-const activities = [
-  { type: 'login', date: '2023-03-15 14:32:45', device: 'Windows PC', location: 'Lagos, Nigeria', ip: '102.89.23.xx' },
-  { type: 'password_change', date: '2023-03-10 09:15:22', device: 'iPhone 13', location: 'Lagos, Nigeria', ip: '102.89.23.xx' },
-  { type: 'profile_update', date: '2023-03-05 16:48:11', device: 'Windows PC', location: 'Lagos, Nigeria', ip: '102.89.23.xx' },
-  { type: 'login', date: '2023-02-28 19:02:33', device: 'Android Device', location: 'Abuja, Nigeria', ip: '105.112.18.xx' },
-  { type: 'login', date: '2023-02-20 08:54:19', device: 'iPhone 13', location: 'Lagos, Nigeria', ip: '102.89.23.xx' },
+// Sample account activity - would be replaced with actual API data
+const accountActivity = [
+  { type: 'login', date: '2025-06-15 14:32:45', device: 'Windows PC', location: 'Lagos, Nigeria', ip: '102.89.23.xx' },
+  { type: 'password_change', date: '2025-06-10 09:15:22', device: 'iPhone 13', location: 'Lagos, Nigeria', ip: '102.89.23.xx' },
+  { type: 'profile_update', date: '2025-06-05 16:48:11', device: 'Windows PC', location: 'Lagos, Nigeria', ip: '102.89.23.xx' },
+  { type: 'login', date: '2025-06-02 19:02:33', device: 'Android Device', location: 'Abuja, Nigeria', ip: '105.112.18.xx' },
+  { type: 'login', date: '2025-06-01 08:54:19', device: 'iPhone 13', location: 'Lagos, Nigeria', ip: '102.89.23.xx' },
 ]
 
 export default function HistoryPage() {
@@ -242,7 +242,7 @@ export default function HistoryPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {activities.map((activity, index) => (
+                {accountActivity.map((activity, index) => (
                   <div key={index} className="p-4 border rounded-lg">
                     <div className="flex items-start gap-3">
                       <div className="p-2 bg-gray-100 rounded-full">

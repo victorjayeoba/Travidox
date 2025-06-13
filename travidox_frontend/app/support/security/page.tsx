@@ -102,7 +102,7 @@ export default function SecurityPage() {
           <ol className="list-decimal pl-6 space-y-2">
             <li>Change your password immediately</li>
             <li>Enable two-factor authentication if not already enabled</li>
-            <li>Contact our security team at <Link href="mailto:security@travidox.com" className="text-green-600 hover:text-green-700">security@travidox.com</Link></li>
+            <li>Contact our security team at <Link href="mailto:hellotravidox@gmail.com" className="text-green-600 hover:text-green-700">hellotravidox@gmail.com</Link></li>
             <li>Review your recent account activities and transactions</li>
             <li>Update your email password as well, especially if it's linked to your Travidox account</li>
           </ol>
@@ -365,8 +365,8 @@ export default function SecurityPage() {
                   <span className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-2 flex-shrink-0">5</span>
                   Regularly Monitor Your Account
                 </h3>
-                <p className="text-gray-600">
-                  Check your account activity regularly and enable notifications for all transactions. If you notice any suspicious activities or transactions you don't recognize, contact our security team immediately at security@travidox.com.
+                                  <p className="text-gray-600">
+                  Check your account activity regularly and enable notifications for all transactions. If you notice any suspicious activities or transactions you don't recognize, contact our security team immediately at hellotravidox@gmail.com.
                 </p>
               </div>
             </div>
@@ -411,11 +411,11 @@ export default function SecurityPage() {
               <div className="space-y-4">
                 <div>
                   <p className="font-medium text-gray-900">Security Team Email</p>
-                  <p className="text-gray-600">security@travidox.com</p>
+                  <p className="text-gray-600">hellotravidox@gmail.com</p>
                 </div>
                 <div>
                   <p className="font-medium text-gray-900">Security Hotline</p>
-                  <p className="text-gray-600">+234 (0) 123 456 7890</p>
+                  <p className="text-gray-600">+234 808 903 2359</p>
                 </div>
                 <div>
                   <p className="font-medium text-gray-900">Bug Bounty Program</p>

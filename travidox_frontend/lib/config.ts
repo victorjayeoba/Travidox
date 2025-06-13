@@ -4,8 +4,8 @@
 
 // Backend API configuration
 export const apiConfig = {
-  // Replace with your actual EC2 instance's IP address or domain
-  baseUrl: process.env.NEXT_PUBLIC_API_URL || 'http://16.171.230.94:8000',
+  // Trading bot API base URL
+  baseUrl: process.env.NEXT_PUBLIC_API_URL || 'http://16.170.239.5:8000',
   
   // API request timeout in milliseconds
   timeout: 30000,
