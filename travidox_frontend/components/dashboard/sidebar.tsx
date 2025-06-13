@@ -221,23 +221,6 @@ export function Sidebar() {
           active={pathname.startsWith('/dashboard/settings')}
           onClick={closeMenuOnMobile}
         />
-
-        <div className="pt-4 mt-4 border-t border-gray-200">
-          <SidebarItem 
-            icon={<User size={18} />} 
-            label="Profile" 
-            href="/dashboard/profile" 
-            active={pathname === '/dashboard/profile'}
-            onClick={closeMenuOnMobile}
-          />
-          
-          <SidebarItem 
-            icon={<Settings size={18} />} 
-            label="Settings" 
-            href="/dashboard/settings" 
-            active={pathname === '/dashboard/settings'}
-            onClick={closeMenuOnMobile}
-          />
           
           <a 
             href="#" 
@@ -247,7 +230,6 @@ export function Sidebar() {
             <span className="mr-3"><LogOut size={18} /></span>
             <span>Logout</span>
           </a>
-        </div>
       </nav>
     </aside>
   )
