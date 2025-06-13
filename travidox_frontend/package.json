@@ -75,11 +75,8 @@
     "sonner": "^1.7.4",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
-<<<<<<< HEAD
     "typewriter-effect": "^2.22.0",
-=======
     "uuid": "^11.1.0",
->>>>>>> b9ad7a0 (updates)
     "vaul": "latest",
     "zod": "^3.25.55"
   },
