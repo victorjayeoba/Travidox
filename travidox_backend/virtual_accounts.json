@@ -17,5 +17,15 @@
     "floating_pnl": 0.0,
     "created_at": 1749776574.6724503,
     "updated_at": 1749776574.6724503
+  },
+  "sD0BQJHBnJPlcoCqW8Hm6DMweNn2": {
+    "balance": 1000.0,
+    "equity": 1000.0,
+    "margin": 0.0,
+    "free_margin": 1000.0,
+    "margin_level": 0.0,
+    "floating_pnl": 0.0,
+    "created_at": 1749808185.1800804,
+    "updated_at": 1749808509.7333548
   }
 }

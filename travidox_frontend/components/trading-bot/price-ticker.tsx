@@ -4,13 +4,18 @@ import { useState, useEffect } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { ArrowUp, ArrowDown, RefreshCw } from 'lucide-react'
 import { useMarketData } from '@/hooks/useMarketData'
+import { FOREX_SYMBOLS } from '@/lib/market-data'
+import { getLatestPrice, subscribeToSymbol, priceUpdateEmitter } from '@/lib/finnhub-websocket'
 
 interface PriceTickerItemProps {
   symbol: string
 }
 
 function PriceTickerItem({ symbol }: PriceTickerItemProps) {
-  const { bid, ask, loading, error } = useMarketData(symbol)
+  const [bid, setBid] = useState<number>(0)
+  const [ask, setAsk] = useState<number>(0)
+  const [loading, setLoading] = useState<boolean>(true)
+  const [error, setError] = useState<boolean>(false)
   const [bidDirection, setBidDirection] = useState<'up' | 'down' | null>(null)
   const [askDirection, setAskDirection] = useState<'up' | 'down' | null>(null)
   const [prevBid, setPrevBid] = useState<number>(0)
@@ -20,6 +25,37 @@ function PriceTickerItem({ symbol }: PriceTickerItemProps) {
   const formattedSymbol = symbol.length === 6 
     ? `${symbol.slice(0, 3)}/${symbol.slice(3, 6)}`
     : symbol;
+  
+  // Initialize prices and subscribe to updates
+  useEffect(() => {
+    // Get initial price
+    try {
+      const initialPrice = getLatestPrice(symbol);
+      setBid(initialPrice.bid);
+      setAsk(initialPrice.ask);
+      setLoading(false);
+    } catch (err) {
+      console.error(`Error getting initial price for ${symbol}:`, err);
+      setError(true);
+      setLoading(false);
+    }
+    
+    // Subscribe to symbol
+    subscribeToSymbol(symbol);
+    
+    // Listen for price updates
+    const handlePriceUpdate = (data: { bid: number; ask: number }) => {
+      setBid(data.bid);
+      setAsk(data.ask);
+    };
+    
+    priceUpdateEmitter.on(`price-update-${symbol}`, handlePriceUpdate);
+    
+    // Cleanup
+    return () => {
+      priceUpdateEmitter.off(`price-update-${symbol}`, handlePriceUpdate);
+    };
+  }, [symbol]);
   
   // Track price changes to show direction indicators
   useEffect(() => {
@@ -99,9 +135,8 @@ function PriceTickerItem({ symbol }: PriceTickerItemProps) {
 }
 
 export function PriceTicker() {
-  const symbols = [
-    'EURUSD', 'GBPUSD', 'USDJPY', 'AUDUSD', 'USDCAD', 'USDCHF', 'NZDUSD'
-  ]
+  // Use the common forex symbols list
+  const symbols = FOREX_SYMBOLS.slice(0, 7); // Just take the first 7 symbols
   
   return (
     <Card>

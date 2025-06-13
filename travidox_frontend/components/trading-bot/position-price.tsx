@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useMarketData } from '@/hooks/useMarketData'
+import { getLatestPrice, subscribeToSymbol, unsubscribeFromSymbol, priceUpdateEmitter } from '@/lib/finnhub-websocket'
 
 interface PositionPriceProps {
   symbol: string
@@ -18,11 +19,43 @@ export function PositionPrice({
   onPriceUpdate,
   volume = 0.01 
 }: PositionPriceProps) {
-  // Get real-time market data
-  const { bid, ask, loading, error } = useMarketData(symbol)
+  const [currentPrice, setCurrentPrice] = useState<number>(openPrice)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   
-  // Use appropriate price based on order type
-  const currentPrice = orderType === 'BUY' ? bid : ask
+  // Subscribe to real-time price updates
+  useEffect(() => {
+    // Get initial price
+    try {
+      const initialPrice = getLatestPrice(symbol);
+      const price = orderType === 'BUY' ? initialPrice.bid : initialPrice.ask;
+      if (price > 0) {
+        setCurrentPrice(price);
+        setIsLoading(false);
+      }
+    } catch (err) {
+      console.error(`Error getting initial price for ${symbol}:`, err);
+    }
+    
+    // Subscribe to symbol
+    subscribeToSymbol(symbol);
+    
+    // Listen for price updates
+    const handlePriceUpdate = (data: { bid: number; ask: number }) => {
+      const price = orderType === 'BUY' ? data.bid : data.ask;
+      if (price > 0) {
+        setCurrentPrice(price);
+        setIsLoading(false);
+      }
+    };
+    
+    priceUpdateEmitter.on(`price-update-${symbol}`, handlePriceUpdate);
+    
+    // Cleanup
+    return () => {
+      unsubscribeFromSymbol(symbol);
+      priceUpdateEmitter.off(`price-update-${symbol}`, handlePriceUpdate);
+    };
+  }, [symbol, orderType]);
   
   // Calculate profit/loss
   const priceDiff = orderType === 'BUY' 
@@ -34,22 +67,16 @@ export function PositionPrice({
   
   // Update parent component with new price and P&L
   useEffect(() => {
-    if (onPriceUpdate && !loading && currentPrice > 0) {
+    if (onPriceUpdate && currentPrice > 0) {
       onPriceUpdate(currentPrice, profitLoss);
     }
-  }, [currentPrice, profitLoss, onPriceUpdate, loading]);
+  }, [currentPrice, profitLoss, onPriceUpdate]);
   
-  if (loading) {
-    return <span className="text-gray-400">Loading...</span>
-  }
-  
-  if (error) {
-    return <span className="text-gray-400">-</span>
-  }
-  
+  // Always show a price, with loading indicator if needed
   return (
     <span className={`${profitLoss > 0 ? 'text-green-500' : profitLoss < 0 ? 'text-red-500' : ''}`}>
       {currentPrice.toFixed(5)}
+      {isLoading && <span className="ml-1 text-gray-400">(updating...)</span>}
     </span>
   )
 } 

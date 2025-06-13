@@ -7,14 +7,15 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { ArrowUpRight, ArrowDownRight, DollarSign } from 'lucide-react';
-import { useTrading } from '@/hooks/useTrading';
+import { useTradingAccount } from '@/hooks/useTradingAccount';
+import { FOREX_SYMBOLS } from '@/lib/market-data';
 
 interface TradingFormProps {
   onOrderPlaced?: () => void;
 }
 
 export function TradingForm({ onOrderPlaced }: TradingFormProps) {
-  const { symbols, placeOrder, refreshPositions, loading } = useTrading();
+  const { placeOrder, marketPrices, loading } = useTradingAccount();
   
   const [selectedSymbol, setSelectedSymbol] = useState('EURUSD');
   const [orderType, setOrderType] = useState<'BUY' | 'SELL'>('BUY');
@@ -23,65 +24,52 @@ export function TradingForm({ onOrderPlaced }: TradingFormProps) {
   const [takeProfit, setTakeProfit] = useState(30);
   const [isPlacing, setIsPlacing] = useState(false);
   
-  // Get symbol details
-  const selectedSymbolDetails = symbols.find(s => s.name === selectedSymbol);
-  
-  // Filter for forex symbols only
-  const forexSymbols = symbols.filter(s => 
-    s.name.includes('USD') || 
-    s.name.includes('EUR') || 
-    s.name.includes('GBP') || 
-    s.name.includes('JPY') || 
-    s.name.includes('CAD') ||
-    s.category === 'forex'
-  );
+  // Get current price for the selected symbol
+  const currentPrice = marketPrices.get(selectedSymbol);
+  const pipSize = 0.0001; // Standard pip size for forex
   
   // Place order
   const handlePlaceOrder = async () => {
     try {
-      setIsPlacing(true);
+      if (!currentPrice) {
+        alert('Cannot place order: Market price not available');
+        return;
+      }
       
-      // Get current price (normally would come from API)
-      // This is a simplification - in a real app, you'd get the current price from the API
-      const currentPrice = selectedSymbolDetails?.price || 1.0;
-      const pipSize = selectedSymbolDetails?.tick_size || 0.0001;
+      setIsPlacing(true);
       
       // Calculate stop loss and take profit prices
       const stopLossPrice = orderType === 'BUY'
-        ? currentPrice - (stopLoss * pipSize)
-        : currentPrice + (stopLoss * pipSize);
+        ? (currentPrice.bid - (stopLoss * pipSize))
+        : (currentPrice.ask + (stopLoss * pipSize));
         
       const takeProfitPrice = orderType === 'BUY'
-        ? currentPrice + (takeProfit * pipSize)
-        : currentPrice - (takeProfit * pipSize);
-      
-      // Order data
-      const orderData = {
-        symbol: selectedSymbol,
-        order_type: orderType,
-        volume: volume,
-        stop_loss: stopLoss > 0 ? stopLossPrice : null,
-        take_profit: takeProfit > 0 ? takeProfitPrice : null,
-      };
-      
-      console.log('Placing order:', orderData);
+        ? (currentPrice.ask + (takeProfit * pipSize))
+        : (currentPrice.bid - (takeProfit * pipSize));
       
       // Place order
-      await placeOrder(orderData);
+      const positionId = await placeOrder(
+        selectedSymbol,
+        orderType,
+        volume,
+        stopLoss > 0 ? stopLossPrice : null,
+        takeProfit > 0 ? takeProfitPrice : null
+      );
       
-      // Refresh positions
-      await refreshPositions();
-      
-      // Call callback
-      if (onOrderPlaced) {
-        onOrderPlaced();
+      if (positionId) {
+        // Call callback
+        if (onOrderPlaced) {
+          onOrderPlaced();
+        }
+        
+        // Success message
+        alert(`Order placed successfully: ${orderType} ${volume} ${selectedSymbol}`);
+      } else {
+        alert('Failed to place order. Please try again.');
       }
-      
-      // Success message
-      alert(`Order placed successfully: ${orderType} ${volume} ${selectedSymbol}`);
     } catch (error) {
       console.error('Error placing order:', error);
-      alert(`Error placing order: ${error}`);
+      alert(`Error placing order: ${error instanceof Error ? error.message : String(error)}`);
     } finally {
       setIsPlacing(false);
     }
@@ -104,16 +92,24 @@ export function TradingForm({ onOrderPlaced }: TradingFormProps) {
               <SelectValue placeholder="Select symbol" />
             </SelectTrigger>
             <SelectContent>
-              {forexSymbols.map((symbol) => (
-                <SelectItem key={symbol.name} value={symbol.name}>
-                  {symbol.name} - {symbol.description || 'Forex Pair'}
+              {FOREX_SYMBOLS.map((symbol) => (
+                <SelectItem key={symbol} value={symbol}>
+                  {symbol} - Forex Pair
                 </SelectItem>
               ))}
-              {forexSymbols.length === 0 && (
-                <SelectItem value="EURUSD">EURUSD - Euro vs US Dollar</SelectItem>
-              )}
             </SelectContent>
           </Select>
+          
+          {/* Current Price Display */}
+          {currentPrice && (
+            <div className="flex justify-between mt-2 text-sm">
+              <span className="text-muted-foreground">Current Price:</span>
+              <div>
+                <span className="font-medium text-green-600 mr-2">Bid: {currentPrice.bid.toFixed(5)}</span>
+                <span className="font-medium text-red-600">Ask: {currentPrice.ask.toFixed(5)}</span>
+              </div>
+            </div>
+          )}
         </div>
         
         {/* Order Type */}
@@ -213,7 +209,7 @@ export function TradingForm({ onOrderPlaced }: TradingFormProps) {
         {/* Submit Button */}
         <Button 
           onClick={handlePlaceOrder} 
-          disabled={isPlacing || loading} 
+          disabled={isPlacing || loading || !currentPrice} 
           className="w-full mt-4"
         >
           {isPlacing ? (
