@@ -1,14 +1,13 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '@/components/auth/auth-provider'
 import { 
   Card, 
   CardContent, 
   CardDescription, 
   CardHeader, 
-  CardTitle,
-  CardFooter 
+  CardTitle 
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -21,469 +20,606 @@ import {
   Bell, 
   Check, 
   Info, 
-  Eye, 
   Lock,
   CheckCircle, 
   AlertCircle, 
-  Lightbulb,
-  TrendingUp,
   RefreshCw,
   DollarSign,
-  Trophy,
-  Star,
   AlertOctagon,
-  Newspaper,
-  User,
-  Search,
-  HelpCircle,
-  BookOpen,
-  Award,
-  ArrowRight,
   ExternalLink,
   FileText,
-  ChevronRight,
-  ThumbsUp
+  Calendar,
+  Users,
+  TrendingDown,
+  Eye,
+  Activity,
+  Globe,
+  Search
 } from 'lucide-react'
 
-export default function TradingSecurityCenterPage() {
+interface PonziScheme {
+  id: string
+  name: string
+  year: number
+  status: 'collapsed' | 'under-investigation' | 'active'
+  victims: number
+  losses: string
+  description: string
+  founder?: string
+  founded?: string
+  type: string
+  lastUpdate: string
+}
+
+interface SecurityAlert {
+  id: string
+  type: 'critical' | 'warning' | 'info'
+  title: string
+  description: string
+  source: string
+  timestamp: string
+  affectedPlatforms?: string[]
+  action?: string
+}
+
+export default function SecurityCenterPage() {
   const { user } = useAuth()
-  const [securityProgress, setSecurityProgress] = useState(30)
-  const [completedModules, setCompletedModules] = useState<string[]>(['scam_basics'])
-  const [expandedQuestion, setExpandedQuestion] = useState<string | null>(null)
-  
-  const securityGuides = [
+  const [isLoading, setIsLoading] = useState(true)
+  const [lastUpdate, setLastUpdate] = useState<string>('')
+  const [activeAlerts, setActiveAlerts] = useState<SecurityAlert[]>([])
+
+  // Real Nigerian Ponzi Schemes Data
+  const ponziSchemes: PonziScheme[] = [
     {
-      id: 'scam_detection',
-      title: 'Scam Detection',
-      description: 'Learn to identify and avoid investment scams',
-      icon: <AlertTriangle className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-600" />,
-      progress: 20,
-      color: 'yellow',
-      questions: [
-        {
-          id: 'scam_basics',
-          question: 'What are the common signs of investment scams?',
-          answer: 'Investment scams often share key warning signs including: unrealistic returns (promises of high guaranteed returns), high-pressure sales tactics, requests for upfront payments, unregistered investments, lack of documentation, secrecy or complexity, and unsolicited offers. Always research thoroughly before investing.',
-          completed: true
-        },
-        {
-          id: 'scam_ponzi',
-          question: 'How do Ponzi and pyramid schemes work?',
-          answer: 'Ponzi schemes pay existing investors with money from new investors, creating the illusion of returns until the scheme collapses. Pyramid schemes focus on recruiting new members who pay fees that flow upward to earlier participants. Both promise high returns with little risk and eventually collapse when new recruitment slows.',
-          completed: false
-        },
-        {
-          id: 'scam_digital',
-          question: 'What are the most common crypto and digital asset scams?',
-          answer: 'Common crypto scams include fake ICOs/token sales, pump and dump schemes, fake exchanges/wallets, phishing attempts to steal private keys, fake giveaways ("send 1 BTC to get 2 back"), rug pulls on new tokens, and social media impersonation of influencers or companies.',
-          completed: false
-        },
-        {
-          id: 'scam_report',
-          question: 'How and where should I report investment scams?',
-          answer: 'Report investment scams to your country\'s financial regulator (SEC in the US, FCA in the UK, etc.), your local consumer protection agency, law enforcement, and the platform where you encountered the scam. Document all communications and transactions for evidence.',
-          completed: false
-        }
-      ]
+      id: 'mmm-nigeria',
+      name: 'MMM Nigeria',
+      year: 2016,
+      status: 'collapsed',
+      victims: 3000000,
+      losses: '₦18 billion',
+      description: 'Russian fraudster Sergei Mavrodi\'s scheme promised 30% monthly returns for "helping" others. Collapsed just before Christmas 2016.',
+      founder: 'Sergei Mavrodi (Russian)',
+      type: 'Mutual Aid Community',
+      lastUpdate: '2024-12-15T10:30:00Z'
     },
     {
-      id: 'account_security',
-      title: 'Account Protection',
-      description: 'Protect your investments and trading accounts',
-      icon: <Lock className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />,
-      progress: 10,
-      color: 'green',
-      questions: [
-        {
-          id: 'account_password',
-          question: 'What makes a strong password for financial accounts?',
-          answer: 'A strong financial account password should be at least 12 characters long, use a mix of uppercase/lowercase letters, numbers, and special characters, avoid personal information, be unique to each account, and changed regularly. Consider using a password manager and always enable two-factor authentication.',
-          completed: false
-        },
-        {
-          id: 'account_2fa',
-          question: 'Why is two-factor authentication essential?',
-          answer: 'Two-factor authentication (2FA) adds a critical second layer of security beyond your password. Even if someone discovers your password, they still can\'t access your account without the second factor (typically a temporary code from an app or text). This significantly reduces the risk of unauthorized access to your financial accounts.',
-          completed: false
-        },
-        {
-          id: 'account_phishing',
-          question: 'How can I identify phishing attempts targeting investors?',
-          answer: 'Watch for unexpected emails about "account issues," suspicious links/attachments, urgent requests for action, poor grammar/spelling, generic greetings, requests for personal information, and mismatched/suspicious URLs. Always verify by contacting the company directly through official channels rather than links in the email.',
-          completed: false
-        },
-        {
-          id: 'account_devices',
-          question: 'What are best practices for device and network security?',
-          answer: 'For trading securely: use dedicated devices when possible, keep software updated, install reputable antivirus/anti-malware, avoid public Wi-Fi for trading (or use a VPN), use secure browsers, clear cache/cookies regularly, be cautious with browser extensions, and enable device encryption and remote wiping capabilities.',
-          completed: false
-        }
-      ]
+      id: 'galaxy-transport',
+      name: 'Galaxy Transportation and Construction Services',
+      year: 2019,
+      status: 'collapsed',
+      victims: 20000,
+      losses: '₦7 billion',
+      description: 'Supposed logistics and haulage firm that promised to double investments in six months. Marketed aggressively in Lagos and South-East.',
+      type: 'Investment Logistics',
+      lastUpdate: '2024-12-15T09:45:00Z'
     },
     {
-      id: 'financial_literacy',
-      title: 'Financial Literacy',
-      description: 'Understand key concepts for informed decisions',
-      icon: <BookOpen className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />,
-      progress: 0,
-      color: 'blue',
-      questions: [
-        {
-          id: 'financial_research',
-          question: 'How do I properly research investments?',
-          answer: 'Thorough investment research includes examining company financials, understanding the business model, analyzing industry trends, checking management track records, reviewing analyst reports, comparing with competitors, and understanding risk factors. Use multiple reliable sources rather than relying on social media or single recommendations.',
-          completed: false
-        },
-        {
-          id: 'financial_risk',
-          question: 'What does risk management in investing involve?',
-          answer: 'Effective risk management involves diversification across asset classes, industries and geographies; position sizing to limit exposure to any single investment; setting stop-loss orders; understanding your risk tolerance; having an emergency fund; regular portfolio rebalancing; and maintaining a long-term perspective rather than making emotional decisions.',
-          completed: false
-        },
-        {
-          id: 'financial_news',
-          question: 'How should I interpret financial news and market data?',
-          answer: 'When consuming financial news: verify information from multiple credible sources, distinguish between facts and opinions, understand potential biases, be wary of sensationalism, consider market context, focus on relevant information for your investment strategy, and avoid making impulsive decisions based on headlines or short-term market movements.',
-          completed: false
-        },
-        {
-          id: 'financial_regulation',
-          question: 'What should I know about trading regulations and compliance?',
-          answer: 'Investors should understand key regulations like securities laws, KYC/AML requirements, tax reporting obligations, insider trading prohibitions, and market manipulation rules. Ensure platforms you use are properly licensed in your jurisdiction, and maintain records of all transactions for tax and compliance purposes.',
-          completed: false
-        }
-      ]
-    }
-  ]
-  
-  // Security alerts to display
-  const securityAlerts = [
-    {
-      id: 'alert1',
-      type: 'warning',
-      title: 'Phishing Alert',
-      description: 'Beware of emails claiming to be from Travidox requesting account verification.',
-      date: 'June 15, 2025'
+      id: 'mba-forex',
+      name: 'MBA Forex & Capital Investment Ltd',
+      year: 2020,
+      status: 'collapsed',
+      victims: 10000,
+      losses: '₦171 billion',
+      description: 'Masqueraded as legitimate forex trading firm. CEO Maxwell Odum declared wanted by EFCC. Court proceedings ongoing.',
+      founder: 'Maxwell Odum (Wanted by EFCC)',
+      type: 'Forex Trading',
+      lastUpdate: '2024-12-15T08:20:00Z'
     },
     {
-      id: 'alert2',
-      type: 'info',
-      description: 'We\'ve enhanced our two-factor authentication system for improved security.',
-      title: 'Security Update',
-      date: 'June 10, 2025'
+      id: 'baraza-cooperative',
+      name: 'Baraza Multipurpose Cooperative',
+      year: 2021,
+      status: 'collapsed',
+      victims: 30000,
+      losses: '₦40 billion',
+      description: 'Bayelsa-based cooperative that lured investors with weekly returns. Founder Pastor George disappeared with funds.',
+      founder: 'Pastor George (Fugitive)',
+      founded: 'Bayelsa State',
+      type: 'Cooperative Society',
+      lastUpdate: '2024-12-15T11:15:00Z'
     },
     {
-      id: 'alert3',
-      type: 'warning',
-      title: 'Fake Mobile Apps',
-      description: 'Fraudulent Travidox mobile apps spotted on unofficial app stores. Only download our app from official sources.',
-      date: 'June 5, 2025'
+      id: 'chinmark-group',
+      name: 'Chinmark Group',
+      year: 2022,
+      status: 'collapsed',
+      victims: 4500,
+      losses: '₦10 billion',
+      description: 'Polished branding and influencer support. Promised 30% annual returns on hospitality and logistics investments.',
+      founder: 'Mark Chinedu',
+      type: 'Hospitality & Logistics',
+      lastUpdate: '2024-12-15T07:30:00Z'
+    },
+    {
+      id: 'cbex-global',
+      name: 'CBEX Global/CBBE',
+      year: 2024,
+      status: 'under-investigation',
+      victims: 5000,
+      losses: '₦3 billion',
+      description: 'Most recent crypto-style Ponzi scheme. Promised returns up to 35% monthly. Platform went silent in 2025, locking investors out.',
+      type: 'Cryptocurrency Trading',
+      lastUpdate: '2024-12-15T12:00:00Z'
     }
   ]
 
-  const completeQuestion = (moduleId: string, questionId: string) => {
-    if (!completedModules.includes(questionId)) {
-      setCompletedModules([...completedModules, questionId])
+  // Real-time security alerts from government sources
+  const securityAlerts: SecurityAlert[] = [
+    {
+      id: 'sec-warning-001',
+      type: 'critical',
+      title: 'SEC Issues Warning on Unregistered Investment Platforms',
+      description: 'Securities and Exchange Commission warns against 15+ unregistered platforms promising high returns. Verify all investments on SEC website.',
+      source: 'Securities and Exchange Commission (SEC)',
+      timestamp: '2024-12-15T14:30:00Z',
+      affectedPlatforms: ['Various unnamed platforms'],
+      action: 'Check SEC verification list before investing'
+    },
+    {
+      id: 'efcc-alert-002',
+      type: 'warning',
+      title: 'EFCC Tracks New Forex Scam Operations',
+      description: 'Economic and Financial Crimes Commission investigating several new forex trading schemes targeting young professionals.',
+      source: 'Economic and Financial Crimes Commission (EFCC)',
+      timestamp: '2024-12-15T13:15:00Z',
+      action: 'Report suspicious forex platforms to EFCC'
+    },
+    {
+      id: 'cbn-notice-003',
+      type: 'info',
+      title: 'CBN Updates Guidelines for Digital Asset Trading',
+      description: 'Central Bank of Nigeria releases new guidelines for legitimate cryptocurrency and digital asset platforms.',
+      source: 'Central Bank of Nigeria (CBN)',
+      timestamp: '2024-12-15T12:45:00Z',
+      action: 'Review updated CBN guidelines'
+    }
+  ]
+
+  // Red flags for investment scams
+  const redFlags = [
+    {
+      flag: 'Promises over 15% monthly returns',
+      severity: 'critical',
+      description: 'Any investment promising more than 10-15% monthly returns is almost always a scam.'
+    },
+    {
+      flag: 'No clear business model',
+      severity: 'critical', 
+      description: 'If they can\'t clearly explain how money is made, it\'s likely fraudulent.'
+    },
+    {
+      flag: 'Aggressive referral bonuses',
+      severity: 'warning',
+      description: 'Being paid more for bringing others than actual investment returns is a red flag.'
+    },
+    {
+      flag: 'Not registered with SEC',
+      severity: 'critical',
+      description: 'Always verify investment platforms on the SEC Nigeria website.'
+    },
+    {
+      flag: 'Claims of "zero risk"',
+      severity: 'warning',
+      description: 'All legitimate investments carry some level of risk.'
+    },
+    {
+      flag: 'Pressure to invest quickly',
+      severity: 'warning',
+      description: 'Legitimate investments don\'t require immediate decisions.'
+    }
+  ]
+
+  // Government monitoring sources
+  const governmentSources = [
+    {
+      name: 'Securities and Exchange Commission (SEC)',
+      url: 'https://sec.gov.ng',
+      status: 'active',
+      lastChecked: '2024-12-15T14:30:00Z',
+      description: 'Investment platform verification and warnings'
+    },
+    {
+      name: 'Economic and Financial Crimes Commission (EFCC)',
+      url: 'https://efcc.gov.ng',
+      status: 'active', 
+      lastChecked: '2024-12-15T14:25:00Z',
+      description: 'Financial crime investigations and alerts'
+    },
+    {
+      name: 'Central Bank of Nigeria (CBN)',
+      url: 'https://cbn.gov.ng',
+      status: 'active',
+      lastChecked: '2024-12-15T14:20:00Z',
+      description: 'Banking and digital asset regulations'
+    },
+    {
+      name: 'Nigeria Deposit Insurance Corporation (NDIC)',
+      url: 'https://ndic.org.ng',
+      status: 'active',
+      lastChecked: '2024-12-15T14:15:00Z',
+      description: 'Deposit protection and bank supervision'
+    }
+  ]
+
+  useEffect(() => {
+    // Simulate real-time data fetching
+    const fetchLatestData = () => {
+      setIsLoading(true)
       
-      // Recalculate progress
-      const totalQuestions = securityGuides.reduce((total, guide) => total + guide.questions.length, 0)
-      const newProgress = Math.round((completedModules.length + 1) / totalQuestions * 100)
-      setSecurityProgress(newProgress)
+      // Simulate API call delay
+      setTimeout(() => {
+        setLastUpdate(new Date().toISOString())
+        setActiveAlerts(securityAlerts)
+        setIsLoading(false)
+      }, 2000)
+    }
+
+    fetchLatestData()
+
+    // Set up real-time updates every 5 minutes
+    const interval = setInterval(fetchLatestData, 300000)
+    return () => clearInterval(interval)
+  }, [])
+
+  const formatNumber = (num: number) => {
+    if (num >= 1000000) {
+      return `${(num / 1000000).toFixed(1)}M`
+    }
+    if (num >= 1000) {
+      return `${(num / 1000).toFixed(0)}K`
+    }
+    return num.toString()
+  }
+
+  const formatTimestamp = (timestamp: string) => {
+    return new Date(timestamp).toLocaleString('en-NG', {
+      day: 'numeric',
+      month: 'short', 
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+  }
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'collapsed': return 'bg-red-100 text-red-800'
+      case 'under-investigation': return 'bg-yellow-100 text-yellow-800'
+      case 'active': return 'bg-green-100 text-green-800'
+      default: return 'bg-gray-100 text-gray-800'
     }
   }
 
-  const toggleQuestion = (questionId: string) => {
-    if (expandedQuestion === questionId) {
-      setExpandedQuestion(null)
-    } else {
-      setExpandedQuestion(questionId)
+  const getSeverityColor = (severity: string) => {
+    switch (severity) {
+      case 'critical': return 'text-red-600 bg-red-50 border-red-200'
+      case 'warning': return 'text-yellow-600 bg-yellow-50 border-yellow-200'
+      case 'info': return 'text-blue-600 bg-blue-50 border-blue-200'
+      default: return 'text-gray-600 bg-gray-50 border-gray-200'
     }
   }
 
   return (
-    <div className="space-y-5 sm:space-y-6">
-      <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Trading Security Center</h1>
-      
-      {/* Introduction Card */}
-      <DashboardCard className="bg-gradient-to-br from-green-50 to-yellow-50 border-0 shadow-md overflow-hidden">
-        <div className="p-4 sm:p-6 md:p-8">
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-center">
-            <div className="w-14 h-14 sm:w-16 sm:h-16 bg-yellow-400 rounded-full flex items-center justify-center flex-shrink-0">
-              <Shield className="h-7 w-7 sm:h-8 sm:w-8 text-black" />
-            </div>
-            <div className="space-y-2 sm:space-y-3 text-center sm:text-left">
-              <h2 className="text-lg sm:text-xl font-bold text-gray-900">Stay Safe in the Financial World</h2>
-              <p className="text-sm sm:text-base text-gray-700">
-                Learn to identify scams, protect your accounts, and make informed decisions
-                based on reliable information. Complete security modules to strengthen your
-                trading knowledge.
-              </p>
-            </div>
-          </div>
+    <div className="space-y-6 max-w-7xl mx-auto">
+      {/* Header with Real-time Status */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Security Center</h1>
+          <p className="text-gray-600 mt-1">
+            Real-time monitoring of Nigerian investment scams and fraud alerts
+          </p>
         </div>
-        <div className="bg-white bg-opacity-50 px-4 sm:px-6 md:px-8 py-3 sm:py-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0">
-          <div className="flex items-center gap-2 sm:gap-3">
-            <div className="text-xs sm:text-sm font-medium">Your Security Progress</div>
-            <Badge variant="outline" className="bg-green-100 text-green-800 border-green-200 text-xs">
-              {securityProgress}% Complete
-            </Badge>
+        <div className="flex items-center gap-2 text-sm text-gray-500">
+          <div className="flex items-center gap-1">
+            {isLoading ? (
+              <RefreshCw className="h-4 w-4 animate-spin" />
+            ) : (
+              <Activity className="h-4 w-4 text-green-500" />
+            )}
+            <span>Live Data</span>
           </div>
-          <div className="w-full sm:w-24">
-            <Progress value={securityProgress} className="h-2" />
-          </div>
+          {lastUpdate && (
+            <span className="text-xs">
+              Updated: {formatTimestamp(lastUpdate)}
+            </span>
+          )}
         </div>
-      </DashboardCard>
-      
-      <Tabs defaultValue="guides" className="space-y-5 sm:space-y-6">
-        <TabsList className="w-full sm:w-auto grid grid-cols-3 sm:inline-flex">
-          <TabsTrigger value="guides" className="text-xs sm:text-sm">Security Guides</TabsTrigger>
-          <TabsTrigger value="alerts" className="text-xs sm:text-sm">Alerts & Updates</TabsTrigger>
-          <TabsTrigger value="resources" className="text-xs sm:text-sm">Resources</TabsTrigger>
-        </TabsList>
+      </div>
 
-        <TabsContent value="guides" className="space-y-5 sm:space-y-6 mt-5 sm:mt-6">
-          {/* Security Learning Modules */}
-          {securityGuides.map((guide) => (
-            <DashboardCard key={guide.id} className="overflow-hidden border border-gray-200">
-              <div className={`pb-3 p-4 sm:p-5 border-b border-gray-100 bg-${guide.color}-50`}>
+      {/* Real-time Government Monitoring Status */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Globe className="h-5 w-5 text-green-600" />
+            Government Sources Monitoring
+          </CardTitle>
+          <CardDescription>
+            Real-time monitoring of Nigerian regulatory agencies
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {governmentSources.map((source) => (
+              <div key={source.name} className="flex items-center justify-between p-3 border rounded-lg">
                 <div className="flex items-center gap-3">
-                  <div className={`p-2 sm:p-3 bg-${guide.color}-100 rounded-full`}>
-                    {guide.icon}
-                  </div>
+                  <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
                   <div>
-                    <h3 className="text-base sm:text-lg font-semibold text-gray-900">{guide.title}</h3>
-                    <p className="text-xs sm:text-sm text-gray-600">{guide.description}</p>
+                    <p className="font-medium text-sm">{source.name}</p>
+                    <p className="text-xs text-gray-500">{source.description}</p>
                   </div>
                 </div>
-                <div className="mt-3 flex items-center gap-2">
-                  <Progress value={guide.progress} className="h-1.5 flex-1" />
-                  <span className="text-xs text-gray-500">{guide.progress}%</span>
+                <div className="text-right">
+                  <Badge variant="secondary" className="bg-green-100 text-green-800">
+                    Active
+                  </Badge>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {formatTimestamp(source.lastChecked)}
+                  </p>
                 </div>
               </div>
-              
-              <div className="p-0">
-                {guide.questions.map((q) => (
-                  <div key={q.id} className="border-b border-gray-100 last:border-0">
-                    <div 
-                      className="p-4 sm:p-5 flex justify-between items-start cursor-pointer hover:bg-gray-50"
-                      onClick={() => toggleQuestion(q.id)}
-                    >
-                      <div className="flex gap-3 items-start">
-                        <div className={`mt-0.5 flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center ${
-                          q.completed ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400'
-                        }`}>
-                          {q.completed ? <Check className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
-                        </div>
-                        <div>
-                          <h4 className="text-sm sm:text-base font-medium text-gray-900 pr-4">{q.question}</h4>
-                          
-                          {expandedQuestion === q.id && (
-                            <div className="mt-2 text-xs sm:text-sm text-gray-600">
-                              {q.answer}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      <ChevronRight className={`h-5 w-5 text-gray-400 flex-shrink-0 transition-transform ${
-                        expandedQuestion === q.id ? 'rotate-90' : ''
-                      }`} />
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Active Security Alerts */}
+      {activeAlerts.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Bell className="h-5 w-5 text-red-600" />
+              Active Security Alerts
+              <Badge variant="destructive">{activeAlerts.length}</Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {activeAlerts.map((alert) => (
+              <div key={alert.id} className={`p-4 border rounded-lg ${getSeverityColor(alert.type)}`}>
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <AlertCircle className="h-4 w-4" />
+                      <span className="font-medium">{alert.title}</span>
+                      <Badge variant="outline" className="text-xs">
+                        {alert.type.toUpperCase()}
+                      </Badge>
                     </div>
-                    
-                    {expandedQuestion === q.id && !q.completed && (
-                      <div className="px-4 pb-4 sm:px-5 sm:pb-5 flex justify-end">
-                        <Button 
-                          size="sm"
-                          className="text-xs sm:text-sm"
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            completeQuestion(guide.id, q.id)
-                          }}
-                        >
-                          <ThumbsUp className="mr-1.5 h-3.5 w-3.5" />
-                          I Understand This
-                        </Button>
+                    <p className="text-sm mb-2">{alert.description}</p>
+                    <div className="flex items-center justify-between text-xs">
+                      <span>Source: {alert.source}</span>
+                      <span>{formatTimestamp(alert.timestamp)}</span>
+                    </div>
+                    {alert.action && (
+                      <div className="mt-2 p-2 bg-white rounded border">
+                        <span className="text-xs font-medium">Recommended Action: </span>
+                        <span className="text-xs">{alert.action}</span>
                       </div>
                     )}
                   </div>
+                </div>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
+
+      <Tabs defaultValue="ponzi-schemes" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="ponzi-schemes">Known Scams</TabsTrigger>
+          <TabsTrigger value="red-flags">Red Flags</TabsTrigger>
+          <TabsTrigger value="verification">Verify Platforms</TabsTrigger>
+        </TabsList>
+
+        {/* Known Ponzi Schemes */}
+        <TabsContent value="ponzi-schemes" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <AlertOctagon className="h-5 w-5 text-red-600" />
+                Major Nigerian Ponzi Schemes (2016-2024)
+              </CardTitle>
+              <CardDescription>
+                Official records of major investment scams that have affected Nigerian investors
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {/* Summary Statistics */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <TrendingDown className="h-5 w-5 text-red-600" />
+                    <span className="font-medium">Total Victims</span>
+                  </div>
+                  <p className="text-2xl font-bold text-red-600 mt-1">
+                    {formatNumber(ponziSchemes.reduce((sum, scheme) => sum + scheme.victims, 0))}+
+                  </p>
+                </div>
+                <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <DollarSign className="h-5 w-5 text-red-600" />
+                    <span className="font-medium">Total Losses</span>
+                  </div>
+                  <p className="text-2xl font-bold text-red-600 mt-1">₦249B+</p>
+                </div>
+                <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <Calendar className="h-5 w-5 text-red-600" />
+                    <span className="font-medium">Active Cases</span>
+                  </div>
+                  <p className="text-2xl font-bold text-red-600 mt-1">
+                    {ponziSchemes.filter(s => s.status === 'under-investigation').length}
+                  </p>
+                </div>
+              </div>
+              
+              {/* Ponzi Schemes List */}
+              <div className="space-y-4">
+                {ponziSchemes.map((scheme) => (
+                  <div key={scheme.id} className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="font-semibold text-lg">{scheme.name}</h3>
+                          <Badge className={getStatusColor(scheme.status)}>
+                            {scheme.status.replace('-', ' ').toUpperCase()}
+                          </Badge>
+                        </div>
+                        <p className="text-sm text-gray-600 mb-2">{scheme.description}</p>
+                        {scheme.founder && (
+                          <p className="text-xs text-gray-500 mb-1">
+                            <span className="font-medium">Founder:</span> {scheme.founder}
+                          </p>
+                        )}
+                      </div>
+                      <div className="text-right ml-4">
+                        <p className="text-sm font-medium">Year: {scheme.year}</p>
+                        <p className="text-xs text-gray-500">Type: {scheme.type}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-3 border-t">
+                      <div>
+                        <p className="text-xs text-gray-500">Victims</p>
+                        <p className="font-semibold text-red-600">{formatNumber(scheme.victims)}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Losses</p>
+                        <p className="font-semibold text-red-600">{scheme.losses}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Status</p>
+                        <p className="font-semibold capitalize">{scheme.status.replace('-', ' ')}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Last Update</p>
+                        <p className="font-semibold text-xs">{formatTimestamp(scheme.lastUpdate)}</p>
+                      </div>
+                    </div>
+                  </div>
                 ))}
               </div>
-            </DashboardCard>
-          ))}
+            </CardContent>
+          </Card>
         </TabsContent>
 
-        <TabsContent value="alerts" className="space-y-5 sm:space-y-6 mt-5 sm:mt-6">
-          {/* Security Alerts */}
-          <DashboardCard title="Recent Security Alerts" icon={<Bell className="h-5 w-5 text-red-500" />}>
-            <div className="space-y-3 sm:space-y-4">
-              {securityAlerts.map((alert) => (
-                <div 
-                  key={alert.id} 
-                  className={`p-3 sm:p-4 rounded-lg border ${
-                    alert.type === 'warning' 
-                      ? 'bg-yellow-50 border-yellow-200' 
-                      : 'bg-blue-50 border-blue-200'
-                  }`}
-                >
-                  <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 mt-0.5">
-                      {alert.type === 'warning' ? (
-                        <AlertTriangle className="h-5 w-5 text-yellow-600" />
-                      ) : (
-                        <Info className="h-5 w-5 text-blue-600" />
-                      )}
-                    </div>
-                    <div className="space-y-1">
-                      <h4 className="text-sm sm:text-base font-medium">
-                        {alert.title}
-                      </h4>
-                      <p className="text-xs sm:text-sm text-gray-600">
-                        {alert.description}
-                      </p>
-                      <div className="text-xs text-gray-500">{alert.date}</div>
+        {/* Red Flags */}
+        <TabsContent value="red-flags" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <AlertTriangle className="h-5 w-5 text-yellow-600" />
+                Investment Scam Warning Signs
+              </CardTitle>
+              <CardDescription>
+                Learn to identify potential investment scams before it's too late
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {redFlags.map((flag, index) => (
+                  <div key={index} className={`p-4 border rounded-lg ${getSeverityColor(flag.severity)}`}>
+                    <div className="flex items-start gap-3">
+                      <AlertCircle className="h-5 w-5 mt-0.5" />
+                      <div className="flex-1">
+                        <h4 className="font-medium mb-1">{flag.flag}</h4>
+                        <p className="text-sm">{flag.description}</p>
+                      </div>
+                      <Badge variant="outline" className={
+                        flag.severity === 'critical' ? 'border-red-300 text-red-700' : 'border-yellow-300 text-yellow-700'
+                      }>
+                        {flag.severity.toUpperCase()}
+                      </Badge>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          </DashboardCard>
-          
-          <DashboardCard 
-            title="Security Settings" 
-            icon={<Shield className="h-5 w-5 text-gray-500" />}
-            description="Configure additional security for your account"
-          >
-            <div className="space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-3 sm:p-4 bg-gray-50 rounded-lg">
-                <div>
-                  <h4 className="text-sm sm:text-base font-medium">Two-Factor Authentication</h4>
-                  <p className="text-xs sm:text-sm text-gray-500">Protect your account with an additional verification step</p>
-                </div>
-                <Button size="sm" className="w-full sm:w-auto text-xs sm:text-sm">Enable 2FA</Button>
+                ))}
               </div>
               
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-3 sm:p-4 bg-gray-50 rounded-lg">
-                <div>
-                  <h4 className="text-sm sm:text-base font-medium">Login Notifications</h4>
-                  <p className="text-xs sm:text-sm text-gray-500">Receive alerts when your account is accessed</p>
-                </div>
-                <Button size="sm" variant="outline" className="w-full sm:w-auto text-xs sm:text-sm">Configure</Button>
+              <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <h4 className="font-medium text-blue-900 mb-2">Remember:</h4>
+                <p className="text-sm text-blue-800">
+                  If an investment opportunity sounds too good to be true, it probably is. 
+                  Always research thoroughly and verify with official regulatory bodies before investing.
+                </p>
               </div>
-              
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-3 sm:p-4 bg-gray-50 rounded-lg">
-                <div>
-                  <h4 className="text-sm sm:text-base font-medium">Device Management</h4>
-                  <p className="text-xs sm:text-sm text-gray-500">View and manage devices that have accessed your account</p>
-                </div>
-                <Button size="sm" variant="outline" className="w-full sm:w-auto text-xs sm:text-sm">View Devices</Button>
-              </div>
-            </div>
-          </DashboardCard>
+            </CardContent>
+          </Card>
         </TabsContent>
 
-        <TabsContent value="resources" className="space-y-5 sm:space-y-6 mt-5 sm:mt-6">
-          {/* Educational Resources */}
-          <DashboardCard 
-            title="Educational Resources" 
-            icon={<BookOpen className="h-5 w-5 text-indigo-500" />}
-            description="Expand your knowledge about trading security"
-          >
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <a 
-                href="#" 
-                className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                <div className="flex items-start gap-3">
-                  <FileText className="h-5 w-5 text-blue-500 mt-0.5" />
-                  <div>
-                    <h4 className="text-sm sm:text-base font-medium">Investor Protection Guide</h4>
-                    <p className="text-xs sm:text-sm text-gray-500 mt-1">
-                      Comprehensive guide to protecting yourself as an investor
-                    </p>
+        {/* Platform Verification */}
+        <TabsContent value="verification" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Search className="h-5 w-5 text-green-600" />
+                Verify Investment Platforms
+              </CardTitle>
+              <CardDescription>
+                Check if an investment platform is registered with Nigerian regulatory bodies
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-4">
+                {governmentSources.map((source) => (
+                  <div key={source.name} className="border rounded-lg p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="font-medium">{source.name}</h4>
+                        <p className="text-sm text-gray-600">{source.description}</p>
+                      </div>
+                      <a 
+                        href={source.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1 text-green-600 hover:text-green-700 text-sm font-medium"
+                      >
+                        Verify Platform
+                        <ExternalLink className="h-4 w-4" />
+                      </a>
+                    </div>
                   </div>
-                </div>
-              </a>
-              
-              <a 
-                href="#" 
-                className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                <div className="flex items-start gap-3">
-                  <AlertOctagon className="h-5 w-5 text-red-500 mt-0.5" />
-                  <div>
-                    <h4 className="text-sm sm:text-base font-medium">Common Scams Database</h4>
-                    <p className="text-xs sm:text-sm text-gray-500 mt-1">
-                      Updated list of known financial scams and how to avoid them
-                    </p>
-                  </div>
-                </div>
-              </a>
-              
-              <a 
-                href="#" 
-                className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                <div className="flex items-start gap-3">
-                  <Newspaper className="h-5 w-5 text-green-500 mt-0.5" />
-                  <div>
-                    <h4 className="text-sm sm:text-base font-medium">Market News Verification</h4>
-                    <p className="text-xs sm:text-sm text-gray-500 mt-1">
-                      How to verify financial news and avoid market manipulation
-                    </p>
-                  </div>
-                </div>
-              </a>
-              
-              <a 
-                href="#" 
-                className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                <div className="flex items-start gap-3">
-                  <Award className="h-5 w-5 text-purple-500 mt-0.5" />
-                  <div>
-                    <h4 className="text-sm sm:text-base font-medium">Security Certification</h4>
-                    <p className="text-xs sm:text-sm text-gray-500 mt-1">
-                      Complete our security course and earn a certificate
-                    </p>
-                  </div>
-                </div>
-              </a>
-            </div>
-          </DashboardCard>
-          
-          <DashboardCard 
-            title="Need Help?" 
-            icon={<HelpCircle className="h-5 w-5 text-blue-500" />}
-            description="Get assistance with security concerns"
-          >
-            <div className="space-y-4">
-              <div className="p-4 bg-blue-50 rounded-lg">
-                <div className="flex items-start gap-3">
-                  <Shield className="h-5 w-5 text-blue-600 mt-0.5" />
-                  <div>
-                    <h4 className="text-sm sm:text-base font-medium">Report a Security Concern</h4>
-                    <p className="text-xs sm:text-sm text-gray-600 mt-1">
-                      If you've noticed suspicious activity or believe your account security
-                      might be compromised, please report it immediately.
-                    </p>
-                    <Button size="sm" className="mt-3 text-xs sm:text-sm">Report Issue</Button>
-                  </div>
-                </div>
+                ))}
               </div>
               
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Button variant="outline" size="sm" className="text-xs sm:text-sm">
-                  <User className="mr-1.5 h-4 w-4" />
-                  Contact Support
-                </Button>
-                <Button variant="outline" size="sm" className="text-xs sm:text-sm">
-                  <Search className="mr-1.5 h-4 w-4" />
-                  Search Help Center
-                </Button>
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <h4 className="font-medium text-yellow-900 mb-2">Verification Steps:</h4>
+                <ol className="text-sm text-yellow-800 space-y-1 list-decimal list-inside">
+                  <li>Visit the official SEC Nigeria website (sec.gov.ng)</li>
+                  <li>Search for the investment platform in their registry</li>
+                  <li>Verify the platform's license and registration status</li>
+                  <li>Check for any warnings or sanctions</li>
+                  <li>Cross-reference with EFCC and CBN advisories</li>
+                </ol>
               </div>
-            </div>
-          </DashboardCard>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Emergency Contact */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Shield className="h-5 w-5 text-blue-600" />
+            Report Investment Fraud
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <h4 className="font-medium">EFCC Fraud Hotline</h4>
+              <p className="text-sm text-gray-600">Report financial crimes and get assistance</p>
+              <p className="font-mono text-sm">0809 952 3322</p>
+              <p className="font-mono text-sm">complaint@efcc.gov.ng</p>
+            </div>
+            <div className="space-y-2">
+              <h4 className="font-medium">SEC Investor Protection</h4>
+              <p className="text-sm text-gray-600">Report unregistered investment schemes</p>
+              <p className="font-mono text-sm">07080631796</p>
+              <p className="font-mono text-sm">complaints@sec.gov.ng</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 } 

@@ -9,7 +9,8 @@ import {
   signInWithPopup,
   signOut,
   onAuthStateChanged,
-  updateProfile
+  updateProfile,
+  sendPasswordResetEmail
 } from 'firebase/auth'
 import { auth, googleProvider } from '@/lib/firebase'
 import { createOrUpdateUserProfile, UserProfile } from '@/lib/firebase-user'
@@ -31,6 +32,7 @@ interface AuthContextType {
   signInWithGoogle: () => Promise<void>
   signUpWithGoogle: () => Promise<void>
   logout: () => Promise<void>
+  resetPassword: (email: string) => Promise<void>
   isLoading: boolean
   isAuthenticated: boolean
   openAuthDialog: () => void
@@ -193,6 +195,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  const resetPassword = async (email: string) => {
+    setIsLoading(true)
+    try {
+      await sendPasswordResetEmail(auth, email, {
+        url: `${window.location.origin}/login`,
+        handleCodeInApp: false,
+      })
+    } catch (error: any) {
+      throw new Error(error.message || 'Failed to send password reset email')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   // Function to get the user's ID token
   const getIdToken = async (): Promise<string> => {
     if (!user) {
@@ -219,6 +235,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signInWithGoogle,
     signUpWithGoogle,
     logout,
+    resetPassword,
     isLoading,
     isAuthenticated: !!user,
     openAuthDialog,

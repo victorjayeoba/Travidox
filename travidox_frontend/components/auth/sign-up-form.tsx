@@ -303,6 +303,14 @@ export function SignUpForm({ onSuccess, switchToSignIn }: SignUpFormProps) {
           </Button>
         </form>
       </Form>
+
+      {/* Mobile Sign In Link */}
+      <div className="text-center text-sm text-gray-600 sm:hidden mt-4">
+        Already have an account?{" "}
+        <Link href="/login" className="text-green-600 hover:text-green-500 font-medium">
+          Sign in
+        </Link>
+      </div>
     </div>
   )
 } 

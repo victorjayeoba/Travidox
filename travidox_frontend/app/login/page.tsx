@@ -56,7 +56,7 @@ export default function LoginPage() {
               </Button>
               <Logo href="/" size="md" />
             </div>
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-gray-600 hidden sm:block">
               Don't have an account?{" "}
               <Link href="/signup" className="text-green-600 hover:text-green-500 font-medium">
                 Sign up

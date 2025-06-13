@@ -226,6 +226,14 @@ export function SignInForm({ onSuccess, onSwitchToSignUp }: SignInFormProps) {
           </Button>
         </form>
       </Form>
+
+      {/* Mobile Sign Up Link */}
+      <div className="text-center text-sm text-gray-600 sm:hidden mt-4">
+        Don't have an account?{" "}
+        <Link href="/signup" className="text-green-600 hover:text-green-500 font-medium">
+          Sign up
+        </Link>
+      </div>
     </div>
   )
 } 

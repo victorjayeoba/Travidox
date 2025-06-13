@@ -7,11 +7,11 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
-import { User, Mail, LogOut, ArrowLeft, Star, Award, BookOpen, FileText, Sparkles } from 'lucide-react'
+import { User, Mail, Star, Award, BookOpen, FileText, Sparkles } from 'lucide-react'
 import { Progress } from '@/components/ui/progress'
 
 export default function ProfilePage() {
-  const { user, userProfile, loading, logout } = useAuth()
+  const { user, userProfile, loading } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
@@ -19,14 +19,6 @@ export default function ProfilePage() {
       router.push('/login')
     }
   }, [user, loading, router])
-
-  const handleLogout = async () => {
-    try {
-      await logout()
-    } catch (error) {
-      console.error('Logout error:', error)
-    }
-  }
 
   const getInitials = (name: string) => {
     return name
@@ -65,14 +57,6 @@ export default function ProfilePage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-900">Your Profile</h1>
-        <Button
-          variant="outline"
-          onClick={handleLogout}
-          className="text-gray-600 hover:text-gray-900"
-        >
-          <LogOut className="h-4 w-4 mr-2" />
-          Sign Out
-        </Button>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -103,11 +87,6 @@ export default function ProfilePage() {
                   </p>
                 </div>
                 <div className="flex space-x-2">
-                  {user.emailVerified && (
-                    <Badge variant="secondary" className="bg-green-100 text-green-800">
-                      Verified Account
-                    </Badge>
-                  )}
                   {userProfile && (
                     <Badge variant="secondary" className="bg-blue-100 text-blue-800">
                       Level {userProfile.level}
@@ -141,14 +120,6 @@ export default function ProfilePage() {
                   </div>
                 </div>
               )}
-              
-              <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                <User className="h-5 w-5 text-gray-400" />
-                <div>
-                  <p className="text-sm font-medium text-gray-500">User ID</p>
-                  <p className="text-sm text-gray-900 font-mono">{user.uid}</p>
-                </div>
-              </div>
             </div>
           </CardContent>
         </Card>

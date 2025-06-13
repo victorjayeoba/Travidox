@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { Search, Bell, Star, AlertTriangle, ChevronDown, Menu, User, X } from 'lucide-react'
+import { Search, Bell, Star, ChevronDown, Menu, User, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { 
@@ -30,7 +30,7 @@ export function DashboardHeader({
   showSearch = true,
   onMenuClick
 }: DashboardHeaderProps) {
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
   const { profile, loading: profileLoading } = useUserProfile()
   const { stocks } = useNigeriaStocks()
   const router = useRouter()
@@ -152,8 +152,6 @@ export function DashboardHeader({
     setShowSearchResults(false)
     router.push('/dashboard/markets')
   }
-  
-  const isVerified = user?.emailVerified || false
 
   const getInitials = (name: string) => {
     return name
@@ -324,17 +322,7 @@ export function DashboardHeader({
               <span className="sr-only">Search</span>
             </Button>
             
-            {!isVerified && (
-              <Button 
-                variant="outline"
-                size="sm"
-                className="hidden sm:flex text-amber-700 border-amber-300 hover:bg-amber-50 bg-amber-50/50 gap-1.5 text-xs font-medium"
-                onClick={() => router.push('/dashboard/verify-email')}
-              >
-                <AlertTriangle size={14} />
-                <span className="hidden md:inline">Verify Email</span>
-            </Button>
-          )}
+
           
           <div 
             id="xp-display"
@@ -428,8 +416,14 @@ export function DashboardHeader({
                 </DropdownMenuItem>
                 <div className="border-t border-gray-100 my-1"></div>
               <DropdownMenuItem 
-                  onClick={() => {
+                  onClick={async () => {
+                    try {
+                      await logout()
+                    } catch (error) {
+                      console.error('Logout error:', error)
+                      // Fallback: still redirect to login even if logout fails
                     router.push('/login')
+                    }
                   }}
                   className="text-red-600"
                 >

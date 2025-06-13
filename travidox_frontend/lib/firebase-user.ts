@@ -74,7 +74,7 @@ export async function createOrUpdateUserProfile(user: User): Promise<UserProfile
       displayName: user.displayName,
       photoURL: user.photoURL,
       phoneNumber: user.phoneNumber,
-      isVerified: user.emailVerified,
+      isVerified: true, // Always set to true since we're not requiring email verification
     });
     
     return userSnap.data() as UserProfile;
@@ -96,7 +96,7 @@ export async function createOrUpdateUserProfile(user: User): Promise<UserProfile
       completedQuizzes: [],
       certificates: [],
       bio: '',
-      isVerified: user.emailVerified,
+      isVerified: true, // Always set to true since we're not requiring email verification
       preferences: {
         emailNotifications: true,
         darkMode: false,

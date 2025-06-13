@@ -205,20 +205,20 @@ export function Sidebar() {
           onClick={closeMenuOnMobile}
         />
         
-        <SidebarItem 
+        {/* <SidebarItem 
           icon={<Clock size={18} />} 
           label="History" 
           href="/dashboard/history" 
           active={pathname.startsWith('/dashboard/history')}
           isNew
           onClick={closeMenuOnMobile}
-        />
+        /> */}
 
         <SidebarItem 
-          icon={<Settings size={18} />} 
-          label="Settings" 
-          href="/dashboard/settings" 
-          active={pathname.startsWith('/dashboard/settings')}
+          icon={<User size={18} />} 
+          label="Profile" 
+          href="/dashboard/profile" 
+          active={pathname.startsWith('/dashboard/profile')}
           onClick={closeMenuOnMobile}
         />
           
