@@ -142,7 +142,7 @@ export default function AIAssistantPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-purple-500 to-blue-600 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 flex items-center justify-center">
             <Bot size={20} className="text-white" />
           </div>
           <div>
@@ -165,7 +165,7 @@ export default function AIAssistantPage() {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Chat Area */}
         <div className="lg:col-span-3">
-          <Card className="bg-white/60 backdrop-blur-sm border-white/20 h-[calc(100vh-16rem)]">
+          <Card className="bg-white/60 backdrop-blur-sm border-white/20 h-[600px]">
             <CardContent className="p-0 h-full flex flex-col">
               {/* Messages */}
               <ScrollArea className="flex-1 p-4">
@@ -183,8 +183,8 @@ export default function AIAssistantPage() {
                           className={cn(
                             "text-xs",
                             message.role === 'user' 
-                              ? "bg-blue-100 text-blue-700" 
-                              : "bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700"
+                              ? "bg-green-100 text-green-700" 
+                              : "bg-gradient-to-r from-green-100 to-emerald-100 text-green-700"
                           )}
                         >
                           {message.role === 'user' ? 'You' : <Bot size={12} />}
@@ -193,13 +193,13 @@ export default function AIAssistantPage() {
                       <div className={cn(
                         "max-w-[85%] rounded-2xl px-4 py-3 text-sm",
                         message.role === 'user'
-                          ? "bg-blue-500 text-white"
+                          ? "bg-green-500 text-white"
                           : "bg-gray-100 text-gray-900"
                       )}>
                         <p className="leading-relaxed">{message.content}</p>
                         <p className={cn(
                           "text-xs mt-1 opacity-70",
-                          message.role === 'user' ? "text-blue-100" : "text-gray-500"
+                          message.role === 'user' ? "text-green-100" : "text-gray-500"
                         )}>
                           {formatTime(message.timestamp)}
                         </p>
@@ -209,7 +209,7 @@ export default function AIAssistantPage() {
                   {isLoading && (
                     <div className="flex items-start space-x-3">
                       <Avatar className="h-7 w-7">
-                        <AvatarFallback className="bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700">
+                        <AvatarFallback className="bg-gradient-to-r from-green-100 to-emerald-100 text-green-700">
                           <Bot size={12} />
                         </AvatarFallback>
                       </Avatar>
@@ -235,12 +235,12 @@ export default function AIAssistantPage() {
                     onChange={(e) => setInputMessage(e.target.value)}
                     onKeyPress={handleKeyPress}
                     disabled={isLoading}
-                    className="flex-1 bg-white border-gray-200 focus:border-purple-500 focus:ring-purple-500"
+                    className="flex-1 bg-white border-gray-200 focus:border-green-500 focus:ring-green-500"
                   />
                   <Button
                     onClick={sendMessage}
                     disabled={!inputMessage.trim() || isLoading}
-                    className="px-4 bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-600 hover:to-blue-700"
+                    className="px-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"
                   >
                     {isLoading ? (
                       <Loader2 size={16} className="animate-spin" />
@@ -270,7 +270,7 @@ export default function AIAssistantPage() {
                   key={index}
                   variant="ghost"
                   size="sm"
-                  className="w-full text-left justify-start h-auto p-3 text-sm hover:bg-purple-50 hover:text-purple-700"
+                  className="w-full text-left justify-start h-auto p-3 text-sm hover:bg-green-50 hover:text-green-700"
                   onClick={() => setInputMessage(question)}
                   disabled={isLoading}
                 >
