@@ -3,7 +3,6 @@ const cloudscraper = require('cloudscraper');
 const cheerio = require('cheerio');
 const crypto = require('crypto');
 const zlib = require('zlib');
-
 const app = express();
 const PORT = process.env.PORT || 8085;
 
@@ -12,7 +11,7 @@ app.use(require('compression')());
 
 // Memory optimization: Limit concurrent requests but allow more for speed
 const activeRequests = new Set();
-const MAX_CONCURRENT_REQUESTS = 25; // Increased from 10
+const MAX_CONCURRENT_REQUESTS = 25; 
 
 // In-memory cache for fast responses
 const cache = new Map();
@@ -1171,7 +1170,7 @@ process.on('SIGINT', () => {
   });
 });
 
-// Handle uncaught exceptions to prevent memory leaks
+
 process.on('uncaughtException', (err) => {
   console.error('Uncaught Exception:', err);
   server.close(() => {
@@ -1181,5 +1180,5 @@ process.on('uncaughtException', (err) => {
 
 process.on('unhandledRejection', (reason, promise) => {
   console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-  // Don't exit here, just log it
+ 
 });

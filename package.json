@@ -1,7 +1,11 @@
 {
   "dependencies": {
     "@heroicons/react": "^2.2.0",
+    "@tailwindcss/typography": "^0.5.13",
     "compression": "^1.8.0",
-    "firebase-admin": "^13.4.0"
+    "firebase-admin": "^13.4.0",
+    "html2pdf.js": "^0.10.2",
+    "react-markdown": "^9.0.1",
+    "remark-gfm": "^4.0.0"
   }
 }

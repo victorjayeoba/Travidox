@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 import { 
   LayoutDashboard, BookOpen, Shield, Bot, PieChart, 
   DollarSign, School, ListChecks, Heart, Clock, Settings, ChevronRight,
-  X, LogOut, Trophy, GraduationCap, User
+  X, LogOut, Trophy, GraduationCap, User, MessageCircle, Sparkles
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -162,6 +162,15 @@ export function Sidebar() {
           label="Stocks" 
           href="/dashboard/markets" 
           active={pathname.startsWith('/dashboard/markets')}
+          onClick={closeMenuOnMobile}
+        />
+
+        <SidebarItem 
+          icon={<Sparkles size={18} />} 
+          label="AI Assistant" 
+          href="/dashboard/ai-assistant" 
+          active={pathname.startsWith('/dashboard/ai-assistant')}
+          isNew
           onClick={closeMenuOnMobile}
         />
 
