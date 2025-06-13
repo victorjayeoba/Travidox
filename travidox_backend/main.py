@@ -7,15 +7,19 @@ import os
 from dotenv import load_dotenv
 from typing import Optional, Dict, Any, List
 import json
-from db import db  # Import the database module
+from db import db, get_virtual_account, get_virtual_positions, get_trading_history  # Import the database module
 from vps_manager import VPSManager, MetaTraderManager
 import MetaTrader5 as mt5
+from market_data import get_market_data_provider  # Import the market data provider
 
 # Load environment variables
-load_dotenv()
+try:
+    load_dotenv()
+except Exception as e:
+    print(f"Warning: Could not load .env file: {e}")
 
-# Development mode flag
-DEV_MODE = os.getenv("DEV_MODE", "false").lower() == "true"
+# Development mode flag - HARDCODED TO FALSE
+DEV_MODE = False  # Hardcoded to False instead of using os.getenv
 DEV_USER_ID = os.getenv("DEV_USER_ID", "dev-user-123")
 DEV_USER_EMAIL = os.getenv("DEV_USER_EMAIL", "dev@example.com")
 # MetaTrader development credentials (for local MT connection)
@@ -76,6 +80,17 @@ else:
             print(f"Successfully connected to VPS at {VPS_HOST}")
         except Exception as e:
             print(f"Failed to connect to VPS: {str(e)}")
+
+# Initialize trading bot for virtual accounts
+try:
+    from trading_bot import get_trading_bot
+    
+    # Create trading bot
+    trading_bot = get_trading_bot()
+    print("✅ Trading bot initialized successfully")
+except Exception as e:
+    print(f"⚠️ WARNING: Failed to initialize trading bot: {str(e)}")
+    trading_bot = None
 
 app = FastAPI(title="Travidox Backend API")
 
@@ -395,19 +410,21 @@ def close_local_position(account_id, position_id):
     }
 
 async def verify_firebase_token(authorization: Optional[str] = Header(None)):
-    # Development mode bypass
+    """Verify Firebase ID token and return user info"""
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Invalid authorization header")
+    
+    token = authorization.split("Bearer ")[1]
+    
+    # For development, we can accept any token and use a fixed user ID
     if DEV_MODE:
-        print("⚠️ DEVELOPMENT MODE: Bypassing authentication ⚠️")
+        print("⚠️ DEVELOPMENT MODE: Using development user ID ⚠️")
         return {
             "uid": DEV_USER_ID,
             "email": DEV_USER_EMAIL,
         }
     
     # Normal authentication flow
-    if not authorization or not authorization.startswith("Bearer "):
-        raise HTTPException(status_code=401, detail="Invalid authorization header")
-    
-    token = authorization.split("Bearer ")[1]
     try:
         decoded_token = auth.verify_id_token(token)
         return {
@@ -702,6 +719,190 @@ async def close_position(
         return {"success": True, "message": f"Position {position_id} closed successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to close position: {str(e)}")
+
+# Virtual Trading Endpoints
+
+@app.get("/virtual-account")
+async def get_virtual_account_info(user: dict = Depends(verify_firebase_token)):
+    """Get virtual trading account information"""
+    try:
+        user_id = user["uid"]
+        
+        # Always create a trading bot instance if not available
+        global trading_bot
+        if not trading_bot:
+            from trading_bot import get_trading_bot
+            trading_bot = get_trading_bot()
+        
+        # Get account info from trading bot
+        account_info = trading_bot.get_account_info(user_id)
+        
+        return {
+            "success": True,
+            "account": account_info
+        }
+    except Exception as e:
+        print(f"Error getting virtual account info: {str(e)}")
+        return {
+            "success": False,
+            "error": str(e)
+        }
+
+@app.post("/virtual-order")
+async def place_virtual_order(
+    order: MarketOrder,
+    user: dict = Depends(verify_firebase_token)
+):
+    """Place a virtual order using the trading bot"""
+    user_id = user["uid"]
+    
+    # Always create a trading bot instance if not available
+    global trading_bot
+    if not trading_bot:
+        from trading_bot import get_trading_bot
+        trading_bot = get_trading_bot()
+    
+    try:
+        result = trading_bot.place_order(
+            user_id=user_id,
+            symbol=order.symbol,
+            order_type=order.order_type,
+            volume=order.volume,
+            stop_loss=order.stop_loss,
+            take_profit=order.take_profit
+        )
+        
+        if not result["success"]:
+            raise HTTPException(status_code=400, detail=result["error"])
+            
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/virtual-position/close/{position_id}")
+async def close_virtual_position_endpoint(
+    position_id: str,
+    user: dict = Depends(verify_firebase_token)
+):
+    """Close a virtual position"""
+    user_id = user["uid"]
+    
+    # Always create a trading bot instance if not available
+    global trading_bot
+    if not trading_bot:
+        from trading_bot import get_trading_bot
+        trading_bot = get_trading_bot()
+    
+    try:
+        result = trading_bot.close_position(user_id, position_id)
+        
+        if not result["success"]:
+            raise HTTPException(status_code=400, detail=result["error"])
+            
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/virtual-positions")
+async def get_virtual_positions_endpoint(user: dict = Depends(verify_firebase_token)):
+    """Get user's virtual trading positions"""
+    try:
+        user_id = user["uid"]
+        
+        # Always create a trading bot instance if not available
+        global trading_bot
+        if not trading_bot:
+            from trading_bot import get_trading_bot
+            trading_bot = get_trading_bot()
+        
+        # Get positions from trading bot
+        positions = trading_bot.get_positions(user_id)
+        
+        return {
+            "success": True,
+            "positions": positions
+        }
+    except Exception as e:
+        print(f"Error getting virtual positions: {str(e)}")
+        return {
+            "success": False,
+            "error": str(e)
+        }
+
+@app.get("/virtual-history")
+async def get_virtual_trading_history(user: dict = Depends(verify_firebase_token)):
+    """Get user's virtual trading history"""
+    try:
+        user_id = user["uid"]
+        
+        # Always create a trading bot instance if not available
+        global trading_bot
+        if not trading_bot:
+            from trading_bot import get_trading_bot
+            trading_bot = get_trading_bot()
+        
+        # Get trading history from trading bot
+        history = trading_bot.get_trading_history(user_id)
+        
+        return {
+            "success": True,
+            "history": history
+        }
+    except Exception as e:
+        print(f"Error getting virtual trading history: {str(e)}")
+        return {
+            "success": False,
+            "error": str(e)
+        }
+
+@app.get("/market-price/{symbol}")
+async def get_market_price(symbol: str, user: dict = Depends(verify_firebase_token)):
+    """Get real-time market price for a symbol"""
+    try:
+        # Get market data provider
+        market_data = get_market_data_provider()
+        
+        # Get forex quote
+        quote = market_data.get_forex_quote(symbol)
+        
+        if "error" in quote and quote["error"]:
+            raise HTTPException(status_code=400, detail=quote["error"])
+        
+        return {
+            "success": True,
+            "symbol": symbol,
+            "bid": quote["bid"],
+            "ask": quote["ask"],
+            "last_updated": quote.get("last_updated", "")
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/reset-positions")
+async def reset_positions(user: dict = Depends(verify_firebase_token)):
+    """Reset all positions P&L values to use the new calculation method"""
+    try:
+        user_id = user["uid"]
+        
+        # Always create a trading bot instance if not available
+        global trading_bot
+        if not trading_bot:
+            from trading_bot import get_trading_bot
+            trading_bot = get_trading_bot()
+        
+        # Force recalculation of all positions with new multiplier
+        positions = trading_bot.get_positions(user_id)
+        
+        return {
+            "success": True,
+            "message": f"Successfully reset {len(positions)} positions"
+        }
+    except Exception as e:
+        print(f"Error resetting positions: {str(e)}")
+        return {
+            "success": False,
+            "error": str(e)
+        }
 
 if __name__ == "__main__":
     import uvicorn
