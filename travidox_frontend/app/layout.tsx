@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import { AuthProvider } from "@/components/auth/auth-provider"
 import { Toaster } from "sonner"
+import NextTopLoader from "nextjs-toploader"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -64,6 +65,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <NextTopLoader 
+          color="#1DB954"
+          initialPosition={0.08}
+          crawlSpeed={200}
+          height={3}
+          crawl={true}
+          showSpinner={true}
+          easing="ease"
+          speed={200}
+          shadow="0 0 10px #1DB954,0 0 5px #1DB954"
+        />
         <AuthProvider>
           {children}
         </AuthProvider>
