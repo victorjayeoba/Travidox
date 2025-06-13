@@ -20,6 +20,10 @@ const config = {
     },
     extend: {
       colors: {
+        'lemon-green-milk': '#E6F1E8',
+        'lemon-green': '#A2D1AB',
+        'grey-text': '#4B5563',
+        'grey-heading': '#1F2937',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
