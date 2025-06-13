@@ -72,7 +72,7 @@ export function HeroSection() {
           <div className="absolute -inset-0.5 bg-gradient-to-r from-green-400 to-emerald-600 rounded-3xl blur opacity-50 group-hover:opacity-75 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
           <video
             className="relative rounded-3xl w-full"
-            src="/Travidox_video.mp4"
+            src="/travidox_video.mp4"
             autoPlay
             muted
             loop
