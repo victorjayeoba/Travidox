@@ -1,18 +1,15 @@
 "use client"
 
-import { useState } from "react"
 import { Section } from "@/components/ui/section"
-import { PlusCircle, MinusCircle, HelpCircle } from "lucide-react"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+import { HelpCircle } from "lucide-react"
 
-interface FAQItem {
-  question: string
-  answer: string
-}
-
-export function FAQSection() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null)
-
-  const faqs: FAQItem[] = [
+const faqs = [
     {
       question: "How do I get started with investing on Travidox?",
       answer: "To get started, simply create an account, complete your profile, and verify your identity. Once approved, you can fund your account using any of our supported payment methods and start investing in your preferred assets."
@@ -39,51 +36,32 @@ export function FAQSection() {
     }
   ]
 
-  const toggleFAQ = (index: number) => {
-    if (openIndex === index) {
-      setOpenIndex(null)
-    } else {
-      setOpenIndex(index)
-    }
-  }
-
+export function FAQSection() {
   return (
-    <Section id="faq" className="bg-gradient-to-br from-gray-50 to-gray-100">
+    <Section id="faq" className="bg-white py-20 lg:py-28">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-12">
-          <HelpCircle className="w-12 h-12 mx-auto text-yellow-500 mb-4" />
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
-          <p className="text-xl text-gray-600">
-            Find answers to the most common questions about investing with Travidox
+          <div className="inline-block bg-brand-green/10 p-4 rounded-full mb-4">
+            <HelpCircle className="w-10 h-10 mx-auto text-brand-green" />
+          </div>
+          <h2 className="text-3xl lg:text-4xl font-bold text-grey-heading mb-4">Frequently Asked Questions</h2>
+          <p className="text-xl text-grey-text">
+            Find answers to the most common questions about investing with Travidox.
           </p>
         </div>
 
-        <div className="space-y-4">
+        <Accordion type="single" collapsible className="w-full">
           {faqs.map((faq, index) => (
-            <div 
-              key={index}
-              className="bg-white rounded-xl shadow-sm overflow-hidden"
-            >
-              <button
-                className="flex justify-between items-center w-full px-6 py-4 text-left"
-                onClick={() => toggleFAQ(index)}
-              >
-                <h3 className="font-medium text-gray-900">{faq.question}</h3>
-                {openIndex === index ? (
-                  <MinusCircle className="w-5 h-5 text-yellow-500 flex-shrink-0" />
-                ) : (
-                  <PlusCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
-                )}
-              </button>
-              
-              {openIndex === index && (
-                <div className="px-6 pb-4">
-                  <p className="text-gray-600">{faq.answer}</p>
-                </div>
-              )}
-            </div>
+            <AccordionItem key={index} value={`item-${index}`} className="bg-lemon-green-milk/50 rounded-lg mb-3 border px-4">
+              <AccordionTrigger className="text-left font-semibold text-grey-heading hover:no-underline">
+                {faq.question}
+              </AccordionTrigger>
+              <AccordionContent className="text-grey-text text-base">
+                {faq.answer}
+              </AccordionContent>
+            </AccordionItem>
           ))}
-        </div>
+        </Accordion>
       </div>
     </Section>
   )

@@ -1,81 +1,66 @@
 import Image from "next/image"
 import { Section } from "@/components/ui/section"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+
+const stocks = [
+  { name: "Dangote Sugar", invested: "₦756.50", logo: "/dangote.png" },
+  { name: "First HoldCo", invested: "₦1,250.00", logo: "/firstbank.png" },
+  { name: "Transcorp Hotels", invested: "₦2,400.00", logo: "/Transcorp.png" },
+  { name: "Zenith Bank", invested: "₦8,750.00", logo: "/Zenith.png" },
+]
 
 export function InvestFractionsSection() {
   return (
-    <Section className="bg-green-600 text-white">
-      <div className="grid lg:grid-cols-2 gap-12 items-center">
+    <Section className="bg-white">
+      <div className="grid lg:grid-cols-2 gap-16 items-center">
         <div className="space-y-6">
-          <h2 className="text-3xl lg:text-4xl font-bold">Invest in fractions</h2>
-          <p className="text-xl text-green-100 leading-relaxed">
+          <h2 className="text-3xl lg:text-4xl font-bold text-grey-heading">Invest in fractions</h2>
+          <p className="text-xl text-grey-text leading-relaxed">
             Buy fractional shares of your favorite Nigerian companies. Own a piece of Dangote Sugar, First HoldCo, 
             Transcorp Hotels, or Zenith Bank without paying full share prices. Start building your dream portfolio today.
           </p>
-          <Button variant="secondary" size="lg" className="bg-white text-green-600 hover:bg-gray-100">
+          <Button size="lg" className="bg-brand-green hover:bg-brand-green-dark text-white">
             <a href="/products/stock-trading">Learn more</a>
           </Button>
         </div>
 
         <div className="relative">
-          <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white/20 rounded-2xl p-4 text-center">
-                <div className="w-12 h-12 bg-white rounded-xl mx-auto mb-2 flex items-center justify-center">
-                  <Image 
-                    src="/dangote.png"
-                    alt="Dangote Sugar"
-                    width={32}
-                    height={32}
-                    className="object-contain"
-                  />
-                </div>
-                <p className="text-sm">Dangote Sugar</p>
-                <p className="text-xs text-green-200">₦756.50 invested</p>
-              </div>
-              <div className="bg-white/20 rounded-2xl p-4 text-center">
-                <div className="w-12 h-12 bg-white rounded-xl mx-auto mb-2 flex items-center justify-center">
-                  <Image 
-                    src="/firstbank.png"
-                    alt="First HoldCo"
-                    width={32}
-                    height={32}
-                    className="object-contain"
-                  />
-                </div>
-                <p className="text-sm">First HoldCo</p>
-                <p className="text-xs text-green-200">₦1,250.00 invested</p>
-              </div>
-              <div className="bg-white/20 rounded-2xl p-4 text-center">
-                <div className="w-12 h-12 bg-white rounded-xl mx-auto mb-2 flex items-center justify-center">
-                  <Image 
-                    src="/Transcorp.png"
-                    alt="Transcorp Hotels"
-                    width={32}
-                    height={32}
-                    className="object-contain"
-                  />
-                </div>
-                <p className="text-sm">Transcorp Hotels</p>
-                <p className="text-xs text-green-200">₦2,400.00 invested</p>
-              </div>
-              <div className="bg-white/20 rounded-2xl p-4 text-center">
-                <div className="w-12 h-12 bg-white rounded-xl mx-auto mb-2 flex items-center justify-center">
-                  <Image 
-                    src="/Zenith.png"
-                    alt="Zenith Bank"
-                    width={32}
-                    height={32}
-                    className="object-contain"
-                  />
-                </div>
-                <p className="text-sm">Zenith Bank</p>
-                <p className="text-xs text-green-200">₦8,750.00 invested</p>
-              </div>
+          <div className="bg-lemon-green-milk/50 rounded-3xl p-8">
+            <div className="grid grid-cols-2 gap-6">
+              {stocks.map((stock) => (
+                <StockCard key={stock.name} {...stock} />
+              ))}
             </div>
           </div>
         </div>
       </div>
     </Section>
+  )
+}
+
+interface StockCardProps {
+  logo: string;
+  name: string;
+  invested: string;
+}
+
+function StockCard({ logo, name, invested }: StockCardProps) {
+  return (
+    <Card className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 text-center shadow-md hover:shadow-lg transition-shadow duration-300">
+      <CardContent className="p-0 flex flex-col items-center">
+        <div className="w-16 h-16 bg-white rounded-xl mb-3 flex items-center justify-center shadow-sm">
+          <Image 
+            src={logo}
+            alt={name}
+            width={40}
+            height={40}
+            className="object-contain"
+          />
+        </div>
+        <p className="font-semibold text-grey-heading text-sm">{name}</p>
+        <p className="text-xs text-grey-text">{invested} invested</p>
+      </CardContent>
+    </Card>
   )
 }

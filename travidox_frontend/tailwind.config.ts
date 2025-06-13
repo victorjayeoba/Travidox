@@ -22,6 +22,10 @@ const config = {
       colors: {
         'lemon-green-milk': '#E6F1E8',
         'lemon-green': '#A2D1AB',
+        'lemon-green-dark': '#059669',
+        'lemon-green-dark-hover': '#047857',
+        'brand-green': '#1DB954',
+        'brand-green-dark': '#1A9F4C',
         'grey-text': '#4B5563',
         'grey-heading': '#1F2937',
         border: "hsl(var(--border))",
