@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { TradingForm } from "@/components/trading-bot/trading-form"
 import { VirtualAccountPanel } from "@/components/trading-bot/virtual-account-panel"
 import { PriceTicker } from "@/components/trading-bot/price-ticker"
@@ -18,6 +18,7 @@ export default function TradingBotPage() {
   const [refreshKey, setRefreshKey] = useState<number>(0)
   const [activeTab, setActiveTab] = useState<string>("signals")
   const [selectedSymbol, setSelectedSymbol] = useState<string>("EURUSD")
+  const [tradeResponse, setTradeResponse] = useState<any>(null)
   
   // Handle refresh
   const handleRefresh = () => {
@@ -35,112 +36,6 @@ export default function TradingBotPage() {
     // The user will need to confirm the order in the trading form
   };
   
-<<<<<<< HEAD
-  // Format the next open time in a user-friendly way
-  const formatNextOpenTime = () => {
-    const nextOpen = getNextMarketOpen();
-    if (!nextOpen) return "";
-    
-    // Get day name
-    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    const dayName = days[nextOpen.getDay()];
-    
-    // Format time
-    const options = { hour: 'numeric' as const, minute: '2-digit' as const, hour12: true };
-    const timeString = nextOpen.toLocaleTimeString(undefined, options);
-    
-    return `${dayName} at ${timeString} (your local time)`;
-  };
-
-  // Handle disconnecting the account
-  const handleDisconnectAccount = async () => {
-    // For now we just refresh - in a real app, you would call an API endpoint
-    // to disconnect the account server-side
-    
-    // Clear local state - in production, this would be done after the API call
-    localStorage.removeItem('authToken')
-    window.location.reload()
-  }
-  
-  // Function to place a real order
-  const placeRealOrder = async () => {
-    if (!isAccountConnected) return
-    
-    try {
-      setIsLoading(true)
-      setTradeResponse(null)
-      
-      // Create order data with user-selected values
-      const orderData = {
-        symbol: selectedSymbol,
-        order_type: tradeType,
-        volume: tradeVolume,
-        stop_loss: tradeSL, // Add stop loss
-        take_profit: tradeTP, // Add take profit
-      }
-      
-      console.log('Placing order with data:', orderData);
-      
-      // Place the order using the real API and get the actual response
-      const apiResponse = await placeOrder(orderData);
-      console.log('API Response:', apiResponse);
-      
-      // Refresh positions to show the new trade
-      await refreshPositions();
-      
-      // Format success message based on actual API response
-      setTradeResponse({
-        success: true,
-        message: apiResponse.message || `Order placed successfully`,
-        details: JSON.stringify(apiResponse, null, 2),
-        timestamp: Date.now(),
-        apiResponse: apiResponse
-      });
-      
-      setIsLoading(false)
-    } catch (error: any) {
-      console.error('Error placing order:', error)
-      
-      // Show error notification with actual API error
-      setTradeResponse({
-        success: false,
-        message: `Error placing order`,
-        details: error?.message || String(error),
-        timestamp: Date.now(),
-        apiResponse: error?.response || null
-      });
-      
-      setIsLoading(false)
-    }
-  }
-  
-  const getRiskColor = () => {
-    switch (riskLevel) {
-      case 1: return 'bg-emerald-100 text-emerald-700'
-      case 2: return 'bg-amber-100 text-amber-700'
-      case 3: return 'bg-rose-100 text-rose-700'
-      default: return 'bg-slate-100 text-slate-700'
-    }
-  }
-  
-  const getRiskText = () => {
-    switch (riskLevel) {
-      case 1: return 'Low Risk'
-      case 2: return 'Medium Risk'
-      case 3: return 'High Risk'
-      default: return 'Custom'
-    }
-  }
-
-  // Sample trade history - would be replaced with actual API data
-  const tradeHistory = [
-    { id: 1, symbol: 'EUR/USD', type: 'buy', amount: 0.5, price: 1.0823, time: '2025-06-15 14:23', profit: null },
-    { id: 2, symbol: 'EUR/USD', type: 'sell', amount: 0.5, price: 1.0855, time: '2025-06-16 10:15', profit: 16.00 },
-    { id: 3, symbol: 'GBP/JPY', type: 'buy', amount: 0.25, price: 186.732, time: '2025-06-16 11:30', profit: null },
-    { id: 4, symbol: 'BTC/USD', type: 'buy', amount: 0.01, price: 42675.84, time: '2025-06-17 09:45', profit: null },
-    { id: 5, symbol: 'GBP/JPY', type: 'sell', amount: 0.25, price: 187.125, time: '2025-06-18 15:20', profit: 9.83 },
-  ]
-  
   // Trade notification component with raw API response
   const TradeNotification = () => {
     if (!tradeResponse) return null;
@@ -154,9 +49,10 @@ export default function TradingBotPage() {
       return () => clearTimeout(timer);
     }, [tradeResponse]);
     
-=======
+    return null; // Placeholder return
+  };
+  
   if (authLoading) {
->>>>>>> e422374184407aba3b50516782bd48558097bd61
     return (
       <div className="container mx-auto p-6">
         <Card>
@@ -260,7 +156,7 @@ export default function TradingBotPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <TradingForm onOrderPlaced={handleRefresh} />
             <PriceTicker />
-              </div>
+          </div>
         </TabsContent>
         
         <TabsContent value="charts">
@@ -271,7 +167,7 @@ export default function TradingBotPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <PriceTicker />
             <Card>
-                <CardContent className="pt-6">
+              <CardContent className="pt-6">
                 <h2 className="text-xl font-bold mb-4">Market Analysis</h2>
                 <p className="mb-2">
                   Use this section to analyze market trends and make informed trading decisions.
@@ -280,8 +176,8 @@ export default function TradingBotPage() {
                 <p>
                   Watch for price movements and volatility to identify potential trading opportunities.
                 </p>
-                </CardContent>
-              </Card>
+              </CardContent>
+            </Card>
           </div>
         </TabsContent>
       </Tabs>
@@ -309,7 +205,7 @@ export default function TradingBotPage() {
             </p>
           </CardContent>
         </Card>
-          </div>
+      </div>
     </div>
   )
-} 
+}
