@@ -72,7 +72,8 @@ export async function GET(
 ) {
   try {
     // In Next.js App Router, we need to await the params
-    const symbolParam = await params.symbol;
+    const awaitedParams = await params;
+    const symbolParam = awaitedParams.symbol;
     
     const searchParams = request.nextUrl.searchParams;
     const interval = searchParams.get('interval') || '1h';
