@@ -2,7 +2,7 @@
 
 import React, { Suspense } from 'react'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { 
   BarChart3, 
@@ -23,7 +23,8 @@ import {
   ArrowDown,
   ArrowUp,
   DollarSign,
-  Percent
+  Percent,
+  RefreshCw
 } from 'lucide-react'
 import { useAuth } from '@/components/auth/auth-provider'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
@@ -32,8 +33,8 @@ import { StockCard } from '@/components/dashboard/stock-card'
 import { Progress } from '@/components/ui/progress'
 import { useUserPortfolioBalance } from '@/hooks/useUserPortfolioBalance'
 import { useUserProfile } from '@/hooks/useUserProfile'
-import { useNigeriaStocks } from '@/hooks/useNigeriaStocks'
-import { useState } from 'react'
+import { useNigeriaStocks, STOCK_PRICES_UPDATE_EVENT } from '@/hooks/useNigeriaStocks'
+import { usePortfolio, PORTFOLIO_UPDATE_EVENT } from '@/hooks/usePortfolio'
 import { StockPurchaseButton } from '@/components/dashboard/StockPurchaseButton'
 
 function getRandomColor(key: string) {
@@ -114,6 +115,26 @@ const MetricCard: React.FC<MetricCardProps> = ({ title, value, change, changeTyp
   </Card>
 )
 
+// Custom Naira Icon Component
+const NairaIcon = ({ size = 24 }: { size?: number }) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round"
+  >
+    <path d="M6 4v16" />
+    <path d="M18 4v16" />
+    <path d="M6 4l12 16" />
+    <path d="M4 9h16" />
+    <path d="M4 15h16" />
+  </svg>
+)
+
 export default function DashboardPage() {
   const { user, loading: authLoading } = useAuth()
   const { profile, addXpAndUpdateBalance } = useUserProfile()
@@ -127,20 +148,59 @@ export default function DashboardPage() {
     updatePrices,
     sellStock
   } = useUserPortfolioBalance()
-  const { stocks, loading: stocksLoading, isMockData } = useNigeriaStocks()
+  const { stocks, loading: stocksLoading, isMockData, refresh: refreshStocks, silentRefresh, lastUpdated } = useNigeriaStocks()
   const [isRefreshing, setIsRefreshing] = useState(false)
+  const [showRefreshIndicator, setShowRefreshIndicator] = useState(false)
   const router = useRouter()
   
-  // Update portfolio prices with the latest stock data
-  useEffect(() => {
-    if (!stocksLoading && stocks.length > 0 && !isRefreshing) {
-      const timer = setTimeout(() => {
-        updatePrices(stocks);
-      }, 500);
+  // Handle refresh of all data
+  const handleRefresh = async () => {
+    setIsRefreshing(true)
+    setShowRefreshIndicator(true)
+    
+    try {
+      // Refresh stock data
+      await refreshStocks()
       
-      return () => clearTimeout(timer);
+      // Hide indicator after a short delay to show it worked
+      setTimeout(() => {
+        setShowRefreshIndicator(false)
+      }, 1000)
+    } catch (error) {
+      console.error('Error refreshing data:', error)
+    } finally {
+      setIsRefreshing(false)
     }
-  }, [stocks, stocksLoading, updatePrices, isRefreshing]);
+  }
+
+  // Silent refresh for trading activities only
+  const handleSilentRefresh = async () => {
+    setShowRefreshIndicator(true)
+    try {
+      await silentRefresh()
+      setTimeout(() => setShowRefreshIndicator(false), 1000)
+    } catch (error) {
+      console.error('Error in silent refresh:', error)
+    }
+  }
+
+  // Listen only for portfolio updates (trading activities)
+  useEffect(() => {
+    const handlePortfolioUpdate = () => {
+      // Show a brief indicator that something updated
+      setShowRefreshIndicator(true)
+      setTimeout(() => setShowRefreshIndicator(false), 1500)
+      
+      // Trigger a silent refresh to get updated stock prices for accurate portfolio values
+      handleSilentRefresh()
+    }
+
+    window.addEventListener(PORTFOLIO_UPDATE_EVENT, handlePortfolioUpdate)
+    
+    return () => {
+      window.removeEventListener(PORTFOLIO_UPDATE_EVENT, handlePortfolioUpdate)
+    }
+  }, [])
   
   useEffect(() => {
     // Redirect to login if not authenticated
@@ -154,14 +214,6 @@ export default function DashboardPage() {
       router.push('/dashboard/overview')
     }
   }, [user, authLoading, router])
-
-  // Handler for manual refresh
-  const handleRefresh = async () => {
-    setIsRefreshing(true)
-    setTimeout(() => {
-      setIsRefreshing(false)
-    }, 1000)
-  }
 
   if (authLoading || portfolioLoading) {
     return (
@@ -228,13 +280,13 @@ export default function DashboardPage() {
 
   // Quick actions data
   const quickActions = [
-          {
-        icon: TrendingUp,
-        title: "Trade Stocks",
-        description: "Buy and sell Nigerian stocks",
-        onClick: () => router.push('/dashboard/markets'),
-        color: "bg-gradient-to-r from-green-500 to-emerald-600"
-      },
+    {
+      icon: TrendingUp,
+      title: "Trade Stocks",
+      description: "Buy and sell Nigerian stocks",
+      onClick: () => router.push('/dashboard/markets'),
+      color: "bg-gradient-to-r from-green-500 to-emerald-600"
+    },
     {
       icon: BookOpen,
       title: "Learn & Earn",
@@ -273,14 +325,35 @@ export default function DashboardPage() {
         <div className="relative">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
             <div className="mb-4 lg:mb-0">
-              <h1 className="text-2xl lg:text-4xl font-bold mb-2">
+              <div className="flex items-center gap-3 mb-2">
+                <h1 className="text-2xl lg:text-4xl font-bold">
                 Welcome back, {user?.displayName?.split(' ')[0] || 'Trader'}! 👋
               </h1>
+                {showRefreshIndicator && (
+                  <div className="bg-white/20 rounded-full p-2">
+                    <RefreshCw className="h-5 w-5 animate-spin" />
+                  </div>
+                )}
+              </div>
               <p className="text-green-100 text-base lg:text-lg">
                 Ready to grow your portfolio today?
               </p>
+              {lastUpdated && (
+                <p className="text-green-200 text-sm mt-1">
+                  Last updated: {lastUpdated.toLocaleTimeString()}
+                </p>
+              )}
             </div>
             <div className="flex flex-col sm:flex-row gap-3 lg:gap-4">
+              <Button 
+                onClick={handleRefresh}
+                disabled={isRefreshing}
+                variant="outline"
+                className="bg-white/10 border-white/20 text-white hover:bg-white/20 font-semibold transition-all duration-300"
+              >
+                <RefreshCw className={`mr-2 h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+                {isRefreshing ? 'Updating...' : 'Refresh'}
+              </Button>
               <Button 
                 onClick={() => router.push('/dashboard/markets')}
                 className="bg-white text-green-700 hover:bg-gray-50 font-semibold transition-all duration-300"
@@ -300,7 +373,7 @@ export default function DashboardPage() {
           value={`₦${totalValue.toFixed(2)}`}
           change={`₦${Math.abs(totalChange).toFixed(2)} (${percentChange.toFixed(2)}%)`}
           changeType={totalChange >= 0 ? 'positive' : 'negative'}
-          icon={DollarSign}
+          icon={NairaIcon}
           color="bg-gradient-to-r from-blue-500 to-blue-600"
         />
         <MetricCard
@@ -368,7 +441,7 @@ export default function DashboardPage() {
                         <StockCard 
                           symbol={asset.symbol}
                           name={asset.name}
-                          price={asset.value / (asset.allocation / 100)}
+                          price={asset.value}
                           change={asset.change}
                         />
                         <div>

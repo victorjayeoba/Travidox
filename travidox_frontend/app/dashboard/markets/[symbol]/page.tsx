@@ -9,9 +9,9 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContai
 import { TrendingUp, TrendingDown, BarChart3, Activity, ArrowLeft, RefreshCw } from 'lucide-react'
 import { getStockById, isValidStockSymbol } from "@/lib/stock-mapping"
 import { getStandardSector, getSectorColor } from "@/lib/sector-mapping"
-import { useNigeriaStocks } from "@/hooks/useNigeriaStocks"
+import { useNigeriaStocks, STOCK_PRICES_UPDATE_EVENT } from "@/hooks/useNigeriaStocks"
 import { StockPurchaseModal } from "@/components/StockPurchaseModal"
-import { usePortfolio } from "@/hooks/usePortfolio"
+import { usePortfolio, PORTFOLIO_UPDATE_EVENT } from "@/hooks/usePortfolio"
 
 interface ChartDataPoint {
   date: string;
@@ -63,15 +63,33 @@ export default function StockDetailPage() {
   const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
   
   // Use hooks
-  const { stocks, loading: stocksLoading } = useNigeriaStocks();
+  const { stocks, loading: stocksLoading, refresh: refreshStocks } = useNigeriaStocks();
   const { portfolio, loading: portfolioLoading } = usePortfolio();
   
   const [ownedQuantity, setOwnedQuantity] = useState(0);
 
+  // Listen for portfolio updates only (when user trades)
+  useEffect(() => {
+    const handlePortfolioUpdate = () => {
+      // Portfolio data will be automatically refreshed by the hook
+      // This ensures shares owned count updates when you buy/sell
+    };
+
+    window.addEventListener(PORTFOLIO_UPDATE_EVENT, handlePortfolioUpdate);
+    
+    return () => {
+      window.removeEventListener(PORTFOLIO_UPDATE_EVENT, handlePortfolioUpdate);
+    };
+  }, []);
+
   // Memoize calculation for owned quantity
   useEffect(() => {
     if (!portfolioLoading && portfolio) {
-      const ownedAsset = portfolio.assets.find(asset => asset.symbol === symbol);
+      // Make symbol matching case-insensitive
+      const ownedAsset = portfolio.assets.find(asset => 
+        asset.symbol.toLowerCase() === symbol.toLowerCase()
+      );
+      
       setOwnedQuantity(ownedAsset ? ownedAsset.quantity : 0);
     }
   }, [portfolio, portfolioLoading, symbol]);
@@ -331,10 +349,10 @@ export default function StockDetailPage() {
               </div>
             ) : (
               <>
-                <div className="text-xl sm:text-2xl font-bold text-gray-900">{ownedQuantity}</div>
-                <div className="text-xs sm:text-sm text-gray-500 truncate">
-                  Value: ₦{(ownedQuantity * currentStock.price).toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                </div>
+            <div className="text-xl sm:text-2xl font-bold text-gray-900">{ownedQuantity}</div>
+            <div className="text-xs sm:text-sm text-gray-500 truncate">
+              Value: ₦{(ownedQuantity * currentStock.price).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+            </div>
               </>
             )}
           </CardContent>

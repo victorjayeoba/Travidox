@@ -305,18 +305,18 @@ export default function CertificatePage() {
                   {/* User Name - Main Focus */}
                   <div className="mb-8 py-6 px-8 bg-amber-50 rounded-lg border-l-4 border-r-4 border-amber-400">
                     <h3 className="text-6xl font-bold text-amber-800 leading-tight">
-                      {certificate.userName}
-                    </h3>
+                  {certificate.userName}
+                </h3>
                   </div>
-                  
+                
                   <p className="text-2xl mb-8 text-gray-700 font-medium" style={{ fontFamily: 'Georgia, Times, serif' }}>
                     has successfully completed the comprehensive course
-                  </p>
-                  
+                </p>
+                
                   {/* Course Title */}
                   <div className="mb-12 py-4 px-6 bg-gray-50 rounded-lg border border-gray-200">
                     <h4 className="text-3xl font-bold text-gray-800 leading-relaxed" style={{ fontFamily: 'Georgia, Times, serif' }}>
-                      {courseData.title}
+                  {courseData.title}
                     </h4>
                   </div>
                   

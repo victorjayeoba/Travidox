@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 export interface NigeriaStock {
   symbol?: string;
@@ -51,16 +51,21 @@ interface StocksResponse {
   error?: string;
 }
 
-export const useNigeriaStocks = () => {
+// Export event for stock price updates
+export const STOCK_PRICES_UPDATE_EVENT = 'stock_prices_update';
+
+export const useNigeriaStocks = (autoRefresh: boolean = false) => {
   const [stocks, setStocks] = useState<NigeriaStock[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isMockData, setIsMockData] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Function to fetch stocks that can be called on demand
-  const fetchStocks = useCallback(async () => {
+  const fetchStocks = useCallback(async (silent: boolean = false) => {
     try {
-      setLoading(true);
+      if (!silent) setLoading(true);
       
       // Always fetch fresh data 
       const response = await fetch('/api/nigeria-stocks', {
@@ -89,38 +94,70 @@ export const useNigeriaStocks = () => {
         setError(null);
       }
 
+      let newStocks: NigeriaStock[] = [];
+
       // Handle different response formats
       if (Array.isArray(result)) {
         // Direct array response
-        setStocks(result);
+        newStocks = result;
       } else if (result.data && Array.isArray(result.data)) {
         // Wrapped in data property
-        setStocks(result.data);
+        newStocks = result.data;
       } else {
         // Unknown format
-        setStocks([]);
+        newStocks = [];
         throw new Error('Invalid data format received');
+      }
+      
+      setStocks(newStocks);
+      setLastUpdated(new Date());
+      
+      // Only dispatch event for silent updates to avoid UI glitches
+      if (silent) {
+        window.dispatchEvent(new CustomEvent(STOCK_PRICES_UPDATE_EVENT, { 
+          detail: newStocks 
+        }));
       }
       
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred');
       console.error('Error fetching Nigeria stocks:', err);
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   }, []);
 
-  // Always fetch fresh data on mount
+  // Setup initial fetch only (no auto-refresh)
   useEffect(() => {
+    // Initial fetch
     fetchStocks();
+    
+    // Remove automatic refresh - only manual refresh now
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [fetchStocks]);
+
+  // Manual refresh function
+  const refresh = useCallback(() => {
+    fetchStocks(false); // Non-silent refresh
+  }, [fetchStocks]);
+
+  // Silent refresh function for background updates
+  const silentRefresh = useCallback(() => {
+    fetchStocks(true); // Silent refresh
   }, [fetchStocks]);
   
-  // Return the stocks, loading state, error, and a function to manually refresh
+  // Return the stocks, loading state, error, and refresh functions
   return { 
     stocks, 
     loading, 
     error,
     isMockData,
-    refresh: fetchStocks
+    lastUpdated,
+    refresh,
+    silentRefresh
   };
 }; 
