@@ -281,9 +281,9 @@ class SimpleDB:
         """Load data from file"""
         try:
             with open(file_name, 'r') as f:
-                    return json.load(f)
+                return json.load(f)
         except:
-        return {}
+            return {}
     
     def _save_data(self, file_name: str, data: Dict[str, Any]) -> None:
         """Save data to file"""
