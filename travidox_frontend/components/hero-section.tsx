@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { useAuth } from "./auth/auth-provider"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { AnimatePresence, motion } from "framer-motion"
 
 const texts = ["Nigerians", "Young Individuals", "Financial Enthusiasts"]
@@ -59,13 +60,24 @@ export function HeroSection() {
             </p>
           </div>
 
-          <Button 
-            onClick={handleCTAClick}
-            size="lg" 
-            className="bg-brand-green hover:bg-brand-green-dark text-white text-lg px-8 py-4 rounded-full transition-transform duration-300 ease-in-out hover:scale-105"
-          >
-            {isAuthenticated ? "View Dashboard" : "Start Investing Now"}
-          </Button>
+          {isAuthenticated ? (
+            <Link href="/dashboard">
+              <Button 
+                size="lg" 
+                className="bg-brand-green hover:bg-brand-green-dark text-white text-lg px-8 py-4 rounded-full transition-transform duration-300 ease-in-out hover:scale-105"
+              >
+                View Dashboard
+              </Button>
+            </Link>
+          ) : (
+            <Button 
+              onClick={handleCTAClick}
+              size="lg" 
+              className="bg-brand-green hover:bg-brand-green-dark text-white text-lg px-8 py-4 rounded-full transition-transform duration-300 ease-in-out hover:scale-105"
+            >
+              Start Investing Now
+            </Button>
+          )}
         </div>
 
         <div className="relative group">
