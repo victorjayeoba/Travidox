@@ -2,7 +2,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 import { NextRequest, NextResponse } from 'next/server'
 import { getMarketContext, getDefaultMarketContext } from '@/lib/market-context'
 
-const genAI = new GoogleGenerativeAI('AIzaSyDybAx2Q9-j5simk7PNf7h3bemCrprcXwc')
+const genAI = new GoogleGenerativeAI('AIzaSyADYXMLm6trfDQI2nONBAN9tHfMZBpA7hw')
 
 const TRAVIDOX_CONTEXT = `
 You are Travidox AI, an intelligent financial assistant for the Travidox platform - Nigeria's premier stock trading and investment learning platform. 
