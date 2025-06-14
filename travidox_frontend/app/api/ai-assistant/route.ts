@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
     if (conversationHistory.length > 0) {
       conversationContext += 'RECENT CONVERSATION:\n'
       conversationHistory.slice(-6).forEach((msg: any) => {
-        conversationContext += `${msg.role === 'user' ? 'User' : 'Travidox AI'}: ${msg.content}\n`
+        conversationContext += `${msg.role === 'user' ? 'User' : ''}: ${msg.content}\n`
       })
       conversationContext += '\n'
     }
