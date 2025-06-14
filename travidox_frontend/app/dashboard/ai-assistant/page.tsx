@@ -140,35 +140,35 @@ export default function AIAssistantPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 flex-shrink-0 flex items-center justify-center">
             <Bot size={20} className="text-white" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-gray-900">AI Assistant</h1>
-            <p className="text-sm text-gray-600">Chat with Travidox AI</p>
+            <p className="text-sm text-gray-600">Your intelligent financial advisor</p>
           </div>
         </div>
         <Button
           onClick={clearConversation}
           variant="outline"
           size="sm"
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 self-start sm:self-center"
         >
           <RefreshCw size={14} />
           New Chat
         </Button>
       </div>
 
-      {/* Main Chat Container */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        {/* Chat Area */}
-        <div className="lg:col-span-3">
-          <Card className="bg-white/60 backdrop-blur-sm border-white/20 h-[600px]">
-            <CardContent className="p-0 h-full flex flex-col">
-              {/* Messages */}
-              <ScrollArea className="flex-1 p-4">
+      {/* Main Content Area */}
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* Chat Panel */}
+        <div className="flex-grow">
+          <Card className="bg-white/60 backdrop-blur-sm border-white/20 flex flex-col h-full">
+            <CardContent className="p-0 flex-1 flex flex-col">
+              {/* Messages Area */}
+              <ScrollArea className="flex-grow p-4" style={{maxHeight: 'calc(100vh - 24rem)', minHeight: '300px'}}>
                 <div className="space-y-4">
                   {messages.map((message) => (
                     <div
@@ -183,22 +183,22 @@ export default function AIAssistantPage() {
                           className={cn(
                             "text-xs",
                             message.role === 'user' 
-                              ? "bg-green-100 text-green-700" 
-                              : "bg-gradient-to-r from-green-100 to-emerald-100 text-green-700"
+                              ? "bg-green-100 text-green-700 font-medium" 
+                              : "bg-gray-200 text-gray-700"
                           )}
                         >
-                          {message.role === 'user' ? 'You' : <Bot size={12} />}
+                          {message.role === 'user' ? 'You' : <Bot size={14} />}
                         </AvatarFallback>
                       </Avatar>
                       <div className={cn(
-                        "max-w-[85%] rounded-2xl px-4 py-3 text-sm",
+                        "max-w-[85%] rounded-lg px-4 py-2.5 text-sm",
                         message.role === 'user'
-                          ? "bg-green-500 text-white"
+                          ? "bg-green-600 text-white"
                           : "bg-gray-100 text-gray-900"
                       )}>
                         <p className="leading-relaxed">{message.content}</p>
                         <p className={cn(
-                          "text-xs mt-1 opacity-70",
+                          "text-xs mt-1.5 opacity-80",
                           message.role === 'user' ? "text-green-100" : "text-gray-500"
                         )}>
                           {formatTime(message.timestamp)}
@@ -208,14 +208,14 @@ export default function AIAssistantPage() {
                   ))}
                   {isLoading && (
                     <div className="flex items-start space-x-3">
-                      <Avatar className="h-7 w-7">
-                        <AvatarFallback className="bg-gradient-to-r from-green-100 to-emerald-100 text-green-700">
-                          <Bot size={12} />
+                      <Avatar className="h-7 w-7 flex-shrink-0">
+                         <AvatarFallback className="bg-gray-200 text-gray-700">
+                          <Bot size={14} />
                         </AvatarFallback>
                       </Avatar>
-                      <div className="bg-gray-100 rounded-2xl px-4 py-3">
+                      <div className="bg-gray-100 rounded-lg px-4 py-2.5">
                         <div className="flex items-center space-x-2">
-                          <Loader2 size={12} className="animate-spin" />
+                          <Loader2 size={14} className="animate-spin text-green-600" />
                           <span className="text-sm text-gray-600">Thinking...</span>
                         </div>
                       </div>
@@ -235,12 +235,12 @@ export default function AIAssistantPage() {
                     onChange={(e) => setInputMessage(e.target.value)}
                     onKeyPress={handleKeyPress}
                     disabled={isLoading}
-                    className="flex-1 bg-white border-gray-200 focus:border-green-500 focus:ring-green-500"
+                    className="flex-1 bg-white border-gray-300 rounded-lg focus:border-green-500 focus:ring-1 focus:ring-green-500"
                   />
                   <Button
                     onClick={sendMessage}
                     disabled={!inputMessage.trim() || isLoading}
-                    className="px-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"
+                    className="px-4 bg-green-600 hover:bg-green-700 text-white rounded-lg"
                   >
                     {isLoading ? (
                       <Loader2 size={16} className="animate-spin" />
@@ -255,13 +255,13 @@ export default function AIAssistantPage() {
         </div>
 
         {/* Sidebar */}
-        <div className="space-y-4">
+        <div className="lg:w-[320px] lg:flex-shrink-0 space-y-4 lg:sticky lg:top-24 self-start">
           {/* Quick Questions */}
           <Card className="bg-white/60 backdrop-blur-sm border-white/20">
             <CardHeader className="pb-3">
-              <div className="flex items-center space-x-2">
-                <Sparkles size={16} className="text-yellow-600" />
-                <CardTitle className="text-base">Quick Start</CardTitle>
+              <div className="flex items-center space-x-2.5">
+                <Sparkles size={16} className="text-yellow-500" />
+                <CardTitle className="text-base font-semibold">Quick Start</CardTitle>
               </div>
             </CardHeader>
             <CardContent className="space-y-2">
@@ -270,7 +270,7 @@ export default function AIAssistantPage() {
                   key={index}
                   variant="ghost"
                   size="sm"
-                  className="w-full text-left justify-start h-auto p-3 text-sm hover:bg-green-50 hover:text-green-700"
+                  className="w-full text-left justify-start h-auto p-2.5 text-sm text-gray-700 hover:bg-green-50 hover:text-green-700 rounded-md"
                   onClick={() => setInputMessage(question)}
                   disabled={isLoading}
                 >
@@ -283,23 +283,23 @@ export default function AIAssistantPage() {
           {/* Features */}
           <Card className="bg-white/60 backdrop-blur-sm border-white/20">
             <CardHeader className="pb-3">
-              <CardTitle className="text-base">Features</CardTitle>
+              <CardTitle className="text-base font-semibold">Features</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 text-sm">
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <div className="flex items-center space-x-3">
+                <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></div>
                 <span className="text-gray-700">Real-time market data</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <div className="flex items-center space-x-3">
+                <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></div>
                 <span className="text-gray-700">Trading strategies</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+              <div className="flex items-center space-x-3">
+                <div className="w-2 h-2 bg-orange-500 rounded-full flex-shrink-0"></div>
                 <span className="text-gray-700">Risk management</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+              <div className="flex items-center space-x-3">
+                <div className="w-2 h-2 bg-purple-500 rounded-full flex-shrink-0"></div>
                 <span className="text-gray-700">Educational content</span>
               </div>
             </CardContent>
@@ -307,8 +307,8 @@ export default function AIAssistantPage() {
 
           {/* Disclaimer */}
           <Card className="bg-yellow-50/80 backdrop-blur-sm border-yellow-200">
-            <CardContent className="p-4">
-              <p className="text-xs text-yellow-800">
+            <CardContent className="p-3">
+              <p className="text-xs text-yellow-900">
                 <strong>Note:</strong> AI provides educational insights. Always do your own research before investing.
               </p>
             </CardContent>
