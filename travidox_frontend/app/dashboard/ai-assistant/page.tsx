@@ -2,6 +2,8 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { Send, Bot, Loader2, Sparkles, RefreshCw } from 'lucide-react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -196,7 +198,20 @@ export default function AIAssistantPage() {
                           ? "bg-green-600 text-white"
                           : "bg-gray-100 text-gray-900"
                       )}>
-                        <p className="leading-relaxed">{message.content}</p>
+                        {message.role === 'assistant' ? (
+                          <div className="prose prose-sm max-w-none prose-p:my-0 prose-ul:my-2 prose-li:my-0">
+                            <ReactMarkdown
+                              remarkPlugins={[remarkGfm]}
+                              components={{
+                                a: ({node, ...props}) => <a className="text-green-600 hover:underline" target="_blank" rel="noopener noreferrer" {...props} />,
+                              }}
+                            >
+                              {message.content}
+                            </ReactMarkdown>
+                          </div>
+                        ) : (
+                          <p className="leading-relaxed">{message.content}</p>
+                        )}
                         <p className={cn(
                           "text-xs mt-1.5 opacity-80",
                           message.role === 'user' ? "text-green-100" : "text-gray-500"
