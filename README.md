@@ -96,6 +96,6 @@ This project is distributed under the MIT License. See `LICENSE` for more inform
 
 ## 📬 Contact
 
-Project Maintainer - [Victor Jayeoba](https://github.com/victorjayeoba)
+Project Maintainer - Travidox Team
 
 Project Link: [https://github.com/victorjayeoba/Travidox](https://github.com/victorjayeoba/Travidox)
