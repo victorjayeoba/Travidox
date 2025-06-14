@@ -28,7 +28,6 @@ travidox_backend/.pytest_cache/
 # Frontend specific ignores
 travidox_frontend/node_modules/
 travidox_frontend/.env
-travidox_frontend/.env.*
 travidox_frontend/build/
 travidox_frontend/dist/
 travidox_frontend/.cache/
