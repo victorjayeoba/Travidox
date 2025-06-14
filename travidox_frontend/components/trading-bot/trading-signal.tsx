@@ -235,7 +235,7 @@ export function TradingSignalComponent({
         title: "Insufficient margin",
         description: `You need approximately $${estimatedMargin.toFixed(2)} margin for this trade`,
         variant: "destructive",
-      });
+        });
       return;
     }
     try {
@@ -257,11 +257,11 @@ export function TradingSignalComponent({
         throw new Error('Failed to place order');
       }
     } catch (error) {
-      toast({
+        toast({
         title: "Failed to place order",
         description: error instanceof Error ? error.message : "An unknown error occurred",
-        variant: "destructive",
-      });
+          variant: "destructive",
+        });
     }
   };
   

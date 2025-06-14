@@ -189,7 +189,7 @@ Whether you're just starting your financial journey or want to improve your mone
             type: "video",
             title: "Introduction to Financial Literacy in Nigeria",
             duration: "15 min",
-            videoUrl: "https://www.youtube.com/watch?v=pZDRC07SABQ",
+            videoUrl: "https://www.youtube.com/embed/ZXH5oMvbp-E?si=PEXhvE261vLgTWbT",
             content: "An introduction to financial literacy and its importance in the Nigerian context."
           },
           {
@@ -331,7 +331,7 @@ This course bridges the gap between complete novice and confident beginner inves
             type: "video",
             title: "Introduction to the Nigerian Stock Exchange (NGX)",
             duration: "15 min",
-            videoUrl: "https://www.youtube.com/watch?v=example1",
+            videoUrl: "https://www.youtube.com/embed/-n7xAKUijjQ?si=BJ2oT3RtunPfUNxU",
             content: "An introduction to the Nigerian Stock Exchange, its history, and its role in the economy."
           },
           {
@@ -464,7 +464,7 @@ This course focuses on building a solid foundation before actual trading, helpin
             type: "video",
             title: "Introduction to Forex Trading for Nigerians",
             duration: "15 min",
-            videoUrl: "https://www.youtube.com/watch?v=example2",
+            videoUrl: "https://www.youtube.com/embed/RuBx4xg2yUY?si=Evj-6eNvmp7LagnL",
             content: "An introduction to forex trading basics and how Nigerians can participate in the global currency market."
           },
           {
@@ -598,7 +598,7 @@ This course bridges the gap between basic chart reading and advanced technical a
             type: "video",
             title: "Introduction to Technical Analysis for Nigerian Stocks",
             duration: "20 min",
-            videoUrl: "https://www.youtube.com/watch?v=technical-analysis-intro",
+            videoUrl: "https://www.youtube.com/embed/0vZnZhN-1EA?si=PuWWLP6eQ0UEJMWI",
             content: "An introduction to technical analysis and its application to the Nigerian stock market."
           },
           {
@@ -693,7 +693,7 @@ Technical analysis can be particularly effective for Nigerian stocks due to the 
             type: "video",
             title: "Chart Types and Their Applications",
             duration: "25 min",
-            videoUrl: "https://www.youtube.com/watch?v=chart-types-explained",
+            videoUrl: "https://www.youtube.com/embed/WbMnfiknBoc?si=dbcGq2aE3wCd7ttB",
             content: "Learn about line charts, bar charts, and candlestick charts and when to use each type."
           },
           {
@@ -849,7 +849,7 @@ This intermediate course is ideal for forex traders who understand the basics an
             type: "video",
             title: "How News Events Impact Forex Markets",
             duration: "15 min",
-            videoUrl: "https://www.youtube.com/watch?v=forex-news-impact",
+            videoUrl: "https://www.youtube.com/embed/UBp56lAQEI4?si=g5vk1bK5JNi1Yjes",
             content: "Learn how economic news and events affect currency prices and create trading opportunities."
           },
           {
@@ -944,7 +944,7 @@ News events and economic data releases are among the most powerful forces drivin
             type: "video",
             title: "Mastering the Economic Calendar",
             duration: "20 min",
-            videoUrl: "https://www.youtube.com/watch?v=economic-calendar-tutorial",
+            videoUrl: "https://www.youtube.com/embed/JNECO2MQ8Ac?si=Y3Tkd1p9YNWc2snx",
             content: "Learn how to read and interpret economic calendars to prepare for trading events."
           },
           {
@@ -1105,7 +1105,7 @@ This course is designed for serious traders who want to elevate their performanc
             type: "video",
             title: "Why Every Trader Needs a Trading Plan",
             duration: "20 min",
-            videoUrl: "https://www.youtube.com/watch?v=trading-plan-intro",
+            videoUrl: "https://www.youtube.com/embed/aWx30SgWbUI?si=f28VNv34Ng9s0Lw8",
             content: "Learn why a structured trading plan is critical for consistent success in the Nigerian markets."
           },
           {
@@ -1201,7 +1201,7 @@ The greatest trading systems in the world are worthless if you can't follow them
             type: "video",
             title: "Advanced Risk Management for Nigerian Traders",
             duration: "25 min",
-            videoUrl: "https://www.youtube.com/watch?v=advanced-risk-management",
+            videoUrl: "https://www.youtube.com/embed/v3RFx1P-j5w?si=7kK5UuXTEj9LIeI5",
             content: "Learn sophisticated risk management techniques specifically tailored for Nigerian market conditions."
           },
           {
@@ -1381,7 +1381,7 @@ This course is designed for serious traders who want to develop professional-lev
             type: "video",
             title: "Advanced Chart Patterns for Nigerian Markets",
             duration: "25 min",
-            videoUrl: "https://www.youtube.com/watch?v=advanced-chart-patterns",
+            videoUrl: "https://www.youtube.com/embed/WbMnfiknBoc?si=zjueqFQ5B4Nm0-jV",
             content: "Learn complex chart patterns and how to identify them in Nigerian stock charts."
           },
           {
@@ -1478,7 +1478,7 @@ While basic candlestick patterns provide valuable insights, advanced patterns ca
             type: "video",
             title: "Fibonacci and Elliott Wave Applications",
             duration: "30 min",
-            videoUrl: "https://www.youtube.com/watch?v=fibonacci-elliott-wave",
+            videoUrl: "https://www.youtube.com/embed/tWTxqfWhU5k?si=JI9pgGpwzjSWVRAm",
             content: "Learn how to apply Fibonacci tools and Elliott Wave theory to Nigerian stocks and forex pairs."
           },
           {
@@ -1666,7 +1666,7 @@ This course bridges the gap between financial education and practical income gen
             type: "video",
             title: "Why You Need Multiple Income Streams in Nigeria",
             duration: "15 min",
-            videoUrl: "https://www.youtube.com/watch?v=multiple-income-nigeria",
+            videoUrl: "https://www.youtube.com/embed/lZovQ9_oWXs?si=Lyn4fQe2uSogQtvp",
             content: "Learn why relying on a single income source is increasingly risky in the Nigerian economy."
           },
           {
@@ -1785,7 +1785,7 @@ In today's Nigerian economy, having multiple income streams isn't just smart—i
             type: "video",
             title: "Top Digital Side Hustles for Nigerians",
             duration: "20 min",
-            videoUrl: "https://www.youtube.com/watch?v=nigeria-digital-hustles",
+            videoUrl: "https://www.youtube.com/embed/UBIIr30jSi4?si=f6bfEkSM-CXOijXw",
             content: "Discover the most accessible and profitable online income opportunities for Nigerians."
           },
           {
@@ -1969,7 +1969,7 @@ This course is essential for any Nigerian who wants to invest safely in an envir
             type: "video",
             title: "The State of Financial Fraud in Nigeria",
             duration: "15 min",
-            videoUrl: "https://www.youtube.com/watch?v=nigeria-financial-fraud",
+            videoUrl: "https://www.youtube.com/embed/oCJG45OJJXk?si=CdweI9TMtT20cT5U",
             content: "An overview of common investment scams and financial fraud schemes in Nigeria."
           },
           {
@@ -2078,7 +2078,7 @@ Investment scams have unfortunately become prevalent in Nigeria, costing investo
             type: "video",
             title: "Investment Scam Red Flags",
             duration: "20 min",
-            videoUrl: "https://www.youtube.com/watch?v=investment-scam-red-flags",
+            videoUrl: "https://www.youtube.com/embed/xPCrGLFYMmo?si=l2vbh7X2QxgHKJ0h",
             content: "Learn the key warning signs that an investment opportunity might be fraudulent."
           },
           {

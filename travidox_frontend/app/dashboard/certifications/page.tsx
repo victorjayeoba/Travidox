@@ -75,7 +75,7 @@ const mockCoursesData: Course[] = [
             type: "video",
             title: "Overview of the Nigerian Stock Exchange (NGX)",
             duration: "15 min",
-            content: "https://www.youtube.com/watch?v=pZDRC07SABQ"
+            content: "https://www.youtube.com/embed/pZDRC07SABQ"
           },
           {
             id: "c1-1-2",
@@ -118,7 +118,7 @@ const mockCoursesData: Course[] = [
             type: "video",
             title: "Understanding the NGX All-Share Index",
             duration: "20 min",
-            content: "https://www.youtube.com/watch?v=MbMh6KJLpQ8"
+            content: "https://www.youtube.com/embed/MbMh6KJLpQ8"
           },
           {
             id: "c1-2-2",
@@ -147,7 +147,7 @@ const mockCoursesData: Course[] = [
             type: "video",
             title: "Overview of Blue-Chip Nigerian Stocks",
             duration: "25 min",
-            content: "https://www.youtube.com/watch?v=xW8KVL3vUks"
+            content: "https://www.youtube.com/embed/xW8KVL3vUks"
           },
           {
             id: "c1-3-2",
@@ -191,7 +191,7 @@ const mockCoursesData: Course[] = [
             type: "video",
             title: "Introduction to Forex Trading in Nigeria",
             duration: "20 min",
-            content: "https://www.youtube.com/watch?v=J69B5hGchUE"
+            content: "https://www.youtube.com/embed/J69B5hGchUE"
           },
           {
             id: "c2-1-2",
@@ -234,7 +234,7 @@ const mockCoursesData: Course[] = [
             type: "video",
             title: "Key Technical Indicators for Forex Trading",
             duration: "30 min",
-            content: "https://www.youtube.com/watch?v=lYfZaFVzDuI"
+            content: "https://www.youtube.com/embed/lYfZaFVzDuI"
           },
           {
             id: "c2-2-2",
@@ -263,7 +263,7 @@ const mockCoursesData: Course[] = [
             type: "video",
             title: "Managing Risk in Volatile Currency Markets",
             duration: "25 min",
-            content: "https://www.youtube.com/watch?v=v6ciLT8YEzU"
+            content: "https://www.youtube.com/embed/v6ciLT8YEzU"
           },
           {
             id: "c2-3-2",
@@ -307,7 +307,7 @@ const mockCoursesData: Course[] = [
             type: "video",
             title: "Technical Analysis Principles for Nigerian Stocks",
             duration: "20 min",
-            content: "https://www.youtube.com/watch?v=08R_TJhAOGo"
+            content: "https://www.youtube.com/embed/08R_TJhAOGo"
           },
           {
             id: "c3-1-2",
@@ -336,7 +336,7 @@ const mockCoursesData: Course[] = [
             type: "video",
             title: "Identifying Chart Patterns on Nigerian Stock Charts",
             duration: "30 min",
-            content: "https://www.youtube.com/watch?v=TmKT8daJJJw"
+            content: "https://www.youtube.com/embed/TmKT8daJJJw"
           },
           {
             id: "c3-2-2",
@@ -365,7 +365,7 @@ const mockCoursesData: Course[] = [
             type: "video",
             title: "Optimal Technical Indicators for Nigerian Stocks",
             duration: "25 min",
-            content: "https://www.youtube.com/watch?v=NQHOM2i8BuA"
+            content: "https://www.youtube.com/embed/NQHOM2i8BuA"
           },
           {
             id: "c3-3-2",
@@ -409,7 +409,7 @@ const mockCoursesData: Course[] = [
             type: "video",
             title: "Introduction to Risk Management for Nigerian Investors",
             duration: "20 min",
-            content: "https://www.youtube.com/watch?v=uBBge9v9eXQ"
+            content: "https://www.youtube.com/embed/uBBge9v9eXQ"
           },
           {
             id: "c4-1-2",
@@ -438,7 +438,7 @@ const mockCoursesData: Course[] = [
             type: "video",
             title: "Optimal Position Sizing Methods",
             duration: "20 min",
-            content: "https://www.youtube.com/watch?v=vLGPVGSDYlc"
+            content: "https://www.youtube.com/embed/vLGPVGSDYlc"
           },
           {
             id: "c4-2-2",
@@ -467,7 +467,7 @@ const mockCoursesData: Course[] = [
             type: "video",
             title: "Effective Stop-Loss Placement in Volatile Markets",
             duration: "20 min",
-            content: "https://www.youtube.com/watch?v=lk-SLJcvkXA"
+            content: "https://www.youtube.com/embed/lk-SLJcvkXA"
           },
           {
             id: "c4-3-2",
@@ -511,7 +511,7 @@ const mockCoursesData: Course[] = [
             type: "video",
             title: "Reading Nigerian Company Financial Reports",
             duration: "25 min",
-            content: "https://www.youtube.com/watch?v=zlrMz0tFVGo"
+            content: "https://www.youtube.com/embed/zlrMz0tFVGo"
           },
           {
             id: "c5-1-2",
@@ -540,7 +540,7 @@ const mockCoursesData: Course[] = [
             type: "video",
             title: "Stock Valuation Techniques for Nigerian Companies",
             duration: "30 min",
-            content: "https://www.youtube.com/watch?v=PAtJIhWZ0oc"
+            content: "https://www.youtube.com/embed/PAtJIhWZ0oc"
           },
           {
             id: "c5-2-2",
@@ -569,7 +569,7 @@ const mockCoursesData: Course[] = [
             type: "video",
             title: "Key Economic Indicators Affecting Nigerian Equities",
             duration: "25 min",
-            content: "https://www.youtube.com/watch?v=p3D4M8RUP-4"
+            content: "https://www.youtube.com/embed/p3D4M8RUP-4"
           },
           {
             id: "c5-3-2",

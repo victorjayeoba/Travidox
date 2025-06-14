@@ -149,88 +149,85 @@ export function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 px-3 py-4 space-y-1">
-        <SidebarItem 
-          icon={<LayoutDashboard size={18} />} 
-          label="Dashboard" 
-          href="/dashboard" 
-          active={pathname === '/dashboard'}
-          onClick={closeMenuOnMobile}
-        />
-        
-        <SidebarItem 
-          icon={<DollarSign size={18} />} 
-          label="Stocks" 
-          href="/dashboard/markets" 
-          active={pathname.startsWith('/dashboard/markets')}
-          onClick={closeMenuOnMobile}
-        />
-
-        <SidebarItem 
-          icon={<Sparkles size={18} />} 
-          label="AI Assistant" 
-          href="/dashboard/ai-assistant" 
-          active={pathname.startsWith('/dashboard/ai-assistant')}
-          isNew
-          onClick={closeMenuOnMobile}
-        />
-
-        <SidebarItem 
-          icon={<Bot size={18} />} 
-          label="Trading Bot" 
-          href="/dashboard/trading-bot" 
-          active={pathname.startsWith('/dashboard/trading-bot')}
-          onClick={closeMenuOnMobile}
-        />
-        
-        <SidebarItem 
-          icon={<BookOpen size={18} />} 
-          label="Learn & Earn" 
-          href="/dashboard/learn" 
-          active={pathname.startsWith('/dashboard/learn')}
-          onClick={closeMenuOnMobile}
-        />
-        
-        <SidebarItem 
-          icon={<Trophy size={18} />} 
-          label="Leaderboard" 
-          href="/dashboard/leaderboard" 
-          active={pathname.startsWith('/dashboard/leaderboard')}
-          onClick={closeMenuOnMobile}
-        />
-        
-        <SidebarItem 
-          icon={<School size={18} />} 
-          label="Certifications" 
-          href="/dashboard/certifications" 
-          active={pathname.startsWith('/dashboard/certifications')}
-          onClick={closeMenuOnMobile}
-        />
-        
-        <SidebarItem 
-          icon={<Shield size={18} />} 
-          label="Security" 
-          href="/dashboard/security" 
-          active={pathname.startsWith('/dashboard/security')}
-          onClick={closeMenuOnMobile}
-        />
-        
-        {/* <SidebarItem 
-          icon={<Clock size={18} />} 
-          label="History" 
-          href="/dashboard/history" 
-          active={pathname.startsWith('/dashboard/history')}
-          isNew
-          onClick={closeMenuOnMobile}
-        /> */}
-
-        <SidebarItem 
-          icon={<User size={18} />} 
-          label="Profile" 
-          href="/dashboard/profile" 
-          active={pathname.startsWith('/dashboard/profile')}
-          onClick={closeMenuOnMobile}
-        />
-          
+        {/* Main Section */}
+        <div className="mb-2">
+          <div className="px-2 py-1 text-xs font-semibold uppercase text-gray-400 tracking-wider">Main</div>
+          <SidebarItem 
+            icon={<LayoutDashboard size={18} />} 
+            label="Dashboard" 
+            href="/dashboard" 
+            active={pathname === '/dashboard'}
+            onClick={closeMenuOnMobile}
+          />
+          <SidebarItem 
+            icon={<BookOpen size={18} />} 
+            label="Learn & Earn" 
+            href="/dashboard/learn" 
+            active={pathname.startsWith('/dashboard/learn')}
+            onClick={closeMenuOnMobile}
+          />
+          <SidebarItem 
+            icon={<School size={18} />} 
+            label="Certifications" 
+            href="/dashboard/certifications" 
+            active={pathname.startsWith('/dashboard/certifications')}
+            onClick={closeMenuOnMobile}
+          />
+        </div>
+        {/* Trading Section */}
+        <div className="mb-2">
+          <div className="px-2 py-1 text-xs font-semibold uppercase text-gray-400 tracking-wider">Trading</div>
+          <SidebarItem 
+            icon={<DollarSign size={18} />} 
+            label="Stocks" 
+            href="/dashboard/markets" 
+            active={pathname.startsWith('/dashboard/markets')}
+            onClick={closeMenuOnMobile}
+          />
+          <SidebarItem 
+            icon={<Bot size={18} />} 
+            label="Trading Bot" 
+            href="/dashboard/trading-bot" 
+            active={pathname.startsWith('/dashboard/trading-bot')}
+            onClick={closeMenuOnMobile}
+          />
+          <SidebarItem 
+            icon={<Sparkles size={18} />} 
+            label="AI Assistant" 
+            href="/dashboard/ai-assistant" 
+            active={pathname.startsWith('/dashboard/ai-assistant')}
+            isNew
+            onClick={closeMenuOnMobile}
+          />
+        </div>
+        {/* Engagement Section */}
+        <div className="mb-2">
+          <div className="px-2 py-1 text-xs font-semibold uppercase text-gray-400 tracking-wider">Engagement</div>
+          <SidebarItem 
+            icon={<Trophy size={18} />} 
+            label="Leaderboard" 
+            href="/dashboard/leaderboard" 
+            active={pathname.startsWith('/dashboard/leaderboard')}
+            onClick={closeMenuOnMobile}
+          />
+        </div>
+        {/* Settings Section */}
+        <div className="mb-2">
+          <div className="px-2 py-1 text-xs font-semibold uppercase text-gray-400 tracking-wider">Settings</div>
+          <SidebarItem 
+            icon={<User size={18} />} 
+            label="Profile" 
+            href="/dashboard/profile" 
+            active={pathname.startsWith('/dashboard/profile')}
+            onClick={closeMenuOnMobile}
+          />
+          <SidebarItem 
+            icon={<Shield size={18} />} 
+            label="Security" 
+            href="/dashboard/security" 
+            active={pathname.startsWith('/dashboard/security')}
+            onClick={closeMenuOnMobile}
+          />
           <a 
             href="#" 
             onClick={handleLogout}
@@ -239,6 +236,7 @@ export function Sidebar() {
             <span className="mr-3"><LogOut size={18} /></span>
             <span>Logout</span>
           </a>
+        </div>
       </nav>
     </aside>
   )

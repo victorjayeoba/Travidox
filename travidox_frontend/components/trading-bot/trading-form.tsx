@@ -141,11 +141,11 @@ export function TradingForm({ onOrderPlaced }: TradingFormProps) {
       );
       
       if (positionId) {
-        // Show success toast with more details
-        toast({
+      // Show success toast with more details
+      toast({
           title: `${type} Order Placed Successfully`,
           description: `${volumeNum} lot of ${selectedSymbol} at ${type === 'BUY' ? ask.toFixed(5) : bid.toFixed(5)}`,
-          variant: "default",
+        variant: "default",
           duration: 5000, // Show for 5 seconds
           action: (
             <div className="flex flex-col gap-1">
@@ -160,20 +160,20 @@ export function TradingForm({ onOrderPlaced }: TradingFormProps) {
               )}
             </div>
           ),
-        });
-        
-        // Reset form
-        setVolume('0.01');
-        setStopLoss('');
-        setTakeProfit('');
-        
-        // Notify parent component to refresh positions
-        if (onOrderPlaced) {
-          onOrderPlaced();
-        }
+      });
+      
+      // Reset form
+      setVolume('0.01');
+      setStopLoss('');
+      setTakeProfit('');
+      
+      // Notify parent component to refresh positions
+      if (onOrderPlaced) {
+        onOrderPlaced();
+      }
       } else {
         throw new Error('Failed to place order');
-      }
+        }
     } catch (error) {
       toast({
         title: "Failed to place order",
@@ -254,7 +254,7 @@ export function TradingForm({ onOrderPlaced }: TradingFormProps) {
                 <div className="flex justify-between items-center">
                   <div>
                     <div className="flex items-center gap-1">
-                      <p className="text-sm font-medium text-muted-foreground">Bid</p>
+                    <p className="text-sm font-medium text-muted-foreground">Bid</p>
                       <TooltipInfo term="Bid" description="" />
                     </div>
                     <p className="text-lg font-bold">{bid.toFixed(5)}</p>
@@ -269,7 +269,7 @@ export function TradingForm({ onOrderPlaced }: TradingFormProps) {
                 <div className="flex justify-between items-center">
                   <div>
                     <div className="flex items-center gap-1">
-                      <p className="text-sm font-medium text-muted-foreground">Ask</p>
+                    <p className="text-sm font-medium text-muted-foreground">Ask</p>
                       <TooltipInfo term="Ask" description="" />
                     </div>
                     <p className="text-lg font-bold">{ask.toFixed(5)}</p>
@@ -288,7 +288,7 @@ export function TradingForm({ onOrderPlaced }: TradingFormProps) {
           
           <div className="space-y-3">
             <div className="flex items-center gap-1">
-              <Label htmlFor="volume">Volume (Lots)</Label>
+            <Label htmlFor="volume">Volume (Lots)</Label>
               <TooltipInfo term="Lot" description="" />
             </div>
             <Input

@@ -38,7 +38,7 @@ export function PositionPrice({
     
     // Subscribe to symbol
     subscribeToSymbol(symbol);
-    
+  
     // Listen for price updates
     const handlePriceUpdate = (data: { bid: number; ask: number }) => {
       const price = orderType === 'BUY' ? data.bid : data.ask;

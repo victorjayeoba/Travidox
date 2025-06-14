@@ -29,8 +29,8 @@ interface LearningContent {
   type: 'video' | 'text' | 'quiz' | 'assignment';
   title: string;
   duration: string;
-  content: string;
-  videoUrl?: string;
+  content: string;  // For videos, this can be a YouTube embed URL
+  videoUrl?: string; // For direct video files
   quiz?: {
     question: string;
     options: string[];
@@ -152,8 +152,33 @@ export function LearningInterface({
 
   // Handle video events
   useEffect(() => {
+    // Check if current content is a YouTube video (check both content and videoUrl fields)
+    const youtubeUrl = currentContent?.videoUrl || currentContent?.content;
+    const isYouTubeVideo = currentContent?.type === 'video' && 
+      youtubeUrl && 
+      (youtubeUrl.includes('youtube.com/embed') || 
+       youtubeUrl.includes('youtu.be'));
+    
+    // If it's a YouTube video, we'll handle completion differently
+    // YouTube videos are auto-marked as completed after a timeout
+    if (isYouTubeVideo && user?.uid) {
+      // Mark YouTube videos as completed after 2 minutes (typical for short educational videos)
+      const youtubeTimer = setTimeout(() => {
+        completeContent(
+          user.uid,
+          course.id,
+          module.id,
+          currentContent.id,
+          totalContents
+        );
+      }, 120000); // 2 minutes
+      
+      return () => clearTimeout(youtubeTimer);
+    }
+    
+    // For regular videos, use the video element events
     const videoElement = videoRef.current;
-    if (!videoElement) return;
+    if (!videoElement || isYouTubeVideo) return;
     
     const handleTimeUpdate = () => {
       setCurrentTime(videoElement.currentTime);
@@ -547,81 +572,107 @@ export function LearningInterface({
     
     switch (currentContent.type) {
       case 'video':
-        return (
-          <div className="px-4 py-8 flex justify-center">
-            <div className="max-w-3xl w-full">
-              <div className="relative">
-              <video
-                ref={videoRef}
-                src={currentContent.videoUrl}
-                  className="w-full rounded-md"
-                  controlsList="nodownload"
-              />
-              
-                {/* Custom video controls */}
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-                  <div className="flex flex-col gap-2">
-                    <div className="flex items-center gap-2">
-                      <span className="text-white text-xs">{formatTime(currentTime)}</span>
-                      <div className="flex-1">
-                  <input
-                    type="range"
-                    min={0}
-                    max={duration || 100}
-                    value={currentTime}
-                    onChange={handleSeek}
-                          className="w-full"
+        // Check if the video URL is a YouTube embed URL (check both content and videoUrl fields)
+        const youtubeUrl = currentContent.videoUrl || currentContent.content;
+        const isYouTubeEmbed = youtubeUrl && 
+          (youtubeUrl.includes('youtube.com/embed') || 
+           youtubeUrl.includes('youtu.be'));
+        
+        if (isYouTubeEmbed) {
+          return (
+            <div className="px-4 py-8 flex justify-center">
+              <div className="max-w-3xl w-full">
+                <div className="relative" style={{ paddingBottom: '56.25%', height: 0, overflow: 'hidden' }}>
+                  <iframe
+                    src={youtubeUrl}
+                    className="absolute top-0 left-0 w-full h-full rounded-md"
+                    allowFullScreen
+                    title={currentContent.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   />
-                      </div>
-                      <span className="text-white text-xs">{formatTime(duration)}</span>
                 </div>
+              </div>
+            </div>
+          );
+        } else {
+          // Fallback to regular video player for non-YouTube videos
+          return (
+            <div className="px-4 py-8 flex justify-center">
+              <div className="max-w-3xl w-full">
+                <div className="relative">
+                <video
+                  ref={videoRef}
+                  src={currentContent.videoUrl || currentContent.content}
+                    className="w-full rounded-md"
+                    controlsList="nodownload"
+                />
                 
-                <div className="flex items-center justify-between">
+                  {/* Custom video controls */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                    <div className="flex flex-col gap-2">
                       <div className="flex items-center gap-2">
-                        <Button variant="ghost" size="icon" className="text-white">
-                          <SkipBack className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="icon" className="text-white" onClick={handlePlayPause}>
-                      {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
-                    </Button>
-                        <Button variant="ghost" size="icon" className="text-white">
-                          <SkipForward className="h-4 w-4" />
-                    </Button>
-                    
-                        <div className="flex items-center gap-2">
-                          <Button variant="ghost" size="icon" className="text-white" onClick={handleMuteToggle}>
-                            {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-                          </Button>
+                        <span className="text-white text-xs">{formatTime(currentTime)}</span>
+                        <div className="flex-1">
                     <input
                       type="range"
                       min={0}
-                      max={1}
-                            step={0.1}
-                      value={volume}
-                      onChange={handleVolumeChange}
-                            className="w-16"
+                      max={duration || 100}
+                      value={currentTime}
+                      onChange={handleSeek}
+                            className="w-full"
                     />
                         </div>
+                        <span className="text-white text-xs">{formatTime(duration)}</span>
                   </div>
                   
-                  <div className="flex items-center gap-2">
-                        <div className="relative">
+                  <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
                           <Button variant="ghost" size="icon" className="text-white">
-                            <Settings className="h-4 w-4" />
-                      </Button>
-                          {/* Playback rate dropdown would go here */}
-                        </div>
-                        <Button variant="ghost" size="icon" className="text-white" onClick={handleFullscreenToggle}>
-                          <Maximize className="h-4 w-4" />
+                            <SkipBack className="h-4 w-4" />
                           </Button>
+                          <Button variant="ghost" size="icon" className="text-white" onClick={handlePlayPause}>
+                        {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
+                      </Button>
+                          <Button variant="ghost" size="icon" className="text-white">
+                            <SkipForward className="h-4 w-4" />
+                      </Button>
+                      
+                          <div className="flex items-center gap-2">
+                            <Button variant="ghost" size="icon" className="text-white" onClick={handleMuteToggle}>
+                              {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                            </Button>
+                      <input
+                        type="range"
+                        min={0}
+                        max={1}
+                              step={0.1}
+                        value={volume}
+                        onChange={handleVolumeChange}
+                              className="w-16"
+                      />
+                          </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-2">
+                          <div className="relative">
+                            <Button variant="ghost" size="icon" className="text-white">
+                              <Settings className="h-4 w-4" />
+                        </Button>
+                            {/* Playback rate dropdown would go here */}
+                          </div>
+                          <Button variant="ghost" size="icon" className="text-white" onClick={handleFullscreenToggle}>
+                            <Maximize className="h-4 w-4" />
+                            </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-              </div>
-        );
+                </div>
+          );
+        }
+        
       
       case 'text':
         return (
