@@ -140,39 +140,37 @@ export default function AIAssistantPage() {
   ]
 
   return (
-    <div className="flex flex-col h-[calc(100vh-8rem)]">
+    <div className="space-y-6">
       {/* Header */}
-      <header className="flex-shrink-0 mb-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 flex-shrink-0 flex items-center justify-center">
-                <Bot size={20} className="text-white" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">AI Assistant</h1>
-                <p className="text-sm text-gray-600">Your intelligent financial advisor</p>
-              </div>
-            </div>
-            <Button
-              onClick={clearConversation}
-              variant="outline"
-              size="sm"
-              className="flex items-center gap-2 self-start sm:self-center"
-            >
-              <RefreshCw size={14} />
-              New Chat
-            </Button>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 flex-shrink-0 flex items-center justify-center">
+            <Bot size={20} className="text-white" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">AI Assistant</h1>
+            <p className="text-sm text-gray-600">Your intelligent financial advisor</p>
+          </div>
         </div>
-      </header>
+        <Button
+          onClick={clearConversation}
+          variant="outline"
+          size="sm"
+          className="flex items-center gap-2 self-start sm:self-center"
+        >
+          <RefreshCw size={14} />
+          New Chat
+        </Button>
+      </div>
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col lg:flex-row gap-6 overflow-hidden">
+      <div className="flex flex-col lg:flex-row gap-6">
         {/* Chat Panel */}
-        <div className="flex-1 flex flex-col min-h-0">
-          <Card className="flex-1 bg-white/60 backdrop-blur-sm border-white/20 flex flex-col">
+        <div className="flex-grow">
+          <Card className="bg-white/60 backdrop-blur-sm border-white/20 flex flex-col h-full">
             <CardContent className="p-0 flex-1 flex flex-col">
               {/* Messages Area */}
-              <ScrollArea className="flex-1 p-4">
+              <ScrollArea className="flex-grow p-4" style={{maxHeight: 'calc(100vh - 24rem)', minHeight: '300px'}}>
                 <div className="space-y-4">
                   {messages.map((message) => (
                     <div
@@ -185,9 +183,9 @@ export default function AIAssistantPage() {
                       <Avatar className="h-7 w-7 flex-shrink-0">
                         <AvatarFallback 
                           className={cn(
-                            "text-xs font-medium",
+                            "text-xs",
                             message.role === 'user' 
-                              ? "bg-green-100 text-green-700" 
+                              ? "bg-green-100 text-green-700 font-medium" 
                               : "bg-gray-200 text-gray-700"
                           )}
                         >
@@ -200,8 +198,9 @@ export default function AIAssistantPage() {
                           ? "bg-green-600 text-white"
                           : "bg-gray-100 text-gray-900"
                       )}>
-                        <div className="prose prose-sm max-w-none prose-p:my-0 prose-ul:my-2 prose-li:my-0">
-                           <ReactMarkdown
+                        {message.role === 'assistant' ? (
+                          <div className="prose prose-sm max-w-none prose-p:my-0 prose-ul:my-2 prose-li:my-0">
+                            <ReactMarkdown
                               remarkPlugins={[remarkGfm]}
                               components={{
                                 a: ({node, ...props}) => <a className="text-green-600 hover:underline" target="_blank" rel="noopener noreferrer" {...props} />,
@@ -209,7 +208,10 @@ export default function AIAssistantPage() {
                             >
                               {message.content}
                             </ReactMarkdown>
-                        </div>
+                          </div>
+                        ) : (
+                          <p className="leading-relaxed">{message.content}</p>
+                        )}
                         <p className={cn(
                           "text-xs mt-1.5 opacity-80",
                           message.role === 'user' ? "text-green-100" : "text-gray-500"
@@ -239,7 +241,7 @@ export default function AIAssistantPage() {
               </ScrollArea>
 
               {/* Input Area */}
-              <div className="p-4 border-t bg-gray-50/50 flex-shrink-0">
+              <div className="p-4 border-t bg-gray-50/50">
                 <div className="flex space-x-3">
                   <Input
                     ref={inputRef}
@@ -268,71 +270,66 @@ export default function AIAssistantPage() {
         </div>
 
         {/* Sidebar */}
-        <aside className="lg:w-[320px] lg:flex-shrink-0 space-y-4">
-         <ScrollArea className="h-full">
-            {/* Quick Questions */}
-            <Card className="bg-white/60 backdrop-blur-sm border-white/20">
-              <CardHeader className="pb-3">
-                <div className="flex items-center space-x-2.5">
-                  <Sparkles size={16} className="text-yellow-500" />
-                  <CardTitle className="text-base font-semibold">Quick Start</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {quickQuestions.map((question, index) => (
-                  <Button
-                    key={index}
-                    variant="ghost"
-                    size="sm"
-                    className="w-full text-left justify-start h-auto p-2.5 text-sm text-gray-700 hover:bg-green-50 hover:text-green-700 rounded-md"
-                    onClick={() => setInputMessage(question)}
-                    disabled={isLoading}
-                  >
-                    {question}
-                  </Button>
-                ))}
-              </CardContent>
-            </Card>
+        <div className="lg:w-[320px] lg:flex-shrink-0 space-y-4 lg:sticky lg:top-24 self-start">
+          {/* Quick Questions */}
+          <Card className="bg-white/60 backdrop-blur-sm border-white/20">
+            <CardHeader className="pb-3">
+              <div className="flex items-center space-x-2.5">
+                <Sparkles size={16} className="text-yellow-500" />
+                <CardTitle className="text-base font-semibold">Quick Start</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              {quickQuestions.map((question, index) => (
+                <Button
+                  key={index}
+                  variant="ghost"
+                  size="sm"
+                  className="w-full text-left justify-start h-auto p-2.5 text-sm text-gray-700 hover:bg-green-50 hover:text-green-700 rounded-md"
+                  onClick={() => setInputMessage(question)}
+                  disabled={isLoading}
+                >
+                  {question}
+                </Button>
+              ))}
+            </CardContent>
+          </Card>
 
-            {/* Features */}
-             <div className="pt-4">
-                <Card className="bg-white/60 backdrop-blur-sm border-white/20">
-                    <CardHeader className="pb-3">
-                        <CardTitle className="text-base font-semibold">Features</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-3 text-sm">
-                        <div className="flex items-center space-x-3">
-                            <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></div>
-                            <span className="text-gray-700">Real-time market data</span>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                            <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></div>
-                            <span className="text-gray-700">Trading strategies</span>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                            <div className="w-2 h-2 bg-orange-500 rounded-full flex-shrink-0"></div>
-                            <span className="text-gray-700">Risk management</span>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                            <div className="w-2 h-2 bg-purple-500 rounded-full flex-shrink-0"></div>
-                            <span className="text-gray-700">Educational content</span>
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-            {/* Disclaimer */}
-             <div className="pt-4">
-                <Card className="bg-yellow-50/80 backdrop-blur-sm border-yellow-200">
-                    <CardContent className="p-3">
-                    <p className="text-xs text-yellow-900">
-                        <strong>Note:</strong> AI provides educational insights. Always do your own research before investing.
-                    </p>
-                    </CardContent>
-                </Card>
-             </div>
-          </ScrollArea>
-        </aside>
-      </main>
+          {/* Features */}
+          <Card className="bg-white/60 backdrop-blur-sm border-white/20">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base font-semibold">Features</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3 text-sm">
+              <div className="flex items-center space-x-3">
+                <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></div>
+                <span className="text-gray-700">Real-time market data</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></div>
+                <span className="text-gray-700">Trading strategies</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <div className="w-2 h-2 bg-orange-500 rounded-full flex-shrink-0"></div>
+                <span className="text-gray-700">Risk management</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <div className="w-2 h-2 bg-purple-500 rounded-full flex-shrink-0"></div>
+                <span className="text-gray-700">Educational content</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Disclaimer */}
+          <Card className="bg-yellow-50/80 backdrop-blur-sm border-yellow-200">
+            <CardContent className="p-3">
+              <p className="text-xs text-yellow-900">
+                <strong>Note:</strong> AI provides educational insights. Always do your own research before investing.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </div>
   )
 } 

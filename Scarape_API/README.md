@@ -25,14 +25,14 @@ Follow these steps to get the scraping API running locally.
 
 1.  **Navigate to the API directory:**
     ```sh
-    cd Scarape_API
+cd Scarape_API
     ```
 
 2.  **Install dependencies:**
     *This project appears to use built-in Node.js modules, but if you add external packages, you would install them here.*
     ```sh
     # Example: npm install
-    ```
+   ```
 
 3.  **Run the scraping script:**
     *The main script appears to be `t.js`. You can run it using Node.js.*

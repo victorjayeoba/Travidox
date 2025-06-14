@@ -29,7 +29,7 @@ Follow these steps to get the backend server running locally.
 1.  **Navigate to the backend directory:**
     ```sh
     cd travidox_backend
-    ```
+   ```
 
 2.  **Create and activate a virtual environment:**
     *   On macOS/Linux:
@@ -39,20 +39,20 @@ Follow these steps to get the backend server running locally.
         ```
     *   On Windows:
         ```sh
-        python -m venv venv
+   python -m venv venv
         .\venv\Scripts\activate
-        ```
+   ```
 
 3.  **Install dependencies:**
     ```sh
-    pip install -r requirements.txt
-    ```
+   pip install -r requirements.txt
+   ```
 
 4.  **Set up environment variables:**
     *   Create a `.env` file by copying the example:
         ```sh
-        cp env.example .env
-        ```
+   cp env.example .env
+   ```
     *   Edit the `.env` file and provide your `SECRET_KEY`.
 
 5.  **Set up Firebase Admin:**

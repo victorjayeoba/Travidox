@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
 
     // Get current market context
     let marketContext = ''
