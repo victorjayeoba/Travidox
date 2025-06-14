@@ -34,7 +34,11 @@ export default function AIAssistantPage() {
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
+      messagesEndRef.current.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'nearest'
+      })
     }
   }
 
@@ -140,7 +144,7 @@ export default function AIAssistantPage() {
   ]
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 h-full lg:h-auto">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center space-x-3">
@@ -164,13 +168,15 @@ export default function AIAssistantPage() {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex flex-col lg:flex-row gap-6">
+      <div className="flex flex-col lg:flex-row gap-6 flex-1 lg:flex-none">
         {/* Chat Panel */}
-        <div className="flex-grow">
+        <div className="flex-grow flex flex-col">
           <Card className="bg-white/60 backdrop-blur-sm border-white/20 flex flex-col h-full">
             <CardContent className="p-0 flex-1 flex flex-col">
               {/* Messages Area */}
-              <ScrollArea className="flex-grow p-4" style={{maxHeight: 'calc(100vh - 24rem)', minHeight: '300px'}}>
+              <ScrollArea 
+                className="flex-grow p-4 h-[400px] lg:h-auto lg:max-h-[calc(100vh-24rem)] lg:min-h-[300px]"
+              >
                 <div className="space-y-4">
                   {messages.map((message) => (
                     <div
