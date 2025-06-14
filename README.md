@@ -205,13 +205,13 @@ Additional documentation:
 
 ## 📜 License
 
-[MIT License](LICENSE) - Copyright (c) 2023 Travidox
+[MIT License](LICENSE) - Copyright (c) 2025 Travidox
 
 ## 📞 Contact & Support
 
-- Website: [https://travidox.com](https://travidox.com)
-- Email: support@travidox.com
-- Phone: +2348079458596
+- Website: [https://travidox.vercel.app](https://travidox.vercel.app)
+- Email: hellotravidox@gmail.com
+- Phone: +2348089032359
 
 ## 🙏 Acknowledgments
 
