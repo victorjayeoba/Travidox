@@ -160,17 +160,17 @@ export function Sidebar() {
             onClick={closeMenuOnMobile}
           />
           <SidebarItem 
-            icon={<BookOpen size={18} />} 
-            label="Learn & Earn" 
-            href="/dashboard/learn" 
-            active={pathname.startsWith('/dashboard/learn')}
-            onClick={closeMenuOnMobile}
-          />
-          <SidebarItem 
             icon={<School size={18} />} 
             label="Certifications" 
             href="/dashboard/certifications" 
             active={pathname.startsWith('/dashboard/certifications')}
+            onClick={closeMenuOnMobile}
+          />
+          <SidebarItem 
+            icon={<BookOpen size={18} />} 
+            label="Learn & Earn" 
+            href="/dashboard/learn" 
+            active={pathname.startsWith('/dashboard/learn')}
             onClick={closeMenuOnMobile}
           />
         </div>
