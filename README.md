@@ -1,55 +1,92 @@
 # Travidox - Trade with Intelligence
 
-A comprehensive trading platform that connects MetaTrader accounts to a modern web interface, allowing users to monitor and execute trades from anywhere with intelligent tools to enhance trading performance.
+![Travidox Logo](/public/logo.png)
 
-## Features
+## Overview
 
-- **Firebase Authentication**: Secure user authentication and management
-- **MetaTrader Integration**: Connect to MT4/MT5 accounts through a VPS
-- **Real-time Trading**: Execute trades directly from the web interface
-- **Account Monitoring**: View account balance, equity, and other metrics
-- **Position Management**: Open, modify, and close trading positions
-- **Trade History**: View and analyze past trading activity
-- **AI-Powered Trading Signals**: Receive intelligent trade recommendations
-- **Trading Leaderboards**: Compare performance with other traders
-- **AI Chat Assistant**: Get trading advice and platform help 24/7
-- **Responsive Design**: Works on desktop, tablet, and mobile devices
+Travidox is a comprehensive trading intelligence platform that seamlessly connects MetaTrader accounts to a modern web interface. It enables traders to monitor and execute trades from anywhere while leveraging AI-powered tools to enhance trading performance and decision-making.
 
-## Architecture
+## 🚀 Key Features
 
-Travidox uses a modern, scalable architecture:
+### Trading & Analysis
+- **MetaTrader Integration**: Connect to MT4/MT5 accounts through a secure connection
+- **Real-time Trading**: Execute trades directly from an intuitive web interface
+- **Position Management**: Open, modify, and close positions with advanced risk parameters
+- **Market Analysis**: Access real-time charts, indicators, and market data
 
-- **Frontend**: React-based web application with a responsive UI
-- **Backend**: FastAPI-based RESTful API service
-- **Authentication**: Firebase Auth for secure user management
-- **AI Integration**: Advanced algorithms for trading signals and chat assistance
-- **Trading**: VPS-hosted MetaTrader terminals for reliable connectivity
-- **Communication**: Secure API calls with token-based authentication
+### AI & Intelligence Tools
+- **AI-Powered Trading Signals**: Receive intelligent trade recommendations with success probability
+- **Trading Chatbot Assistant**: Get 24/7 trading advice and platform assistance
+- **Market Sentiment Analysis**: AI-processed market sentiment data from multiple sources
 
-## Requirements
+### User Experience
+- **Responsive Design**: Seamless experience across desktop, tablet, and mobile devices
+- **Account Monitoring**: View account balance, equity, and performance metrics
+- **Trading History & Analysis**: Review and analyze past trading activity with visual insights
+- **Trading Leaderboards**: Compare performance with other traders and follow top performers
 
-### Backend
+### Security
+- **Firebase Authentication**: Secure user authentication with multi-factor options
+- **End-to-End Encryption**: All sensitive data and communications are encrypted
+- **Secure API Connections**: Protected MetaTrader access via encrypted connections
+
+## 📊 System Architecture
+
+Travidox implements a modern, scalable architecture:
+
+```
+┌─────────────────┐     ┌────────────────┐     ┌───────────────────┐
+│  React Frontend │────▶│ FastAPI Backend │────▶│ MetaTrader API   │
+└─────────────────┘     └────────────────┘     └───────────────────┘
+        │                       │                       │
+        ▼                       ▼                       ▼
+┌─────────────────┐     ┌────────────────┐     ┌───────────────────┐
+│  Firebase Auth  │     │  AI Services   │     │ Market Data Feeds │
+└─────────────────┘     └────────────────┘     └───────────────────┘
+```
+
+### Frontend (Next.js & React)
+- Modern React application with Next.js framework
+- Tailwind CSS for responsive design
+- Real-time data visualization with Recharts
+- Firebase integration for authentication and real-time features
+
+### Backend (FastAPI)
+- High-performance Python FastAPI server
+- Secure API endpoints with JWT authentication
+- Integration with MetaTrader via direct API access
+- AI models for trading signals and market analysis
+
+### Infrastructure
+- Firebase for authentication and database
+- Modern cloud deployment with scalability support
+
+## 💻 Technical Requirements
+
+### Backend Requirements
 - Python 3.9+
-- FastAPI and dependencies
-- Firebase Admin SDK
-- Paramiko (for SSH)
-- Machine Learning libraries for AI features
-- VPS with MetaTrader installed
+- FastAPI 0.104.1+
+- Firebase Admin SDK 6.2.0+
+- Additional dependencies in `requirements.txt`
 
-### Frontend
+### Frontend Requirements
 - Node.js 16+
-- React 17+
-- Firebase JS SDK
-- Real-time data visualization libraries
-- Modern web browser
+- Next.js 15.2.4+
+- React 19+
+- Firebase JS SDK 11.9.0+
+- See `package.json` for complete dependency list
 
-## Installation
+### Infrastructure Requirements
+- Firebase project with Authentication enabled
+- Modern web browser for client access
+
+## 🔧 Installation & Setup
 
 ### Backend Setup
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/your-username/Travidox.git
+git clone https://github.com/victorjayeoba/Travidox.git
 cd Travidox/travidox_backend
 ```
 
@@ -67,20 +104,15 @@ pip install -r requirements.txt
 4. Configure environment variables:
 ```bash
 cp env.example .env
-# Edit .env with your actual credentials
+# Edit .env with your credentials and configuration
 ```
 
-5. Set up Firebase:
+5. Setup Firebase:
    - Create a Firebase project in the [Firebase Console](https://console.firebase.google.com/)
-   - Generate a private key file for your service account
-   - Save it as `firebase-credentials.json` (or update the path in your .env file)
+   - Generate a private key for your service account
+   - Save it as `firebase-credentials.json` in the backend directory
 
-6. Set up VPS and MetaTrader:
-   - Install MetaTrader on your VPS
-   - Copy the scripts from `vps_scripts/` to your VPS
-   - Configure the VPS connection details in your .env file
-
-7. Run the backend:
+6. Start the backend server:
 ```bash
 python main.py
 ```
@@ -98,83 +130,93 @@ cd ../travidox_frontend
 npm install
 ```
 
-3. Configure Firebase:
-   - Create a `.env.local` file with your Firebase web configuration
-   - Set up Firebase Authentication in the Firebase Console
+3. Configure environment variables:
+```bash
+cp .env.example .env.local
+# Edit .env.local with your Firebase and API configuration
+```
 
 4. Start the development server:
 ```bash
-npm start
+npm run dev
 ```
    The frontend will be available at http://localhost:3000
 
-## Usage
+5. For production build:
+```bash
+npm run build
+npm start
+```
 
-1. Create an account or log in using the web interface
-2. Connect your MetaTrader account by providing your login credentials
-3. View your account information, including balance and open positions
-4. Place trades through the intuitive trading interface
-5. Monitor and manage your positions in real-time
+## 🔐 Security Measures
 
-## Security
+Travidox implements comprehensive security measures:
 
-- All sensitive communications are encrypted
-- Firebase Authentication provides secure user management
-- MetaTrader credentials are never stored permanently
-- API requests are authenticated using Firebase ID tokens
-- VPS communications use secure SSH connections
+- **Authentication**: Firebase Authentication with email/password and optional MFA
+- **Authorization**: Role-based access control for all API endpoints
+- **Data Encryption**: All sensitive data encrypted at rest and in transit
+- **API Security**: JWT token authentication for all API requests
+- **Credential Management**: MetaTrader credentials never stored permanently
+- **Audit Logging**: Comprehensive logging of all security-relevant events
 
-## Development
+## 🧪 Testing
 
-### Testing
-
-Backend:
+### Backend Testing
 ```bash
 cd travidox_backend
 pytest
 ```
 
-Frontend:
+### Frontend Testing
 ```bash
 cd travidox_frontend
 npm test
 ```
 
-### Code Style
-
-- Backend follows PEP 8 Python style guidelines
-- Frontend follows ESLint with Airbnb configuration
-
-## Deployment
+## 🚀 Deployment
 
 ### Backend Deployment
-
-1. Set up a server with Python installed
-2. Configure environment variables securely
-3. Set up a production ASGI server (e.g., Uvicorn behind Nginx)
-4. Use a process manager like Supervisor or systemd
-5. Set up SSL for secure communications
+1. Provision a server with Python 3.9+
+2. Set up environment variables securely
+3. Install production ASGI server (e.g., Uvicorn with Gunicorn)
+4. Configure process management with Supervisor or systemd
+5. Set up reverse proxy (Nginx) with SSL/TLS
 
 ### Frontend Deployment
-
 1. Build the production version:
 ```bash
 npm run build
 ```
-2. Deploy to a static hosting service (Firebase Hosting, Vercel, Netlify, etc.)
-3. Configure environment variables for production
+2. Deploy to a static hosting service:
+   - Vercel (recommended for Next.js)
+   - Netlify
+   - Firebase Hosting
+   - AWS Amplify
 
-## License
+## 📝 Documentation
 
-[Specify your license here]
+Additional documentation:
+- [Backend API Documentation](travidox_backend/README.md)
+- [MetaTrader Integration Guide](travidox_backend/MT_INTEGRATION.md)
+- [Development Mode Setup](travidox_backend/DEV_MODE_SETUP.md)
+- [AWS Deployment Guide](travidox_frontend/README-AWS-SETUP.md)
+- [Password Reset Implementation](travidox_frontend/FORGOT_PASSWORD_README.md)
+- [AI Assistant Integration](travidox_frontend/AI_ASSISTANT_PAGE_README.md)
 
-## Contact
+## 📜 License
 
-[+2348079458596]
+[MIT License](LICENSE) - Copyright (c) 2023 Travidox
 
-## Acknowledgments
+## 📞 Contact & Support
 
-- MetaTrader for the trading platform
-- Firebase for authentication services
+- Website: [https://travidox.com](https://travidox.com)
+- Email: support@travidox.com
+- Phone: +2348079458596
+
+## 🙏 Acknowledgments
+
+- MetaTrader for the robust trading platform
+- Firebase for authentication and database services
 - FastAPI for the efficient backend framework
-- React for the responsive frontend framework 
+- Next.js and React for the responsive frontend framework
+- The open-source community for various libraries and tools
