@@ -6,6 +6,140 @@
 
 Travidox is a comprehensive trading intelligence platform that seamlessly connects MetaTrader accounts to a modern web interface. It enables traders to monitor and execute trades from anywhere while leveraging AI-powered tools to enhance trading performance and decision-making.
 
+## 📋 Hackathon Setup Guide (Quick Start)
+
+This guide helps hackathon judges and reviewers quickly set up and test Travidox on their local machine.
+
+### Prerequisites
+- Node.js 16+ ([Download](https://nodejs.org/))
+- Python 3.9+ ([Download](https://www.python.org/downloads/))
+- Git ([Download](https://git-scm.com/downloads))
+- Firebase account (free tier is sufficient) ([Create Account](https://firebase.google.com/))
+
+### Frontend Setup (5 minutes)
+
+1. Clone the repository:
+```bash
+git clone https://github.com/victorjayeoba/Travidox.git
+cd Travidox
+```
+
+2. Install frontend dependencies:
+```bash
+cd travidox_frontend
+npm install
+```
+
+3. Create a `.env.local` file in the frontend directory:
+```bash
+# Sample content for .env.local
+NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
+NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
+NEXT_PUBLIC_BACKEND_URL=http://localhost:8000
+```
+
+4. Start the development server:
+```bash
+npm run dev
+```
+   The frontend will be available at http://localhost:3000
+
+### Backend Setup (Optional - 5 minutes)
+
+1. Navigate to the backend directory:
+```bash
+cd ../travidox_backend
+```
+
+2. Create and activate a virtual environment:
+```bash
+# On Windows
+python -m venv venv
+venv\Scripts\activate
+
+# On macOS/Linux
+python -m venv venv
+source venv/bin/activate
+```
+
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+4. Create a `.env` file in the backend directory:
+```
+# Sample content for .env
+DEBUG=True
+SECRET_KEY=your-secret-key
+FIREBASE_CREDENTIALS_PATH=firebase-credentials.json
+```
+
+5. Start the backend server:
+```bash
+python main.py
+```
+   The API will be available at http://localhost:8000
+
+### Firebase Setup (10 minutes)
+
+1. Go to [Firebase Console](https://console.firebase.google.com/)
+2. Create a new project
+3. Set up Authentication with Email/Password provider
+4. In Project Settings > General > Your Apps, create a new Web App
+5. Copy the Firebase configuration to your `.env.local` file
+6. For backend auth setup, go to Project Settings > Service Accounts > Generate new private key
+7. Save the JSON file as `firebase-credentials.json` in the backend directory
+
+### Demo Mode
+
+For hackathon evaluation, the application can run in demo mode without backend connectivity. Simply access the frontend at http://localhost:3000 and use these credentials:
+
+- Email: demo@travidox.com
+- Password: demo1234
+
+## 🔍 Troubleshooting
+
+### Common Issues
+
+1. **Node.js Version Error**: If you encounter errors related to Node.js versions:
+```bash
+nvm install 16
+nvm use 16
+# Then reinstall dependencies
+```
+
+2. **Python Package Errors**: If you encounter package compatibility issues:
+```bash
+pip install -r requirements.txt --upgrade
+```
+
+3. **Firebase Configuration Errors**:
+   - Ensure your Firebase project has Authentication enabled
+   - Verify that your `.env.local` contains the correct Firebase configuration values
+   - Check that the Email/Password authentication method is enabled in Firebase console
+
+4. **Port Already in Use**:
+```bash
+# Frontend (change port to 3001)
+npm run dev -- -p 3001
+
+# Backend (change port to 8001)
+# Edit main.py to change the port number
+```
+
+5. **Build Fails**: Clear cache and node modules:
+```bash
+rm -rf .next node_modules
+npm install
+```
+
+For additional help, contact us at hellotravidox@gmail.com or create an issue on GitHub.
+
 ## 🚀 Key Features
 
 ### Trading & Analysis
@@ -80,7 +214,7 @@ Travidox implements a modern, scalable architecture:
 - Firebase project with Authentication enabled
 - Modern web browser for client access
 
-## 🔧 Installation & Setup
+## 🔧 Full Installation & Setup
 
 ### Backend Setup
 
