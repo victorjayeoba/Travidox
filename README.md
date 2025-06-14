@@ -1,6 +1,6 @@
 # Travidox Trading Platform
 
-![Travidox Banner](https://i.imgur.com/your-banner-image.png) <!-- It's recommended to add a banner image -->
+<!-- It's recommended to add a banner image -->
 
 Welcome to the official repository for **Travidox**, a modern trading intelligence platform designed for the Nigerian Stock Exchange (NGX). Our mission is to empower investors by combining a powerful web interface with AI-driven tools for insightful, data-backed trading.
 
